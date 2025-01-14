@@ -1,3 +1,14 @@
+.custom-sweetalert {
+    width: '100px'; 
+    height: '70px';
+    padding: '2px'; 
+    font-size: '8px';
+    color: red ;
+    border-radius: 10px; /* Coins arrondis */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Ombre légère */
+}
+
+
 table{
     background:#fff;
     opacity: 0.8;

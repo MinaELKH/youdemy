@@ -1,8 +1,9 @@
-<?php 
-require("../sweetAlert.php"); 
+<?php
+require_once("../sweetAlert.php");
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 ?>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,13 +12,30 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Language (Français) -->
+    <script src="//cdn.datatables.net/plug-ins/1.13.5/i18n/fr-FR.json"></script>
+
+
+
+
+
     <style>
         body {
             font-family: 'Roboto', sans-serif;
         }
     </style>
-    <link rel="stylesheet" href="../../css/style.css" >
-      <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="../../src/css/style.css">
+    <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 </head>
@@ -25,37 +43,94 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 <body class="bg-gray-100">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="bg-blue-900 text-white space-y-6 py-7 px-2">
 
-            <nav>
-                <!-- dashboard -->
-                <a href="dashboard.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-tachometer-alt"></i>
-                </a>
-                 <!-- valide enseignant -->
-                <a href="gereteacher.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-user-check"></i>
-                </a>
-                <!-- gere user -->
-                <a href="gereUser.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-users-cog"></i>
-                </a>
-                <!-- categorie -->
-                <a href="categorie.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-book"></i>
-                </a>
-                <!-- tags -->
-                <a href="tags.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-tags"></i>
-                </a>
-                <!-- statistique -->
-                <a href="static.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-chart-pie"></i>
-                </a>
-            </nav>
-        </div>
+
+        <nav class="bg-gradient-to-b from-blue-600 to-indigo-700 shadow-2xl rounded-2xl p-4 space-y-2">
+            <!-- Dashboard -->
+            <a href="dashboard.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+                <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-tachometer-alt text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+                <span class="absolute -right-2 -top-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    3
+                </span>
+            </a>
+
+            <!-- Valider Enseignant -->
+            <a href="approuvedTeacher.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+                <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-user-check text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+                <span class="absolute -right-2 -top-2 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    5
+                </span>
+            </a>
+
+            <!-- Gérer Enseignant -->
+            <a href="gereteacher.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+                <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-chalkboard-teacher text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+            </a>
+
+            <!-- Gérer Étudiants -->
+            <a href="gereUsers.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+                <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-users-cog text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+                <span class="absolute -right-2 -top-2 bg-yellow-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    12
+                </span>
+            </a>
+
+            <!-- Catégories -->
+            <a href="categorie.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+                <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-layer-group text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+            </a>
+
+            <!-- Tags -->
+            <a href="tags.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+                <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-tags text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+            </a>
+
+            <!-- Statistiques -->
+            <a href="static.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+                <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-chart-pie text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+            </a>
+
+            <!-- Séparateur -->
+            <div class="border-t border-white/20 my-2"></div>
+
+            <!-- Déconnexion -->
+            <a href="logout.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-red-500/20 hover:scale-105">
+                <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <i class="fas fa-sign-out-alt text-white text-xl relative z-10 transform group-hover:rotate-12 group-hover:text-red-500"></i>
+            </a>
+        </nav>
+
+        <style>
+            /* Animations supplémentaires */
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                }
+
+                50% {
+                    transform: scale(1.05);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            .group:hover i {
+                animation: pulse 0.5s ease-in-out;
+            }
+        </style>
+
+
         <!-- Main Content -->
-        
+
         <div class="flex-1 flex flex-col">
             <!-- Top Bar -->
             <header class="bg-white shadow py-4 px-4 flex justify-between items-center">
@@ -73,12 +148,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
             </header>
             <!-- Main Section -->
             <main class="flex-1 bg-gray-100 p-6">
-                           <?php 
-                             echo isset($content) ? $content : '<p>Bienvenue sur le site de réservation de voyages.</p>';
-                             ?>
+                <?php
+                echo isset($content) ? $content : '<p>Bienvenue sur le site de réservation de voyages.</p>';
+                ?>
 
 
-               
+
                 <!-- Gestion des utilisateurs -->
                 <section class="mb-6">
                     <h3 class="text-xl font-semibold mb-4">Gestion des utilisateurs</h3>

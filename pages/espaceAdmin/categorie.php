@@ -1,5 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
+require_once("../sweetAlert.php"); 
 ob_start();
 
 use classes\Categorie;
@@ -11,16 +12,37 @@ $dbManager = new DatabaseManager();
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add"])) {
     try {
+        // Votre code à exécuter
         if (empty($_POST['name'])) {
-            echo "Veuillez remplir les champs.";
+            throw new Exception("Le champ 'titre de categorie' est obligatoire.");
+        }
+    
+        $newCategorie = new Categorie($dbManager, 0, $_POST['name'], $_POST['description']);
+        $result = $newCategorie->add();
+    
+        if ($result) {
+            // Si l'ajout réussit, configure une alerte SweetAlert de succès
+            $_SESSION['msgSweetAlert'] = [
+                'title' => 'Succès',
+                'text' => 'La catégorie a été ajoutée avec succès.',
+                'status' => 'success'
+            ];
+            sweetAlert('categorie.php'); // Redirige vers la page des catégories
+            exit;
         } else {
-            $newCategorie = new Categorie($dbManager, 0, $_POST['name'], $_POST['description']);
-            $result = $newCategorie->add();
-            echo $result ? "Catégorie ajoutée avec succès !" : "Erreur lors de l'ajout de la catégorie.";
+            throw new Exception("Échec de l'ajout de la catégorie.");
         }
     } catch (Exception $e) {
-        echo "Erreur : " . $e->getMessage();
+        // Configure une alerte SweetAlert d'erreur
+        $_SESSION['msgSweetAlert'] = [
+            'title' => 'Erreur',
+            'text' => $e->getMessage(),
+            'status' => 'error'
+        ];
+        sweetAlert('categorie.php'); // Redirige vers la page des catégories
+        exit;
     }
+    
 }
 
 // Archive de catégorie
@@ -82,25 +104,25 @@ function afficher($dbManager)
 }
 ?>
 
-?>
 
-<!DOCTYPE html>
+
+<!-- <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Catégories</title>
-    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- DataTables CSS -->
+  
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
-    <!-- DataTables JS -->
+   
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-    <!-- DataTables Language (Français) -->
+ 
     <script src="//cdn.datatables.net/plug-ins/1.13.5/i18n/fr-FR.json"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100"> -->
 
 <section class="mb-4">
     <h3 class="text-xl font-semibold mb-2">Gestion des Catégories</h3>

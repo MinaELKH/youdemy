@@ -8,12 +8,12 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 class User
 {
-    private $id_user;
-    private $name_full;
-    private $email;
+    protected $id_user;
+    protected $name_full;
+    protected $email;
     private $passwordHash;
-    private $avatar;
-    private $role;
+    protected $avatar;
+    protected $role;
 
     public function __construct(
         int $id_user,
@@ -21,7 +21,7 @@ class User
         ?string $email,
         string $role,
         ?string $avatar = null,
-        $passwordHash = null
+        ?string $passwordHash = null
     ) {
         $this->id_user = $id_user;
         $this->name_full = $name_full;

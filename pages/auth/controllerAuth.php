@@ -45,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
         ];
         sweetAlert('dashboard.php'); // Redirection vers le tableau de bord
         exit;
-
     } catch (Exception $e) {
         // Gestion des erreurs
         $_SESSION['msgSweetAlert'] = [
