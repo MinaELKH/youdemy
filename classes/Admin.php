@@ -1,14 +1,8 @@
 <?php
-
 namespace classes;
-
 use config\DataBaseManager;
-<?php
-
 namespace classes;
-
 use config\DataBaseManager;
-
 class Admin extends User
 {
     private DataBaseManager $dbManager;

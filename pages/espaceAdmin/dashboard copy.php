@@ -141,9 +141,455 @@ $dbManager = new DatabaseManager();
                         </ul>
                     </div>
                 </div>
+                <div class="flex-1 flex flex-col">
+            <!-- Top Bar -->
+            <header class="bg-white shadow py-4 px-4 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-semibold"> Bienvenue Name </h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="text-gray-600">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+            </header>
+            <!-- Main Section -->
+            <main class="flex-1 bg-gray-100 p-6">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+                    <!-- Total Sales Card -->
+                    <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-500 text-white rounded-full p-2">
+                                <i class="fas fa-chart-bar">
+                                </i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-gray-600">
+                                    Total Sales
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            87,472
+                        </div>
+                        <div class="flex items-center">
+                            <img alt="Bar chart icon" class="mr-2" src="https://placehold.co/50x20" />
+                            <span class="text-green-500 text-sm">
+                                Increased By 2.0%
+                                <i class="fas fa-arrow-up">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Total Revenue Card -->
+                    <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-pink-500 text-white rounded-full p-2">
+                                <i class="fas fa-briefcase">
+                                </i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-gray-600">
+                                    Total Revenue
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            $9,432
+                        </div>
+                        <div class="flex items-center">
+                            <img alt="Bar chart icon" class="mr-2" src="https://placehold.co/50x20" />
+                            <span class="text-red-500 text-sm">
+                                Decreased By 1.0%
+                                <i class="fas fa-arrow-down">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Total Customers Card -->
+                    <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-pink-500 text-white rounded-full p-2">
+                                <i class="fas fa-users">
+                                </i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-gray-600">
+                                    Total Customers
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            3,132
+                        </div>
+                        <div class="flex items-center">
+                            <img alt="Bar chart icon" class="mr-2" src="https://placehold.co/50x20" />
+                            <span class="text-green-500 text-sm">
+                                Increased By 1.5%
+                                <i class="fas fa-arrow-up">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Total Profit Card -->
+                    <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-orange-500 text-white rounded-full p-2">
+                                <i class="fas fa-dollar-sign">
+                                </i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-gray-600">
+                                    Total Profit
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            $5,325
+                        </div>
+                        <div class="flex items-center">
+                            <img alt="Bar chart icon" class="mr-2" src="https://placehold.co/50x20" />
+                            <span class="text-green-500 text-sm">
+                                Increased By 1.3%
+                                <i class="fas fa-arrow-up">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Validation des comptes enseignants -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Validation des comptes enseignants</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-600">Liste des enseignants en attente de validation...</p>
+                        <!-- Add your content here -->
+                    </div>
+                </section>
+                <!-- Gestion des utilisateurs -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Gestion des utilisateurs</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-600">Activation, suspension ou suppression des utilisateurs...</p>
+                        <!-- Add your content here -->
+                    </div>
+                </section>
+                <!-- Gestion des contenus -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Gestion des contenus</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-600">Gestion des cours, catégories et tags...</p>
+                        <!-- Add your content here -->
+                    </div>
+                </section>
+                <!-- Insertion en masse de tags -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Insertion en masse de tags</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-600">Insertion en masse de tags pour gagner en efficacité...</p>
+                        <!-- Add your content here -->
+                    </div>
+                </section>
+                <!-- Statistiques globales -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Statistiques globales</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Total Courses -->
+                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Total Courses</h3>
+                                        <p class="text-gray-600">1,234</p>
+                                    </div>
+                                    <div class="bg-blue-500 text-white p-3 rounded-full">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Courses by Category -->
+                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Courses by Category</h3>
+                                        <p class="text-gray-600">Details...</p>
+                                    </div>
+                                    <div class="bg-green-500 text-white p-3 rounded-full">
+                                        <i class="fas fa-chart-pie"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Course with Most Students -->
+                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Course with Most Students</h3>
+                                        <p class="text-gray-600">Course Name</p>
+                                    </div>
+                                    <div class="bg-yellow-500 text-white p-3 rounded-full">
+                                        <i class="fas fa-user-graduate"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Top 3 Teachers -->
+                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Top 3 Teachers</h3>
+                                        <p class="text-gray-600">Teacher Names</p>
+                                    </div>
+                                    <div class="bg-red-500 text-white p-3 rounded-full">
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        
+
+
+
+<!-- d autre dashboard -->
+
+        <div class="flex-1 flex flex-col">
+            <!-- Top Bar -->
+            <header class="bg-white shadow py-4 px-4 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-semibold"> Bienvenue Name </h2>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-600">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="text-gray-600">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                </div>
+            </header>
+            <!-- Main Section -->
+            <main class="flex-1 bg-gray-100 p-6">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+                    <!-- Total Sales Card -->
+                    <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-500 text-white rounded-full p-2">
+                                <i class="fas fa-chart-bar">
+                                </i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-gray-600">
+                                    Total Sales
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            87,472
+                        </div>
+                        <div class="flex items-center">
+                            <img alt="Bar chart icon" class="mr-2" src="https://placehold.co/50x20" />
+                            <span class="text-green-500 text-sm">
+                                Increased By 2.0%
+                                <i class="fas fa-arrow-up">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Total Revenue Card -->
+                    <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-pink-500 text-white rounded-full p-2">
+                                <i class="fas fa-briefcase">
+                                </i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-gray-600">
+                                    Total Revenue
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            $9,432
+                        </div>
+                        <div class="flex items-center">
+                            <img alt="Bar chart icon" class="mr-2" src="https://placehold.co/50x20" />
+                            <span class="text-red-500 text-sm">
+                                Decreased By 1.0%
+                                <i class="fas fa-arrow-down">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Total Customers Card -->
+                    <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-pink-500 text-white rounded-full p-2">
+                                <i class="fas fa-users">
+                                </i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-gray-600">
+                                    Total Customers
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            3,132
+                        </div>
+                        <div class="flex items-center">
+                            <img alt="Bar chart icon" class="mr-2" src="https://placehold.co/50x20" />
+                            <span class="text-green-500 text-sm">
+                                Increased By 1.5%
+                                <i class="fas fa-arrow-up">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Total Profit Card -->
+                    <div class="bg-white rounded-lg shadow p-4 flex flex-col items-center">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-orange-500 text-white rounded-full p-2">
+                                <i class="fas fa-dollar-sign">
+                                </i>
+                            </div>
+                            <div class="ml-4">
+                                <h2 class="text-gray-600">
+                                    Total Profit
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">
+                            $5,325
+                        </div>
+                        <div class="flex items-center">
+                            <img alt="Bar chart icon" class="mr-2" src="https://placehold.co/50x20" />
+                            <span class="text-green-500 text-sm">
+                                Increased By 1.3%
+                                <i class="fas fa-arrow-up">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Validation des comptes enseignants -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Validation des comptes enseignants</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-600">Liste des enseignants en attente de validation...</p>
+                        <!-- Add your content here -->
+                    </div>
+                </section>
+                <!-- Gestion des utilisateurs -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Gestion des utilisateurs</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-600">Activation, suspension ou suppression des utilisateurs...</p>
+                        <!-- Add your content here -->
+                    </div>
+                </section>
+                <!-- Gestion des contenus -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Gestion des contenus</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-600">Gestion des cours, catégories et tags...</p>
+                        <!-- Add your content here -->
+                    </div>
+                </section>
+                <!-- Insertion en masse de tags -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Insertion en masse de tags</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-600">Insertion en masse de tags pour gagner en efficacité...</p>
+                        <!-- Add your content here -->
+                    </div>
+                </section>
+                <!-- Statistiques globales -->
+                <section class="mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Statistiques globales</h3>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Total Courses -->
+                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Total Courses</h3>
+                                        <p class="text-gray-600">1,234</p>
+                                    </div>
+                                    <div class="bg-blue-500 text-white p-3 rounded-full">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Courses by Category -->
+                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Courses by Category</h3>
+                                        <p class="text-gray-600">Details...</p>
+                                    </div>
+                                    <div class="bg-green-500 text-white p-3 rounded-full">
+                                        <i class="fas fa-chart-pie"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Course with Most Students -->
+                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Course with Most Students</h3>
+                                        <p class="text-gray-600">Course Name</p>
+                                    </div>
+                                    <div class="bg-yellow-500 text-white p-3 rounded-full">
+                                        <i class="fas fa-user-graduate"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Top 3 Teachers -->
+                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-lg font-semibold">Top 3 Teachers</h3>
+                                        <p class="text-gray-600">Teacher Names</p>
+                                    </div>
+                                    <div class="bg-red-500 text-white p-3 rounded-full">
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </main>
         </div>
     </div>
+
+
     <script>
         // Line Chart
         const lineCtx = document.getElementById('lineChart').getContext('2d');

@@ -1,3 +1,7 @@
+<?php 
+require("../sweetAlert.php"); 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
+?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -12,41 +16,50 @@
             font-family: 'Roboto', sans-serif;
         }
     </style>
+      <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 </head>
+
 <body class="bg-gray-100">
     <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="bg-blue-900 text-white w-64 space-y-6 py-7 px-2">
-            <div class="text-center">
-                <h1 class="text-3xl font-bold"> Dashboard</h1>
-            </div>
+        <div class="bg-blue-900 text-white space-y-6 py-7 px-2">
+
             <nav>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                <!-- dashboard -->
+                <a href="dashboard.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
+                    <i class="fas fa-tachometer-alt"></i>
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-user-check"></i> Validation des comptes enseignants
+                 <!-- valide enseignant -->
+                <a href="gereteacher.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
+                    <i class="fas fa-user-check"></i>
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-users-cog"></i> Gestion des utilisateurs
+                <!-- gere user -->
+                <a href="gereUser.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
+                    <i class="fas fa-users-cog"></i>
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-book"></i> Gestion des contenus
+                <!-- categorie -->
+                <a href="categorie.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
+                    <i class="fas fa-book"></i>
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-tags"></i> Insertion en masse de tags
+                <!-- tags -->
+                <a href="tags.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
+                    <i class="fas fa-tags"></i>
                 </a>
-                <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
-                    <i class="fas fa-chart-pie"></i> Statistiques globales
+                <!-- statistique -->
+                <a href="static.php" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">
+                    <i class="fas fa-chart-pie"></i>
                 </a>
             </nav>
         </div>
         <!-- Main Content -->
+        
         <div class="flex-1 flex flex-col">
             <!-- Top Bar -->
             <header class="bg-white shadow py-4 px-4 flex justify-between items-center">
                 <div>
-                    <h2 class="text-2xl font-semibold"> Bienvenue  Name  </h2>
+                    <h2 class="text-2xl font-semibold"> Bienvenue Name </h2>
                 </div>
                 <div class="flex items-center space-x-4">
                     <button class="text-gray-600">
@@ -59,52 +72,12 @@
             </header>
             <!-- Main Section -->
             <main class="flex-1 bg-gray-100 p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Card 1 -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="text-lg font-semibold">Total Users</h3>
-                                <p class="text-gray-600">1,234</p>
-                            </div>
-                            <div class="bg-blue-500 text-white p-3 rounded-full">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 2 -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="text-lg font-semibold">New Orders</h3>
-                                <p class="text-gray-600">567</p>
-                            </div>
-                            <div class="bg-green-500 text-white p-3 rounded-full">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="text-lg font-semibold">Revenue</h3>
-                                <p class="text-gray-600">$12,345</p>
-                            </div>
-                            <div class="bg-yellow-500 text-white p-3 rounded-full">
-                                <i class="fas fa-dollar-sign"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Validation des comptes enseignants -->
-                <section class="mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Validation des comptes enseignants</h3>
-                    <div class="bg-white p-6 rounded-lg shadow-lg">
-                        <p class="text-gray-600">Liste des enseignants en attente de validation...</p>
-                        <!-- Add your content here -->
-                    </div>
-                </section>
+                           <?php 
+                             echo isset($content) ? $content : '<p>Bienvenue sur le site de réservation de voyages.</p>';
+                             ?>
+
+
+               
                 <!-- Gestion des utilisateurs -->
                 <section class="mb-6">
                     <h3 class="text-xl font-semibold mb-4">Gestion des utilisateurs</h3>
@@ -252,4 +225,5 @@
         });
     </script>
 </body>
+
 </html>

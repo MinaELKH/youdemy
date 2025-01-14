@@ -1,7 +1,6 @@
 <!-- Gestion de l'authentification - Connexion - register -->
 <?php
 require("../sweetAlert.php"); 
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 use classes\User ;
 use config\Session ; 

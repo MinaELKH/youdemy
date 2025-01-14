@@ -64,7 +64,7 @@ class DataBaseManager
     }
     public function selectAll(string $table): array |bool
     {
-        $query = "SELECT * FROM $table where archive = 0";
+        $query = "SELECT * FROM $table where archived = 0";
         $stmt = $this->connection->prepare($query);
         if ($stmt->execute()) {
             return $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -73,9 +73,11 @@ class DataBaseManager
         }
     }
 
-    public function selectAllArchive(string $table): array |bool
+
+    
+    public function selectAllarchived(string $table): array |bool
     {
-        $query = "SELECT * FROM $table where archive = 1";
+        $query = "SELECT * FROM $table where archived = 1";
         $stmt = $this->connection->prepare($query);
         if ($stmt->execute()) {
             return $stmt->fetchAll(PDO::FETCH_OBJ);

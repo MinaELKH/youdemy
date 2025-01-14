@@ -63,7 +63,7 @@ class User
     {
         $this->passwordHash = password_hash($password, PASSWORD_BCRYPT);
     }
-    public function save()
+   private function save()
     {
         $db = Database::getInstance()->getConnection();
         try {

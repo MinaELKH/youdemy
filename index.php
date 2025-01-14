@@ -1,6 +1,5 @@
 <?php 
     require_once  'autoloader.php';
-
 ?>
 <html lang="en">
  <head>
