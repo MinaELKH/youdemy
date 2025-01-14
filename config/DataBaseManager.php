@@ -64,7 +64,7 @@ class DataBaseManager
     }
     public function selectAll(string $table): array |bool
     {
-        $query = "SELECT * FROM $table where archived = 0";
+        $query = "SELECT * FROM $table where archived = 0  order by created_at desc ";
         $stmt = $this->connection->prepare($query);
         if ($stmt->execute()) {
             return $stmt->fetchAll(PDO::FETCH_OBJ);

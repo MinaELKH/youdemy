@@ -16,6 +16,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
             font-family: 'Roboto', sans-serif;
         }
     </style>
+    <link rel="stylesheet" href="../../css/style.css" >
       <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
