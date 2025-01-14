@@ -24,10 +24,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <!-- DataTables Language (Français) -->
     <script src="//cdn.datatables.net/plug-ins/1.13.5/i18n/fr-FR.json"></script>
-
-
-
-
+    <!-- script data table --> 
+    <script src="../../src/js/dataTable.js"></script>
+    <script src="../../src/js/main.js"></script>
 
     <style>
         body {
@@ -37,7 +36,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
     <link rel="stylesheet" href="../../src/css/style.css">
     <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
+   
+     
 </head>
 
 <body class="bg-gray-100">
@@ -56,7 +56,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
             </a>
 
             <!-- Valider Enseignant -->
-            <a href="approuvedTeacher.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+            <a href="approvedTeacher.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
                 <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <i class="fas fa-user-check text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
                 <span class="absolute -right-2 -top-2 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

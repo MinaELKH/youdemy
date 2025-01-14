@@ -11,17 +11,19 @@ class User
     protected $id_user;
     protected $name_full;
     protected $email;
-    private $passwordHash;
-    protected $avatar;
     protected $role;
+    protected $avatar;
+    private $passwordHash;
+    
+  
 
     public function __construct(
-        int $id_user,
-        ?string $name_full,
-        ?string $email,
-        string $role,
+        ?int $id_user=null,
+        ?string $name_full =null,
+        ?string $email =null,
+        string $role =null,
         ?string $avatar = null,
-        ?string $passwordHash = null
+        $passwordHash = null
     ) {
         $this->id_user = $id_user;
         $this->name_full = $name_full;
@@ -30,6 +32,13 @@ class User
         $this->avatar = $avatar;
         $this->passwordHash = $passwordHash;
     }
+
+
+//  public function __get($att) {
+//         // Retourner la valeur de la propriété si elle existe
+//          return $this->$att;
+//  }
+
 
     public function __toString()
     {
@@ -63,7 +72,7 @@ class User
     {
         $this->passwordHash = password_hash($password, PASSWORD_BCRYPT);
     }
-   private function save()
+     private function save()
     {
         $db = Database::getInstance()->getConnection();
         try {

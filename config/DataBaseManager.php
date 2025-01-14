@@ -60,7 +60,15 @@ class DataBaseManager
             $stmt->bindParam(":$column", $data[$column]);
         }
         $stmt->bindParam(":whereValue", $whereValue);
-        return $stmt->execute();
+
+      
+      $stmt->execute();
+
+        if ($stmt->rowCount() > 0) {
+            return true; // L'update a modifié au moins une ligne
+        } else {
+            return false; // Aucune ligne modifiée
+        }
     }
     public function selectAll(string $table): array |bool
     {
@@ -75,7 +83,7 @@ class DataBaseManager
 
 
     
-    public function selectAllarchived(string $table): array |bool
+    public function selectAll_Archived(string $table): array |bool
     {
         $query = "SELECT * FROM $table where archived = 1";
         $stmt = $this->connection->prepare($query);

@@ -1,5 +1,17 @@
 <?php
-function sweetAlert($redirectUrl) {
+
+function setSweetAlertMessage($title, $text, $status, $redirectPage) {
+    $_SESSION['msgSweetAlert'] = [
+        'title' => $title,
+        'text' => $text,
+        'status' => $status
+    ];
+    sweetAlert($redirectPage); // Appel de la fonction pour afficher l'alerte
+    exit;
+}
+
+
+function sweetAlert($redirectUrl) { 
     // Vérifie si une alerte existe dans la session
     if (isset($_SESSION['msgSweetAlert'])) {
         $title = addslashes($_SESSION['msgSweetAlert']['title']);
@@ -15,7 +27,8 @@ function sweetAlert($redirectUrl) {
                     title: '$title',
                     text: '$text',
                     icon: '$status',
-                    showConfirmButton: true,
+                    showConfirmButton: false,  // Désactive le bouton de confirmation
+                    timer: 2000,  // Temps avant fermeture (en ms, ici 3000ms = 3 secondes)
                     customClass: {
                         popup: 'custom-sweetalert' // Appliquer une classe CSS personnalisée
                     }

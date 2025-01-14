@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
-require_once("../sweetAlert.php"); 
+require_once("../sweetAlert.php");
 ob_start();
 
 use classes\Categorie;
@@ -16,47 +16,32 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add"])) {
         if (empty($_POST['name'])) {
             throw new Exception("Le champ 'titre de categorie' est obligatoire.");
         }
-    
+
         $newCategorie = new Categorie($dbManager, 0, $_POST['name'], $_POST['description']);
         $result = $newCategorie->add();
-    
+
         if ($result) {
-            // Si l'ajout réussit, configure une alerte SweetAlert de succès
-            $_SESSION['msgSweetAlert'] = [
-                'title' => 'Succès',
-                'text' => 'La catégorie a été ajoutée avec succès.',
-                'status' => 'success'
-            ];
-            sweetAlert('categorie.php'); // Redirige vers la page des catégories
-            exit;
+            setSweetAlertMessage('Succès', ' La catégorie a été ajoutée avec succès', 'success', 'categorie.php');
         } else {
             throw new Exception("Échec de l'ajout de la catégorie.");
         }
     } catch (Exception $e) {
-        // Configure une alerte SweetAlert d'erreur
-        $_SESSION['msgSweetAlert'] = [
-            'title' => 'Erreur',
-            'text' => $e->getMessage(),
-            'status' => 'error'
-        ];
-        sweetAlert('categorie.php'); // Redirige vers la page des catégories
-        exit;
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'categorie.php');
     }
-    
 }
 
 // Archive de catégorie
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
     try {
-        if (!empty($_POST['id_categorie'])) {
             $newCategorie = new Categorie($dbManager, $_POST['id_categorie']);
             $result = $newCategorie->archived();
-            echo $result ? "Catégorie archivée avec succès !" : "Erreur lors de l'archivage de la catégorie.";
-        } else {
-            echo "L'ID de la catégorie est manquant.";
-        }
-    } catch (Exception $e) {
-        echo "Erreur : " . $e->getMessage();
+            if ($result) {
+                setSweetAlertMessage('Succès', 'Categorie archivée avec succès.', 'success', 'categorie.php');
+            } else {
+                setSweetAlertMessage('Erreur', 'Aucun archivage n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'categorie.php');
+            }
+        } catch (Exception $e) {
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'categorie.php');
     }
 }
 
@@ -159,12 +144,12 @@ function afficher($dbManager)
 </section>
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#categoriesTable').DataTable({
-            paging: true,        // Activer la pagination
-            searching: true,     // Activer la recherche
-            info: true,          // Activer les informations sur les résultats
-            responsive: true,    // Mode responsive
+            paging: true, // Activer la pagination
+            searching: true, // Activer la recherche
+            info: true, // Activer les informations sur les résultats
+            responsive: true, // Mode responsive
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.13.5/i18n/fr-FR.json" // Français
             },
@@ -176,4 +161,3 @@ function afficher($dbManager)
 $content = ob_get_clean();
 include('layout.php');
 ?>
-
