@@ -4,62 +4,44 @@ require_once("../sweetAlert.php");
 ob_start();
 
 use config\DataBaseManager;
-use classes\Teacher;
+use classes\Student;
 
 $dbManager = new DataBaseManager();
 
-// Archive d teacher
+// Archive d student
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
     try {
-        $newTeacher = new Teacher($dbManager, $_POST['id_teacher']);
-        $result = $newTeacher->archived();
+        $newstudent = new Student($dbManager, $_POST['id_student']);
+        $result = $newstudent->archived();
 
         if ($result) {
-            setSweetAlertMessage('Succès', 'L\'enseignant a été archivé avec succès.', 'success', 'gereTeacher.php');
+            setSweetAlertMessage('Succès', 'L\'apprenant a été archivé avec succès.', 'success', 'gerestudent.php');
         } else {
-            setSweetAlertMessage('Erreur', 'Aucun archivage n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'gereTeacher.php');
+            setSweetAlertMessage('Erreur', 'Aucun archivage n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'gerestudent.php');
         }
     } catch (Exception $e) {
 
-        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gereTeacher.php/pending');
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gerestudent.php/pending');
     }
 }
 
-// suspension d teacher
+// suspension d student
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["suspended"])) {
     try {
-        $newTeacher = new Teacher($dbManager, $_POST['id_teacher']);
-        $result = $newTeacher->suspended();
+        $newstudent = new student($dbManager, $_POST['id_student']);
+        $result = $newstudent->suspended();
 
         if ($result) {
-            setSweetAlertMessage('Succès', 'L\'enseignant a été suspendu avec succès.', 'success', 'gereTeacher.php');
+            setSweetAlertMessage('Succès', 'L\'apprenant a été suspendu avec succès.', 'success', 'gerestudent.php');
         } else {
-            setSweetAlertMessage('Erreur', 'Aucun suspension n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'gereTeacher.php');
+            setSweetAlertMessage('Erreur', 'Aucun suspension n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'gerestudent.php');
         }
     } catch (Exception $e) {
 
-        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gereTeacher.php');
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gerestudent.php');
     }
 }
 
-// approved d teacher
-if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
-    //    var_dump($_POST);
-    //    die();
-    try {
-        $newTeacher = new Teacher($dbManager, $_POST['id_teacher']);
-        $status  = $_POST["status"];
-        $result = $newTeacher->approved($status);
-        if ($result) {
-            setSweetAlertMessage('Succès', 'L\'operation a étè effectué en succès.', 'success', '');
-        } else {
-            setSweetAlertMessage('Erreur', 'Aucune operation n\'a eu lieu. veuillez contacter le superAdmin', 'error', '');
-        }
-    } catch (Exception $e) {
-
-        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gereTeacher.php');
-    }
-}
 
 
 
@@ -70,12 +52,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
 
 
 ?>
-<!-- Gestion des Enseignants -->
+<!-- Gestion des apprenants -->
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 p-8">
     <div class="container mx-auto">
         <div class="flex justify-between items-center mb-10">
             <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                Gestion des Enseignants
+                Gestion des apprenants
             </h1>
 
             <div class="flex space-x-4">
@@ -89,10 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                 </div>
                 <form method="get" action="">
                     <button value="1" name="pending" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full hover:scale-105 transform transition flex items-center shadow-xl hover:shadow-2xl">
-                        <i class="fas fa-plus mr-2"></i> Demandes en attente
+                        <i class="fas fa-plus mr-2"></i> Apprenants bloqués
                     </button>
+                </form>
             </div>
-            </form>
+            
         </div>
 
         <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden p-6">
@@ -101,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                     <tr>
                         <?php
                         $headers = [
-                            'Enseignant' => 'w-1/4',
+                            'apprenant' => 'w-1/4',
                             'Cours' => 'w-1/6',
                             'Contact' => 'w-1/4',
                             'Statut' => 'w-1/6',
@@ -119,29 +102,26 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
 
                 <tbody>
                     <?php
-                    if (isset($_GET["pending"])) {
-                        $newTeacher = new teacher($dbManager);
-                        $teacherss = $newTeacher->getAll_Pending();
-                    } else {
-                        $newTeacher = new teacher($dbManager);
-                        $teacherss = $newTeacher->getAll();
-                    }
+                  
+                        $newstudent = new student($dbManager);
+                        $students = $newstudent->getAll();
+                   
                     //  echo"<pre>" ;
-                    //  var_dump($teacherss);
+                    //  var_dump($students);
                     //  echo"<pre>" ;
-                    foreach ($teacherss as $teacher): ?>
+                    foreach ($students as $student): ?>
                         <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition duration-300">
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-4">
                                     <div class="relative">
                                         <img
-                                            src="<?= htmlspecialchars($teacher->getAvatar() ?? 'default-avatar.png') ?>"
+                                            src="<?= htmlspecialchars($student->getAvatar() ?? 'default-avatar.png') ?>"
                                             alt="Profile"
                                             class="w-16 h-16 rounded-full object-cover border-4 bg-green-500 border-opacity-30 transform hover:scale-110 transition" />
                                         <span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 ring-2 ring-white"></span>
                                     </div>
                                     <div>
-                                        <div class="font-bold text-gray-900"><?= htmlspecialchars($teacher->getname_full()) ?></div>
+                                        <div class="font-bold text-gray-900"><?= htmlspecialchars($student->getname_full()) ?></div>
                                     </div>
                                 </div>
                             </td>
@@ -154,16 +134,16 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
 
                             <td class="px-6 py-4">
                                 <div class="text-sm text-gray-600">
-                                    <div><?= htmlspecialchars($teacher->getEmail()) ?></div>
+                                    <div><?= htmlspecialchars($student->getEmail()) ?></div>
                                     <div class="text-xs text-gray-400">00212 68594892</div>
                                 </div>
                             </td>
 
                             <td class="px-6 py-4">
-                                <span class="= $teacher->suspended ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?> 
+                                <span class="= $student->suspended ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?> 
                                     px-3 py-1 rounded-full text-xs font-semibold uppercase">
                                     <?php
-                                    if ($teacher->suspended == 0) {
+                                    if ($student->suspended == 0) {
                                         echo "<span class='text-green-500'>Actif</span>";
                                     } else {
                                         echo "<span class='text-red-500'>Suspension</span>";
@@ -174,22 +154,22 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                             <!-- approuve -->
                             <td class="px-2 py-1 text-center">
                             <form action="" method="post">
-                                <input type="hidden" name="id_teacher" value="<?= $teacher->getid_user() ?>">
+                                <input type="hidden" name="id_student" value="<?= $student->getid_user() ?>">
                                 <div class="inline-flex space-x-1">
                                     <button type="submit" name="status" value="pending" class="
-                                            <?= $teacher->approved == 'pending' ? 'text-yellow-500' : 'text-gray-300' ?> 
+                                            <?= $student->approved == 'pending' ? 'text-yellow-500' : 'text-gray-300' ?> 
                                             hover:text-yellow-600 transition-colors duration-200">
                                         <i class="fas fa-clock"></i>
                                     </button>
 
                                     <button type="submit" name="status" value="approved" class="
-                                            <?= $teacher->approved == 'approved' ? 'text-green-500' : 'text-gray-300' ?> 
+                                            <?= $student->approved == 'approved' ? 'text-green-500' : 'text-gray-300' ?> 
                                             hover:text-green-600 transition-colors duration-200">
                                         <i class="fas fa-check-circle"></i>
                                     </button>
 
                                     <button type="submit" name="status" value="rejected" class="
-            <?= $teacher->approved == 'rejected' ? 'text-red-500' : 'text-gray-300' ?> 
+            <?= $student->approved == 'rejected' ? 'text-red-500' : 'text-gray-300' ?> 
             hover:text-red-600 transition-colors duration-200">
                                         <i class="fas fa-times-circle"></i>
                                     </button>
@@ -201,19 +181,19 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                                     <!-- View Details Button -->
                                     <button
                                         type="button"
-                                        onclick="viewTeacherDetails(<?= $teacher->getid_user() ?>)"
+                                        onclick="viewstudentDetails(<?= $student->getid_user() ?>)"
                                         class="text-blue-500 hover:text-blue-700 transform hover:scale-125 transition"
                                         title="Voir les détails">
                                         <i class="fas fa-eye"></i>
                                     </button>
 
                                     <!-- Suspension Button -->
-                                    <?php if ($teacher->suspended == 1): ?>
+                                    <?php if ($student->suspended == 1): ?>
                                         <button
                                             type="submit"
                                             name="activate"
                                             class="text-green-500 hover:text-green-700 transform hover:scale-125 transition"
-                                            title="Réactiver l'enseignant">
+                                            title="Réactiver l'apprenant">
                                             <i class="fas fa-check-circle"></i>
                                         </button>
                                     <?php else: ?>
@@ -221,18 +201,18 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                                             type="submit"
                                             name="suspended"
                                             class="text-orange-500 hover:text-orange-700 transform hover:scale-125 transition"
-                                            title="Suspendre l'enseignant">
+                                            title="Suspendre l'apprenant">
                                             <i class="fas fa-ban "></i>
                                         </button>
                                     <?php endif; ?>
 
                                     <!-- Archive Button -->
-                                    <?php if (!$teacher->archived): ?>
+                                    <?php if (!$student->archived): ?>
                                         <button
                                             type="submit"
                                             name="archive"
                                             class="text-red-500 hover:text-red-700 transform hover:scale-125 transition"
-                                            title="Archiver l'enseignant">
+                                            title="Archiver l'apprenant">
                                             <i class="fas fa-archive"></i>
                                         </button>
                                     <?php endif; ?>

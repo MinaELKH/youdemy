@@ -8,7 +8,7 @@ class Database
     private static $instance = null; // Instance PDO pour éviter plusieurs connexions
 
     private $host = 'localhost';
-    private $dbname = 'youdemy'; 
+    private $dbname = 'youdemy_croise'; 
     private $username = 'root';
     private $password = ''; 
 

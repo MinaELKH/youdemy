@@ -1,37 +1,78 @@
--- Ajout des catégories
-INSERT INTO categories (name, created_at) VALUES
-('Développement Web', NOW()),
-('Data Science', NOW()),
-('Design Graphique', NOW()),
-('Marketing Digital', NOW()),
-('Gestion de Projet', NOW()),
-('Photographie', NOW()),
-('Programmation Mobile', NOW()),
-('Sécurité Informatique', NOW()),
-('Intelligence Artificielle', NOW()),
-('Finance Personnelle', NOW());
+-- INSERT INTO `roles` (`id_role`, `role`)
+-- VALUES 
+--     (1, 'admin'),
+--     (2, 'teacher'),
+--     (3, 'student')
+    
+    
+    
+    
+    --Insertion dans la table users (en supposant que le rôle 2 est pour les enseignants)
+-- INSERT INTO `users` 
+-- (`email`, `password`, `name_full`, `avatar`, `id_role`, `archived`, `suspended`) VALUES 
+-- ('john.smith@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John Smith', 'john_avatar.jpg', 2, 0, 0),
+-- ('emma.johnson@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Emma Johnson', 'emma_avatar.jpg', 2, 0, 0),
+-- ('michael.brown@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Michael Brown', 'michael_avatar.jpg', 2, 0, 0),
+-- ('sophia.davis@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Sophia Davis', 'sophia_avatar.jpg', 2, 0, 0),
+-- ('david.wilson@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'David Wilson', 'david_avatar.jpg', 2, 0, 0),
+-- ('olivia.martinez@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Olivia Martinez', 'olivia_avatar.jpg', 2, 0, 0),
+-- ('james.anderson@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'James Anderson', 'james_avatar.jpg', 2, 0, 0),
+-- ('ava.thomas@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Ava Thomas', 'ava_avatar.jpg', 2, 0, 0),
+-- ('ethan.jackson@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Ethan Jackson', 'ethan_avatar.jpg', 2, 0, 0),
+-- ('isabella.white@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Isabella White', 'isabella_avatar.jpg', 2, 0, 0),
+-- ('alexander.harris@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Alexander Harris', 'alexander_avatar.jpg', 2, 0, 0),
+-- ('mia.martin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Mia Martin', 'mia_avatar.jpg', 2, 0, 0),
+-- ('william.thompson@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'William Thompson', 'william_avatar.jpg', 2, 0, 0),
+-- ('charlotte.garcia@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Charlotte Garcia', 'charlotte_avatar.jpg', 2, 0, 0),
+-- ('benjamin.robinson@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Benjamin Robinson', 'benjamin_avatar.jpg', 2, 0, 0),
+-- ('amelia.clark@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Amelia Clark', 'amelia_avatar.jpg', 2, 0, 0),
+-- ('daniel.rodriguez@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Daniel Rodriguez', 'daniel_avatar.jpg', 2, 0, 0),
+-- ('harper.lewis@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Harper Lewis', 'harper_avatar.jpg', 2, 0, 0),
+-- ('mason.lee@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Mason Lee', 'mason_avatar.jpg', 2, 0, 0),
+-- ('evelyn.walker@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Evelyn Walker', 'evelyn_avatar.jpg', 2, 0, 0);
+-- 
+-- Insertion dans la table teacher
 
--- Ajout des cours pour chaque catégorie
-INSERT INTO courses (title, description, picture, prix, status, id_teacher, id_category, archive, created_at, updated_at)
-VALUES
--- Catégorie 1 : Développement Web
-('HTML & CSS', 'Cours complet sur les bases du développement web avec HTML et CSS.', 'html_css.png', 49.99, 'active', FLOOR(40 + (RAND() * 7)), 1, '0', NOW(), NOW()),
-('JavaScript pour débutants', 'Apprenez les bases de JavaScript et développez des projets.', 'javascript.png', 59.99, 'active', FLOOR(40 + (RAND() * 7)), 1, '0', NOW(), NOW()),
-('PHP et MySQL', 'Créez des applications web dynamiques avec PHP et MySQL.', 'php_mysql.png', 69.99, 'active', FLOOR(40 + (RAND() * 7)), 1, '0', NOW(), NOW()),
-('Frameworks JavaScript', 'Introduction aux frameworks populaires comme React et Vue.', 'frameworks.png', 79.99, 'active', FLOOR(40 + (RAND() * 7)), 1, '0', NOW(), NOW()),
-('Node.js et Express', 'Construisez des applications backend avec Node.js.', 'nodejs.png', 89.99, 'active', FLOOR(40 + (RAND() * 7)), 1, '0', NOW(), NOW()),
-('Bootstrap avec Tailwind', 'Design web avancé avec Bootstrap et Tailwind CSS.', 'bootstrap_tailwind.png', 49.99, 'active', FLOOR(40 + (RAND() * 7)), 1, '0', NOW(), NOW()),
-('Optimisation SEO', 'Apprenez à optimiser votre site pour les moteurs de recherche.', 'seo.png', 39.99, 'active', FLOOR(40 + (RAND() * 7)), 1, '0', NOW(), NOW()),
-('API REST', 'Maîtrisez la création d’API RESTful avec PHP et JavaScript.', 'api_rest.png', 69.99, 'active', FLOOR(40 + (RAND() * 7)), 1, '0', NOW(), NOW()),
+-- INSERT INTO `teachers` 
+-- (`id_user`, `approved`, `message`) VALUES 
+-- (1, 'approved', 'Profil validé : 10 ans d\'expérience en développement web, diplôme de l\'École Polytechnique et références professionnelles solides.'),
+-- (2, 'approved', 'Approuvé : Portfolio impressionnant, plusieurs projets innovants et certifications internationales en design UX/UI.'),
+-- (3, 'approved', 'Validation confirmée : Ancien ingénieur cloud chez Google, publications techniques et expertise reconnue.'),
+-- (4, 'rejected', 'Refusé : Manque d\'expérience professionnelle significative et absence de certifications pertinentes.'),
+-- (5, 'approved', 'Approuvé : Expert cybersécurité certifié CISSP, 15 ans dans le domaine de la sécurité informatique.'),
+-- (6, 'rejected', 'Refusé : Parcours académique incomplet et peu de projets concrets en intelligence artificielle.'),
+-- (7, 'approved', 'Validation : DBA senior avec plus de 12 ans d\'expérience chez Oracle et MySQL, formateur reconnu.'),
+-- (8, 'rejected', 'Refusé : Dossier incomplet, informations de qualification manquantes.'),
+-- (9, 'approved', 'Approuvé : Contributeur open-source majeur, formateur Python dans plusieurs bootcamps internationaux.'),
+-- (10, 'approved', 'Validation confirmée : Lead développeur JavaScript, nombreuses conférences et workshops donnés.'),
+-- (11, 'rejected', 'Refusé : Niveau technique insuffisant, nécessite un développement professionnel supplémentaire.'),
+-- (12, 'approved', 'Approuvé : Architecte réseau certifié CCNA, plus de 8 ans d\'expérience dans l\'infrastructure IT.'),
+-- (13, 'approved', 'Validation : Game designer professionnel, a travaillé sur des projets AAA et possède des diplômes spécialisés.'),
+-- (14, 'rejected', 'Refusé : Compétences en analyse de données trop junior, recommandation de formations complémentaires.'),
+-- (15, 'approved', 'Approuvé : Data scientist avec doctorat, publications dans des revues scientifiques internationales.'),
+-- (16, 'rejected', 'Refusé : Manque de preuves concrètes de réalisations en machine learning.'),
+-- (17, 'approved', 'Validation : Développeur blockchain reconnu, plusieurs smart contracts audités et publiés.'),
+-- (18, 'approved', 'Approuvé : Consultant cyberdéfense pour des organisations gouvernementales, certifications de haut niveau.'),
+-- (19, 'rejected', 'Refusé : Compétences déclarées non vérifiées, nécessité de fournir des preuves supplémentaires.'),
+-- (20, 'approved', 'Validation : Expert en technologies émergentes, conférencier international et mentor reconnu.');
 
--- Répétez cette structure pour les 9 autres catégories
 
--- Exemple pour la Catégorie 2 : Data Science
-('Python pour Data Science', 'Introduction à Python pour la science des données.', 'python_datasci.png', 99.99, 'active', FLOOR(40 + (RAND() * 7)), 2, '0', NOW(), NOW()),
-('Analyse des données', 'Apprenez à analyser des données avec pandas et NumPy.', 'data_analysis.png', 89.99, 'active', FLOOR(40 + (RAND() * 7)), 2, '0', NOW(), NOW()),
-('Visualisation avec Matplotlib', 'Créez des visualisations de données attractives.', 'matplotlib.png', 79.99, 'active', FLOOR(40 + (RAND() * 7)), 2, '0', NOW(), NOW()),
-('Machine Learning', 'Introduction aux algorithmes d’apprentissage automatique.', 'ml.png', 119.99, 'active', FLOOR(40 + (RAND() * 7)), 2, '0', NOW(), NOW()),
-('Deep Learning', 'Apprenez les bases des réseaux de neurones.', 'deep_learning.png', 129.99, 'active', FLOOR(40 + (RAND() * 7)), 2, '0', NOW(), NOW()),
-('Big Data', 'Manipulez et analysez de grandes quantités de données.', 'big_data.png', 149.99, 'active', FLOOR(40 + (RAND() * 7)), 2, '0', NOW(), NOW()),
-('SQL Avancé', 'Maîtrisez SQL pour des requêtes complexes.', 'sql_advanced.png', 69.99, 'active', FLOOR(40 + (RAND() * 7)), 2, '0', NOW(), NOW()),
-('Statistiques', 'Bases des statistiques appliquées pour Data Science.', 'statistics.png', 79.99, 'active', FLOOR(40 + (RAND() * 7)), 2, '0', NOW(), NOW());
+
+
+-- INSERT INTO categories (name, created_at) VALUES
+-- ('Développement Web', NOW()),
+-- ('Data Science', NOW()),
+-- ('Design Graphique', NOW()),
+-- ('Marketing Digital', NOW()),
+-- ('Gestion de Projet', NOW()),
+-- ('Photographie', NOW()),
+-- ('Programmation Mobile', NOW()),
+-- ('Sécurité Informatique', NOW()),
+-- ('Intelligence Artificielle', NOW()),
+-- ('Finance Personnelle', NOW());
+
+
+
+
+
+

@@ -65,13 +65,13 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
             </a>
 
             <!-- Gérer Enseignant -->
-            <a href="gereteacher.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+            <a href="gereTeacher.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
                 <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <i class="fas fa-chalkboard-teacher text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
             </a>
 
             <!-- Gérer Étudiants -->
-            <a href="gereUsers.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
+            <a href="gereStudent.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
                 <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <i class="fas fa-users-cog text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
                 <span class="absolute -right-2 -top-2 bg-yellow-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

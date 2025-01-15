@@ -5,7 +5,7 @@ use Exception ;
 class Teacher extends User
 {
     private ?DataBaseManager $db;
-    private int $approved;
+    private ?string $approved;
     private  int $archived ; 
     private  int $suspended ;
     
@@ -15,11 +15,11 @@ class Teacher extends User
         ?int $id_user = null,
         ?string $name_full = null, 
         ?string $email= null ,
-        ?string $role = null,
+        ?string $role = 'teacher',
         ?string $avatar = null,
         int $suspended = 0,
         int $archived = 0,
-        int  $approved = 0 
+        ?string $approved = null
     ) {
         parent::__construct($id_user, $name_full, $email, $role, $avatar); 
         $this->db = $db; 
@@ -61,6 +61,15 @@ class Teacher extends User
         return $this->db->update("users" , $data , $whereColumn , $whereValue) ;
     }
 
+    public function approved($statut):bool{
+        $data = [
+            "approved"=>$statut
+        ] ; 
+        $whereColumn = "id_user" ;
+        $whereValue = $this->id_user ;
+    // j ai ajouté un table teacher qui recois la modification de l approuvation 
+        return $this->db->update("teachers" , $data , $whereColumn , $whereValue) ;
+    }
     // public function getAll():array
     // {
     //     return $this->db->selectAll("users") ;
@@ -88,7 +97,8 @@ class Teacher extends User
 
 
     public function getAll_Pending(): array {
-        $params = ["approved"=>0] ;
+        $params = ["approved"=>'pending' , 
+        "archived"=>0] ;
         $teachers = [];
         $results = $this->db->selectBy("viewteacher", $params );
         if ($results) {
