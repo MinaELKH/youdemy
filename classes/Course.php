@@ -6,15 +6,15 @@ use config\Database ;
 
 class Course {
     private ?DataBaseManager $db;
-    private ?int $id_Course; 
+    private ?int $id_course; 
     private ?string $title; 
     private ?string $description;
     private ?int $archived; 
 
-public function __construct(?DataBaseManager $db , ?int $id_Course=0 , ?string $title=null , ?string $description=null  , ?int $archived=null)
+public function __construct(?DataBaseManager $db , ?int $id_course=0 , ?string $title=null , ?string $description=null  , ?int $archived=null)
 {
     $this->db=$db ; 
-    $this->id_Course=$id_Course;
+    $this->id_course=$id_course;
     $this->title = $title ; 
     $this->description = $description ; 
     $this->archived = $archived ;
@@ -31,8 +31,8 @@ public function add():bool{
     return $this->db->insert("Courses" , $data) ;
 }
 public function delete():bool{
-    $cond = "id_Course" ; 
-    $param = $this->id_Course ;
+    $cond = "id_course" ; 
+    $param = $this->id_course ;
     return $this->db->delete("Courses" , $cond , $param) ;
 }
 
@@ -41,8 +41,8 @@ public function update():bool{
         "title"=>$this->title , 
         "description"=>$this->description ,
     ] ; 
-    $whereColumn = "id_Course" ;
-    $whereValue = $this->id_Course ;
+    $whereColumn = "id_course" ;
+    $whereValue = $this->id_course ;
     return $this->db->update("Courses" , $data , $whereColumn , $whereValue) ;
 }
 
@@ -50,31 +50,38 @@ public function archived():bool{
     $data = [
         "archived"=>1
     ] ; 
-    $whereColumn = "id_Course" ;
-    $whereValue = $this->id_Course ;
+    $whereColumn = "id_course" ;
+    $whereValue = $this->id_course ;
     return $this->db->update("Courses" , $data , $whereColumn , $whereValue) ;
 }
 
 
+
+public function approved($status):bool{
+    $data = [
+        "status"=>$status
+    ] ; 
+    $whereColumn = "id_user" ;
+    $whereValue = $this->id_user ;
+// j ai ajouté un table teacher qui recois la modification de l approuvation 
+    return $this->db->update("teachers" , $data , $whereColumn , $whereValue) ;
+}
 // public function getAll():array
 // {
 //     return $this->db->selectAll("Courses") ;
 // }
 
-
+public function getAll_Pending(): array {
+    $params = ["status"=>'pending' , 
+    "archived"=>0] ;
+    $teachers = [];
+    $results = $this->db->selectBy("viewCourses", $params );
+    return $results ;
+}
 
 
 public function getAll(): array {
-    $results = $this->db->selectAll("Courses");
-    $Courses = [];
-
-    if ($results) {
-        foreach ($results as $result) {
-            $Courses[] = new Course(null, $result->id_Course, $result->title, $result->description, $result->archived);
-        }
-    }
-
-    return $Courses;
+    return $this->db->selectAll("viewcourses");
 }
 
 }

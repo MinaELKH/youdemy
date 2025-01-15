@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
         }
     } catch (Exception $e) {
 
-        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gereTeacher.php/pending');
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gereTeacher.php');
     }
 }
 
@@ -123,7 +123,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                             'Cours' => 'w-1/6',
                             'Contact' => 'w-1/4',
                             'Statut' => 'w-1/6',
-                            'Approuve' => 'w-1/6',
                             'Actions' => 'w-1/6 text-center'
                         ];
 

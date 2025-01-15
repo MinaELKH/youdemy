@@ -12,18 +12,18 @@ class Tag
 {
     private DatabaseManager $dbManager;
     private ?int $id_tag;
-    private ?string $name_full;
+    private ?string $name_tag;
     private ?string $archive;
 
     public function __construct(
         DatabaseManager $dbManager,
         ?int $id_tag = null,
-        ?string $name_full = null,
+        ?string $name_tag = null,
         ?string $archive = '0'
     ) {
         $this->dbManager = $dbManager;
         $this->id_tag = $id_tag;
-        $this->name_full = $name_full;
+        $this->name_tag = $name_tag;
         $this->archive = $archive;
     }
 
@@ -36,10 +36,10 @@ class Tag
 
     public function getTagByname(): ?stdClass
     {
-        $query = "SELECT * FROM tags WHERE name_full = :name_full AND archive = 0";
+        $query = "SELECT * FROM tags WHERE name_tag = :name_tag AND archived = 0";
         $connection = $this->dbManager->getConnection();
         $stmt = $connection->prepare($query);
-        $stmt->bindValue(":name_full", $this->name_full, PDO::PARAM_STR);
+        $stmt->bindValue(":name_tag", $this->name_tag, PDO::PARAM_STR);
         if ($stmt->execute()) {
             $result = $stmt->fetch(PDO::FETCH_OBJ);
             return $result ?: null; // Retourne null si aucun tag trouvé
@@ -50,8 +50,8 @@ class Tag
     public function add(): bool
     {
         $data = [
-            'name_full' => $this->name_full,
-            'archive' => $this->archive,
+            'name_tag' => $this->name_tag,
+            'archived' => $this->archive,
         ];
         return $this->dbManager->insert('tags', $data);
     }
