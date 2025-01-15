@@ -60,6 +60,17 @@ class student extends User
         return $this->db->update("users" , $data , $whereColumn , $whereValue) ;
     }
 
+    public function activited():bool{
+        $data = [
+            "suspended"=>0
+        ] ; 
+        $whereColumn = "id_user" ;
+        $whereValue = $this->id_user ;
+    
+        return $this->db->update("users" , $data , $whereColumn , $whereValue) ;
+    }
+
+
     // public function getAll():array
     // {
     //     return $this->db->selectAll("users") ;

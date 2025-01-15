@@ -10,6 +10,8 @@ $dbManager = new DataBaseManager();
 
 // Archive d student
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
+    // var_dump($_POST) ;
+    // die(); 
     try {
         $newstudent = new Student($dbManager, $_POST['id_student']);
         $result = $newstudent->archived();
@@ -42,6 +44,24 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["suspended"])) {
     }
 }
 
+
+
+// activation d student
+if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["activate"])) {
+    try {
+        $newstudent = new student($dbManager, $_POST['id_student']);
+        $result = $newstudent->activited();
+
+        if ($result) {
+            setSweetAlertMessage('Succès', 'L\'apprenant a été réactive avec succès.', 'success', 'gerestudent.php');
+        } else {
+            setSweetAlertMessage('Erreur', 'Aucun réactivation n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'gerestudent.php');
+        }
+    } catch (Exception $e) {
+
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gerestudent.php');
+    }
+}
 
 
 
@@ -88,7 +108,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["suspended"])) {
                             'Cours' => 'w-1/6',
                             'Contact' => 'w-1/4',
                             'Statut' => 'w-1/6',
-                            'Approuve' => 'w-1/6',
                             'Actions' => 'w-1/6 text-center'
                         ];
 
@@ -151,31 +170,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["suspended"])) {
                                     ?>
                                 </span>
                             </td>
-                            <!-- approuve -->
-                            <td class="px-2 py-1 text-center">
-                            <form action="" method="post">
-                                <input type="hidden" name="id_student" value="<?= $student->getid_user() ?>">
-                                <div class="inline-flex space-x-1">
-                                    <button type="submit" name="status" value="pending" class="
-                                            <?= $student->approved == 'pending' ? 'text-yellow-500' : 'text-gray-300' ?> 
-                                            hover:text-yellow-600 transition-colors duration-200">
-                                        <i class="fas fa-clock"></i>
-                                    </button>
-
-                                    <button type="submit" name="status" value="approved" class="
-                                            <?= $student->approved == 'approved' ? 'text-green-500' : 'text-gray-300' ?> 
-                                            hover:text-green-600 transition-colors duration-200">
-                                        <i class="fas fa-check-circle"></i>
-                                    </button>
-
-                                    <button type="submit" name="status" value="rejected" class="
-            <?= $student->approved == 'rejected' ? 'text-red-500' : 'text-gray-300' ?> 
-            hover:text-red-600 transition-colors duration-200">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
-                                </div>
-                            </td>
-
+                     
+                         <form method="post" action="">
+                            <input type="hidden" name="id_student" value="<?= $student->getId_user() ?>" >
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center space-x-3">
                                     <!-- View Details Button -->

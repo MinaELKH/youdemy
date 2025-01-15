@@ -42,6 +42,24 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["suspended"])) {
     }
 }
 
+
+// activation d etudiant
+if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["activate"])) {
+    try {
+        $newteacher = new Teacher($dbManager, $_POST['id_teacher']);
+        $result = $newteacher->activited();
+
+        if ($result) {
+            setSweetAlertMessage('Succès', 'L\'enseignant a été réactive avec succès.', 'success', 'gereteacher.php');
+        } else {
+            setSweetAlertMessage('Erreur', 'Aucun réactivation n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'gereteacher.php');
+        }
+    } catch (Exception $e) {
+
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gereteacher.php');
+    }
+}
+
 // approved d teacher
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
     //    var_dump($_POST);

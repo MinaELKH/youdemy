@@ -60,7 +60,16 @@ class Teacher extends User
     
         return $this->db->update("users" , $data , $whereColumn , $whereValue) ;
     }
-
+    public function activited():bool{
+        $data = [
+            "suspended"=>0
+        ] ; 
+        $whereColumn = "id_user" ;
+        $whereValue = $this->id_user ;
+    
+        return $this->db->update("users" , $data , $whereColumn , $whereValue) ;
+    }
+    
     public function approved($statut):bool{
         $data = [
             "approved"=>$statut
