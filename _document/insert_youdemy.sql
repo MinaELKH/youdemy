@@ -57,6 +57,27 @@
 -- (20, 'approved', 'Validation : Expert en technologies émergentes, conférencier international et mentor reconnu.');
 
 
+INSERT INTO `users` (`email`, `password`, `name_full`, `avatar`, `id_role`, `created_at`, `archived`, `suspended`) VALUES
+('johndoe92@gmail.com', 'password123', 'John Doe', 'avatar1.jpg', 3, NOW(), 0, 0),
+('janedoe85@yahoo.com', 'password123', 'Jane Doe', 'avatar2.jpg', 3, NOW(), 0, 0),
+('alice.smith@hotmail.com', 'password123', 'Alice Smith', 'avatar3.jpg', 3, NOW(), 0, 0),
+('bob.brown@outlook.com', 'password123', 'Bob Brown', 'avatar4.jpg', 3, NOW(), 0, 0),
+('charlie.davis@gmail.com', 'password123', 'Charlie Davis', 'avatar5.jpg', 3, NOW(), 0, 0),
+('david.clark@icloud.com', 'password123', 'David Clark', 'avatar6.jpg', 3, NOW(), 0, 0),
+('eva.evans@aol.com', 'password123', 'Eva Evans', 'avatar7.jpg', 3, NOW(), 0, 0),
+('fay.green@live.com', 'password123', 'Fay Green', 'avatar8.jpg', 3, NOW(), 0, 0),
+('george.harris@outlook.com', 'password123', 'George Harris', 'avatar9.jpg', 3, NOW(), 0, 0),
+('holly.johnson@zoho.com', 'password123', 'Holly Johnson', 'avatar10.jpg', 3, NOW(), 0, 0),
+('ian.king@icloud.com', 'password123', 'Ian King', 'avatar11.jpg', 3, NOW(), 0, 0),
+('jack.lee@gmail.com', 'password123', 'Jack Lee', 'avatar12.jpg', 3, NOW(), 0, 0),
+('karen.mitchell@aol.com', 'password123', 'Karen Mitchell', 'avatar13.jpg', 3, NOW(), 0, 0),
+('liam.moore@outlook.com', 'password123', 'Liam Moore', 'avatar14.jpg', 3, NOW(), 0, 0),
+('megan.nelson@zoho.com', 'password123', 'Megan Nelson', 'avatar15.jpg', 3, NOW(), 0, 0),
+('nathan.oconnor@gmail.com', 'password123', 'Nathan Connor', 'avatar16.jpg', 3, NOW(), 0, 0),
+('olivia.peters@live.com', 'password123', 'Olivia Peters', 'avatar17.jpg', 3, NOW(), 0, 0),
+('paul.quinn@yahoo.com', 'password123', 'Paul Quinn', 'avatar18.jpg', 3, NOW(), 0, 0),
+('quinn.roberts@hotmail.com', 'password123', 'Quinn Roberts', 'avatar19.jpg', 3, NOW(), 0, 0),
+('rachel.smith@icloud.com', 'password123', 'Rachel Smith', 'avatar20.jpg', 3, NOW(), 0, 0);
 
 
 -- INSERT INTO categories (name, created_at) VALUES
@@ -76,3 +97,4 @@
 
 
 
+voyageoop

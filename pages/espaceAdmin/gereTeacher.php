@@ -190,29 +190,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                                 </span>
                             </td>
                             <!-- approuve -->
-                            <td class="px-2 py-1 text-center">
+                        
                             <form action="" method="post">
                                 <input type="hidden" name="id_teacher" value="<?= $teacher->getid_user() ?>">
-                                <div class="inline-flex space-x-1">
-                                    <button type="submit" name="status" value="pending" class="
-                                            <?= $teacher->approved == 'pending' ? 'text-yellow-500' : 'text-gray-300' ?> 
-                                            hover:text-yellow-600 transition-colors duration-200">
-                                        <i class="fas fa-clock"></i>
-                                    </button>
-
-                                    <button type="submit" name="status" value="approved" class="
-                                            <?= $teacher->approved == 'approved' ? 'text-green-500' : 'text-gray-300' ?> 
-                                            hover:text-green-600 transition-colors duration-200">
-                                        <i class="fas fa-check-circle"></i>
-                                    </button>
-
-                                    <button type="submit" name="status" value="rejected" class="
-            <?= $teacher->approved == 'rejected' ? 'text-red-500' : 'text-gray-300' ?> 
-            hover:text-red-600 transition-colors duration-200">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
-                                </div>
-                            </td>
+                         
+                          
 
                             <td class="px-6 py-4 text-center">
                                 <div class="flex justify-center space-x-3">

@@ -12,12 +12,15 @@ $dbManager = new DatabaseManager();
 
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add"])) {
     try {
+
+        
         // Votre code à exécuter
         if (empty($_POST['name'])) {
             throw new Exception("Le champ 'titre de categorie' est obligatoire.");
         }
 
         $newCategorie = new Categorie($dbManager, 0, $_POST['name'], $_POST['description']);
+
         $result = $newCategorie->add();
 
         if ($result) {
@@ -52,27 +55,36 @@ function afficher($dbManager)
         $categorie = new Categorie($dbManager);
         $categories = $categorie->getAll();
 
+        echo "<div class='min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 p-8'>
+                <div class='container mx-auto'>
+                    <div class='bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden p-6'>";
+
         if (!empty($categories)) {
-            echo "<table id='categoriesTable' class='display w-full'>
-                    <thead>
+            echo "<table id='DataTable' class='w-full'>
+                    <thead class='bg-gradient-to-r from-blue-50 to-purple-50'>
                         <tr>
-                            <th>Réf</th>
-                            <th>Nom</th>
-                            <th>Description</th>
-                            <th>Actions</th>
+                            <th class='w-1/6 px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider'>Réf</th>
+                            <th class='w-1/3 px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider'>Nom</th>
+                            <th class='w-1/3 px-6 py-4 text-left text-sm font-bold text-gray-700 uppercase tracking-wider'>Description</th>
+                            <th class='w-1/6 px-6 py-4 text-center text-sm font-bold text-gray-700 uppercase tracking-wider'>Actions</th>
                         </tr>
                     </thead>
                     <tbody>";
+
             foreach ($categories as $objet) {
-                echo "<tr>
-                        <td>{$objet->id_categorie}</td>
-                        <td>{$objet->name}</td>
-                        <td>{$objet->description}</td>
-                        <td>
-                            <form action='' method='post'>
+                echo "<tr class='border-b border-gray-100 hover:bg-blue-50/50 transition duration-300'>
+                        <td class='px-6 py-4 text-gray-800'>{$objet->id_categorie}</td>
+                        <td class='px-6 py-4'>
+                            <div class='font-semibold text-gray-900'>{$objet->name}</div>
+                        </td>
+                        <td class='px-6 py-4 text-gray-600'>{$objet->description}</td>
+                        <td class='px-6 py-4 text-center'>
+                            <form action='' method='post' class='flex justify-center'>
                                 <input type='hidden' name='id_categorie' value='{$objet->id_categorie}'>
-                                <button type='submit' name='archive' value='{$objet->id_categorie}' class='text-red-400'>
-                                    <span class='material-symbols-outlined'>archive</span>
+                                <button type='submit' name='archive' value='{$objet->id_categorie}' 
+                                    class='text-red-500 hover:text-red-700 transform hover:scale-125 transition'
+                                    title='Archiver la catégorie'>
+                                    <i class='fas fa-archive'></i>
                                 </button>
                             </form>
                         </td>
@@ -81,12 +93,37 @@ function afficher($dbManager)
             echo "</tbody>
                 </table>";
         } else {
-            echo "<p>Aucune catégorie trouvée.</p>";
+            echo "<p class='text-center text-gray-500 py-6'>Aucune catégorie trouvée.</p>";
         }
+
+        echo "  </div>
+            </div>
+        </div>";
+
+        // Add DataTables initialization script
+        echo "<script>
+            $(document).ready(function() {
+                $('#categoriesTable').DataTable({
+                    responsive: true,
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
+                    },
+                    columnDefs: [{
+                        targets: 'no-sort',
+                        orderable: false
+                    }]
+                });
+            });
+        </script>";
+
     } catch (Exception $e) {
-        echo "Erreur lors de la récupération des catégories : " . $e->getMessage();
+        echo "<div class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>
+                <strong class='font-bold'>Erreur : </strong>
+                <span class='block sm:inline'>" . htmlspecialchars($e->getMessage()) . "</span>
+              </div>";
     }
 }
+
 ?>
 
 
@@ -143,7 +180,7 @@ function afficher($dbManager)
     </div>
 </section>
 
-<script>
+<!-- <script>
     $(document).ready(function() {
         $('#categoriesTable').DataTable({
             paging: true, // Activer la pagination
@@ -155,7 +192,7 @@ function afficher($dbManager)
             },
         });
     });
-</script>
+</script> -->
 
 <?php
 $content = ob_get_clean();

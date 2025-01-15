@@ -13,7 +13,9 @@ class DataBaseManager
         $db = Database::getInstance();
         $this->connection = $db->getConnection();
     }
-
+    public function getConnection(){
+        return  $this->connection;
+    }
 
     public function insert(string $table, array $data): bool
     {
@@ -28,7 +30,7 @@ class DataBaseManager
 
         $i = 1;
         foreach ($data as $value) {
-            $stmt->bindParam($i, $value);
+            $stmt->bindValue($i, $value);
             $i++;
         }
 

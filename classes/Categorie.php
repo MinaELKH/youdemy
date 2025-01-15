@@ -28,6 +28,7 @@ public function add():bool{
         "name"=>$this->name ,
         "description"=>$this->description ,
     ] ; 
+  
     return $this->db->insert("categories" , $data) ;
 }
 public function delete():bool{
