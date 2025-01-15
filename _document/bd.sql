@@ -15,11 +15,11 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Listage de la structure de la base pour youdemy
-CREATE DATABASE IF NOT EXISTS `youdemy` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `youdemy`;
+-- Listage de la structure de la base pour youdemy_croise
+CREATE DATABASE IF NOT EXISTS `youdemy_croise` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `youdemy_croise`;
 
--- Listage de la structure de table youdemy. categories
+-- Listage de la structure de table youdemy_croise. categories
 CREATE TABLE IF NOT EXISTS `categories` (
   `id_categorie` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -27,11 +27,11 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `archived` tinyint(1) DEFAULT '0',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`id_categorie`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table youdemy. courses
+-- Listage de la structure de table youdemy_croise. courses
 CREATE TABLE IF NOT EXISTS `courses` (
   `id_course` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `courses` (
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table youdemy. enrollments
+-- Listage de la structure de table youdemy_croise. enrollments
 CREATE TABLE IF NOT EXISTS `enrollments` (
   `id_enrollements` int NOT NULL AUTO_INCREMENT,
   `id_student` int DEFAULT NULL,
@@ -70,11 +70,13 @@ CREATE TABLE IF NOT EXISTS `enrollments` (
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table youdemy. reviews
+-- Listage de la structure de table youdemy_croise. reviews
 CREATE TABLE IF NOT EXISTS `reviews` (
   `id_reviews` int NOT NULL AUTO_INCREMENT,
   `id_article` int NOT NULL,
+  `comment` varchar(255) NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `archived` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id_reviews`),
   KEY `id_article` (`id_article`),
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`id_article`) REFERENCES `courses` (`id_course`)
@@ -82,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table youdemy. roles
+-- Listage de la structure de table youdemy_croise. roles
 CREATE TABLE IF NOT EXISTS `roles` (
   `id_role` int NOT NULL AUTO_INCREMENT,
   `role` varchar(50) NOT NULL,
@@ -92,19 +94,19 @@ CREATE TABLE IF NOT EXISTS `roles` (
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table youdemy. tags
+-- Listage de la structure de table youdemy_croise. tags
 CREATE TABLE IF NOT EXISTS `tags` (
   `id_tag` int NOT NULL AUTO_INCREMENT,
-  `NAME` varchar(50) NOT NULL,
+  `name_tag` varchar(50) NOT NULL,
   `archived` tinyint(1) DEFAULT '0',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_tag`),
-  UNIQUE KEY `NAME` (`NAME`)
+  UNIQUE KEY `name_tag` (`name_tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table youdemy. tag_course
+-- Listage de la structure de table youdemy_croise. tag_course
 CREATE TABLE IF NOT EXISTS `tag_course` (
   `id_course` int NOT NULL,
   `id_tag` int NOT NULL,
@@ -117,10 +119,10 @@ CREATE TABLE IF NOT EXISTS `tag_course` (
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table youdemy. teacher
-CREATE TABLE IF NOT EXISTS `teacher` (
+-- Listage de la structure de table youdemy_croise. teachers
+CREATE TABLE IF NOT EXISTS `teachers` (
   `id_user` int NOT NULL,
-  `approved` tinyint(1) DEFAULT '0',
+  `approved` enum('pending','approved','rejected') DEFAULT 'pending',
   `message` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id_user`),
   CONSTRAINT `teacher_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`)
@@ -128,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `teacher` (
 
 -- Les données exportées n'étaient pas sélectionnées.
 
--- Listage de la structure de table youdemy. users
+-- Listage de la structure de table youdemy_croise. users
 CREATE TABLE IF NOT EXISTS `users` (
   `id_user` int NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
@@ -143,9 +145,30 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `id_role` (`id_role`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Les données exportées n'étaient pas sélectionnées.
+
+-- Listage de la structure de vue youdemy_croise. viewteacher
+-- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
+CREATE TABLE `viewteacher` (
+	`id_user` INT(10) NOT NULL,
+	`email` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`password` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`name_full` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`avatar` VARCHAR(255) NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`id_role` INT(10) NOT NULL,
+	`created_at` DATETIME NULL,
+	`archived` TINYINT(1) NULL,
+	`suspended` TINYINT(1) NULL,
+	`approved` ENUM('pending','approved','rejected') NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`message` VARCHAR(255) NULL COLLATE 'utf8mb4_0900_ai_ci'
+) ENGINE=MyISAM;
+
+-- Listage de la structure de vue youdemy_croise. viewteacher
+-- Suppression de la table temporaire et création finale de la structure d'une vue
+DROP TABLE IF EXISTS `viewteacher`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `viewteacher` AS select `u`.`id_user` AS `id_user`,`u`.`email` AS `email`,`u`.`password` AS `password`,`u`.`name_full` AS `name_full`,`u`.`avatar` AS `avatar`,`u`.`id_role` AS `id_role`,`u`.`created_at` AS `created_at`,`u`.`archived` AS `archived`,`u`.`suspended` AS `suspended`,`t`.`approved` AS `approved`,`t`.`message` AS `message` from (`users` `u` join `teachers` `t` on((`u`.`id_user` = `t`.`id_user`)));
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
