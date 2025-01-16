@@ -41,8 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
             setSweetAlertMessage('Erreur', 'Aucune operation n\'a eu lieu. veuillez contacter le superAdmin', 'error', '');
         }
     } catch (Exception $e) {
-
-        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'gerecourse.php');
+        var_dump($e->getMessage());
+        die();
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'course.php');
     }
 }
 
@@ -88,11 +89,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                         <?php
                         $headers = [
                             'Titre' => 'w-1/6',
-                            'Catégorie' => 'w-1/6',
-                            'Info' => 'w-1/6',
-                            'statut' => 'w-1/6',
+                            'Catégorie' => 'w-1/6 ',
+                            'Info' => 'w-1/6 ',
+                            'Enseignant' => 'w-1/6 ',
                             'Description' => 'w-1/6',
-                            'Actions' => 'w-1/6 text-center'
+                            'statut' => 'w-1/6'
                         ];
 
                         foreach ($headers as $header => $width): ?>
@@ -134,7 +135,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                                             <?= htmlspecialchars($course->title) ?>
                                         </div>
                                         <div class="text-xs text-gray-500 truncate max-w-[150px]">
-                                            <?= htmlspecialchars($course->teacher_name) ?>
                                             <span class="flex items-center text-gray-600">
                                                 <i class="fas fa-calendar mr-1 text-purple-500 text-sm"></i>
                                                 <?= date('d/m/Y', strtotime($course->created_at)) ?? 'N/A' ?>
@@ -165,34 +165,19 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                                 </div>
                             </td>
 
+                            <!-- Colonne teacher -->
+                            <td class="px-4 py-2 text-center">
+                                <div class="flex justify-center space-x-2">
+                                    <div class="text-xs text-gray-500 truncate max-w-[150px]">
+                                        <?= htmlspecialchars($course->teacher_name) ?>
+                                        <br>
+                                        <?= htmlspecialchars($course->email) ?>
+                                    </div>
 
 
-                            <!-- Colonne Statistiques -->
-                            <td class="px-4 py-2">
-                            <form action="" method="post">
-                                <input type="hidden" name="id_course" value="<?= $course->id_course ?>">
-                                <div class="inline-flex space-x-1">
-                                    <button type="submit" name="status" value="pending" class="
-                                            <?= $course->status == 'pending' ? 'text-yellow-500' : 'text-gray-300' ?> 
-                                            hover:text-yellow-600 transition-colors duration-200">
-                                        <i class="fas fa-clock"></i>
-                                    </button>
 
-                                    <button type="submit" name="status" value="approved" class="
-                                            <?= $course->status == 'approved' ? 'text-green-500' : 'text-gray-300' ?> 
-                                            hover:text-green-600 transition-colors duration-200">
-                                        <i class="fas fa-check-circle"></i>
-                                    </button>
-
-                                    <button type="submit" name="status" value="rejected" class="
-                                        <?= $course->status == 'rejected' ? 'text-red-500' : 'text-gray-300' ?> 
-                                        hover:text-red-600 transition-colors duration-200">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
                                 </div>
-                            </form>
                             </td>
-
                             <!-- Colonne Description -->
                             <td class="px-4 py-2">
                                 <div class="text-xs text-gray-500 truncate max-w-[200px]">
@@ -200,21 +185,41 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                                 </div>
                             </td>
 
-                            <!-- Colonne Actions -->
-                            <td class="px-4 py-2 text-center">
-                                <div class="flex justify-center space-x-2">
-                                    <button
-                                        onclick="viewcourseDetails(<?= $course->id_course ?>)"
-                                        class="text-blue-500 hover:text-blue-700 text-sm">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button
-                                        onclick="editCourse(<?= $course->id_course ?>)"
-                                        class="text-green-500 hover:text-green-700 text-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </div>
+                            <!-- Colonne Statut -->
+                            <td class="px-4 py-2">
+                                <form action="" method="post">
+                                    <input type="hidden" name="id_course" value="<?= $course->id_course ?>">
+                                    <div class="inline-flex space-x-2">
+                                        <button type="submit" name="status" value="pending" class="
+                                            <?= $course->status == 'pending' ? 'text-yellow-500' : 'text-gray-300' ?> 
+                                            hover:text-yellow-600 transition-colors duration-200">
+                                            <i class="fas fa-clock"></i>
+                                        </button>
+
+                                        <button type="submit" name="status" value="approved" class="
+                                            <?= $course->status == 'approved' ? 'text-green-500' : 'text-gray-300' ?> 
+                                            hover:text-green-600 transition-colors duration-200">
+                                            <i class="fas fa-check-circle"></i>
+                                        </button>
+
+                                        <button type="submit" name="status" value="rejected" class="
+                                        <?= $course->status == 'rejected' ? 'text-red-500' : 'text-gray-300' ?> 
+                                        hover:text-red-600 transition-colors duration-200">
+                                            <i class="fas fa-times-circle"></i>
+                                        </button>
+
+                                        <button
+                                            onclick="viewcourseDetails(<?= $course->id_course ?>)"
+                                            class="text-blue-500 hover:text-blue-700 text-sm ">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+
+                                    </div>
+                                </form>
                             </td>
+
+
+
                         </tr>
 
                     <?php endforeach; ?>

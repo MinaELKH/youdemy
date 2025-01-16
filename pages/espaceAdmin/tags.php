@@ -59,7 +59,7 @@ if (isset($_POST['addTags'])) {
                     </div>
 
                     <!-- Liste des Tags -->
-                    <input type="hidden" name="tags" id="tags">
+                    <input type="text" name="tags" id="tags">
                     <div 
                         id="tagList" 
                         class="flex flex-wrap gap-2 min-h-[100px] border border-dashed border-blue-300 p-2 rounded-lg"
@@ -102,6 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tagList = document.getElementById('tagList');
     const tagCountPreview = document.getElementById('tagCountPreview');
     const resetButton = document.getElementById('resetButton');
+
+
+
     const tagsHiddenInput = document.getElementById('tags');  // ici on stock les tags a recupere sur post
     
 
@@ -123,7 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateTagCount();
             });
             tagList.appendChild(tagElement);
+
             tags.push(tagText); 
+            
             tagInput.value = '';
             tagsHiddenInput.value = tags.join(',');
             updateTagCount(tagText);

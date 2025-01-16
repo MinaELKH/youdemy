@@ -47,7 +47,11 @@ class student extends Member
         }
         return $students ;
     }
+     
 
+  public function getMyCourses(): array {
+        return $this->db->selectBy("viewcourse_Student", ["id_student" => $this->id_user]);
+    }
 
     
 
