@@ -159,7 +159,7 @@ use classes\Role;
             <!-- Main Section -->
             <main class="flex-1 bg-gray-100 p-6">
                 <?php
-                echo isset($content) ? $content : '<p>Bienvenue sur le site de réservation de voyages.</p>';
+                echo isset($content) ? $content : '<p>Bienvenue sur Votre Dashorad .</p>';
                 ?>
 
 

@@ -27,8 +27,8 @@ function sweetAlert($redirectUrl) {
                     title: '$title',
                     text: '$text',
                     icon: '$status',
-                    showConfirmButton: false,  // Désactive le bouton de confirmation
-                    timer: 2000,  // Temps avant fermeture (en ms, ici 3000ms = 3 secondes)
+                    showConfirmButton: true,  // Désactive le bouton de confirmation
+                   // timer: 2000,  // Temps avant fermeture (en ms, ici 3000ms = 3 secondes)
                     customClass: {
                         popup: 'custom-sweetalert' // Appliquer une classe CSS personnalisée
                     }

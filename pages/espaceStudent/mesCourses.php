@@ -19,64 +19,14 @@ $newStudent = new student ($dbManager , 66) ;
 ?>
 
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Youdemy</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js"></script>
-</head>
-<body class="bg-gray-50">
-  <!-- Navigation -->
-  <nav class="bg-white shadow px-6 py-4 fixed w-full top-0 z-10">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <button @click="sidebarOpen = !sidebarOpen" class="p-2 hover:bg-gray-100 rounded-lg">
-          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </button>
-        <h1 class="text-2xl font-bold text-blue-600">Youdemy</h1>
-      </div>
-      
-      <div class="w-96">
-        <input type="text" 
-               placeholder="Rechercher un cours..." 
-               class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500" />
-      </div>
-      
-      <img src="/api/placeholder/32/32" alt="Profile" class="w-8 h-8 rounded-full ring-2 ring-blue-500" />
-    </div>
-  </nav>
 
-  <div class="pt-20 flex">
-    <!-- Sidebar -->
-    <aside class="fixed left-0 top-20 h-full bg-white shadow w-64"
-           :class="sidebarOpen ? 'translate-x-0' : '-translate-x-64'">
-      <nav class="p-4">
-        <ul class="space-y-2">
-          <template x-for="item in ['Mes Cours', 'Recommandés', 'Favoris']">
-            <li>
-              <a href="#" class="flex items-center gap-3 p-2 text-gray-700 hover:bg-blue-50 rounded-lg">
-                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                <span x-text="item"></span>
-              </a>
-            </li>
-          </template>
-        </ul>
-      </nav>
-    </aside>
+    <section class="lg:mx-32">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-semibold text-gray-700">Cours en Cours</h2>
+            <a href="#" class="text-sm text-blue-600 hover:underline">Voir tout</a>
+        </div>
 
-    <!-- Main Content -->
-
-    <main class="flex-1 px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto">
-    <section  class="lg:mx-32"  >
-        <h2 class="text-xl font-bold mb-6">Mes Cours en Cours</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php 
             $courses = $newStudent->getMyCourses();
             foreach ($courses as $course): ?>
@@ -127,10 +77,9 @@ $newStudent = new student ($dbManager , 66) ;
             <?php endforeach; ?>
         </div>
     </section>
-</main>
 
 
-
-  </div>
-</body>
-</html>
+<?php
+$content = ob_get_clean();
+include('layout.php');
+?>
