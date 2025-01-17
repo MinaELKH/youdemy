@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   PRIMARY KEY (`id_categorie`)
 ) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table youdemy_croise.categories : ~22 rows (environ)
+-- Listage des données de la table youdemy_croise.categories : ~19 rows (environ)
 INSERT INTO `categories` (`id_categorie`, `name`, `created_at`, `archived`, `description`) VALUES
 	(29, 'Développement Web', '2025-01-15 00:17:43', 0, NULL),
 	(30, 'Data Science', '2025-01-15 00:17:43', 0, NULL),
@@ -54,48 +54,98 @@ INSERT INTO `categories` (`id_categorie`, `name`, `created_at`, `archived`, `des
 	(49, 'Ad sapiente illo qua', '2025-01-15 15:09:59', 0, 'Ad sapiente illo qua'),
 	(50, 'Patrick Hooper', '2025-01-15 15:16:06', 0, 'Qui iure ut ullam do');
 
+-- Listage de la structure de table youdemy_croise. content
+CREATE TABLE IF NOT EXISTS `content` (
+  `id_content` int NOT NULL AUTO_INCREMENT,
+  `id_course` int DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `type` enum('texte','video','autre') DEFAULT NULL,
+  `content_text` text,
+  `url_video` varchar(255) DEFAULT NULL,
+  `duration` varchar(50) DEFAULT NULL,
+  `url_file` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id_content`),
+  KEY `id_course` (`id_course`),
+  CONSTRAINT `content_ibfk_1` FOREIGN KEY (`id_course`) REFERENCES `courses` (`id_course`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Listage des données de la table youdemy_croise.content : ~8 rows (environ)
+INSERT INTO `content` (`id_content`, `id_course`, `title`, `type`, `content_text`, `url_video`, `duration`, `url_file`) VALUES
+	(2, 33, 'Introduction à PHP', 'video', NULL, 'https://example.com/video.mp4', NULL, NULL),
+	(3, 33, 'Introduction à PHP', 'video', NULL, 'https://example.com/video.mp4', NULL, NULL),
+	(4, 33, 'Introduction à PHP', 'video', NULL, 'https://example.com/video.mp4', NULL, NULL),
+	(5, 33, 'Chapitre 1 - Introduction', 'texte', 'Ceci est une introduction au cours PHP.', NULL, NULL, NULL),
+	(6, 33, 'JS en testing', 'video', NULL, 'https://example.com/video.mp4', '120', NULL),
+	(7, 33, 'Chapitre 2- les principe de js', 'texte', 'Ceci est une introduction au cours PHP.', NULL, NULL, NULL),
+	(8, 59, 'Aut voluptatem totam', 'texte', 'sddcsqc', NULL, NULL, NULL),
+	(9, 60, 'Numquam vel itaque q', 'video', NULL, 'https://www.tezedodigykejoc.cm', '66', NULL),
+	(10, 61, 'Magni ad ipsam quam ', 'texte', '<h1>Données et méthodes statiques</h1><p><em>Avec cet exemple, on voit l\'utilisation d\'attributs et de méthodes statiques, c\'est-à-dire dont la définition débute avec le modificateur&nbsp;</em><strong><em>static</em></strong><em>. On rappelle qu\'une méthode ou un attribut </em><strong>auquels n\'est pas appliqué le modificateur&nbsp;static&nbsp;sont dits d\'instance. Un attribut ou une méthode statique (i.e. déclaré avec le mot&nbsp;static) est aussi dit&nbsp;attribut de classe&nbsp;ou&nbsp;méthode de classe.</strong></p><h2>Un attribut déclaré&nbsp;<strong>static</strong>&nbsp;(i.e. statique ou de classe) existe dès que sa classe est chargée en mémoire, en dehors et indépendamment de toute instanciation. Quelque soit le nombre d\'instanciation de la classe (0, 1, ou plus) un attribut de classe, i.e. statique, existe en un et un seul exemplaire. Un tel attribut sera utilisé un peu comme une variable globale d\'un programme non objet.</h2><ol><li>Une méthode, pour être de classe, ne doit pas manipuler, directement ou indirectement, d\'attributs non statiques de sa classe. En conséquence, si une méthode de classe utilise dans son code un attribut ou une méthode non statique de sa classe, une erreur est détectée à la compilation.</li><li>De l\'extérieur de sa classe ou d\'une classe héritée, un attribut ou une méthode de classe pourront être utilisés précédés du nom de sa classe :</li><li>&nbsp;&nbsp;&nbsp;&nbsp;nom_d\'une<strong>_classe.</strong>nom_de_l\'attribut_ou_méthode_de_classe)</li><li>ou bien (mais cela est moins correct) du nom d\'une instance de la classe.</li><li><span style="background-color: rgba(255, 255, 0, 0.067);">Signalons enfin qu\'une méthode&nbsp;</span><strong>static</strong><span style="background-color: rgba(255, 255, 0, 0.067);">&nbsp;ne peut pas être redéfinie, ce qui signifie qu\'elle est automatiquement&nbsp;</span><a href="https://perso.telecom-paristech.fr/hudry/coursJava/reserve.html#final" rel="noopener noreferrer" target="_blank" style="background-color: rgba(255, 255, 0, 0.067);"><strong>final</strong></a><span style="background-color: rgba(255, 255, 0, 0.067);">.</span>Natus eiusmod veniam.</li></ol>', NULL, NULL, NULL);
+
 -- Listage de la structure de table youdemy_croise. courses
 CREATE TABLE IF NOT EXISTS `courses` (
   `id_course` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
+  `picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `prix` decimal(10,0) DEFAULT NULL,
   `description` text NOT NULL,
-  `picture` varchar(255) DEFAULT NULL,
+  `status` enum('pending','approved','rejected') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'pending',
   `id_teacher` int DEFAULT NULL,
-  `status` enum('pending','active','archived') DEFAULT 'pending',
   `id_categorie` int DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `archived` tinyint(1) DEFAULT '0',
-  `prix` decimal(10,0) DEFAULT NULL,
+  `type` enum('texte','video') DEFAULT NULL,
   PRIMARY KEY (`id_course`),
   KEY `id_teacher` (`id_teacher`),
   KEY `id_category` (`id_categorie`),
   CONSTRAINT `courses_ibfk_1` FOREIGN KEY (`id_teacher`) REFERENCES `users` (`id_user`),
   CONSTRAINT `courses_ibfk_2` FOREIGN KEY (`id_categorie`) REFERENCES `categories` (`id_categorie`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table youdemy_croise.courses : ~20 rows (environ)
-INSERT INTO `courses` (`id_course`, `title`, `description`, `picture`, `id_teacher`, `status`, `id_categorie`, `created_at`, `updated_at`, `archived`, `prix`) VALUES
-	(33, 'Introduction to Programming', 'Learn the basics of programming with this beginner-friendly course.', 'intro_programming.jpg', 1, 'approved', 29, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 50),
-	(34, 'Advanced Python', 'Master advanced Python programming concepts.', 'advanced_python.jpg', 2, 'approved', 30, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 100),
-	(35, 'Web Development Fundamentals', 'A comprehensive guide to web development for beginners.', 'web_dev.jpg', 3, 'approved', 31, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 80),
-	(36, 'Machine Learning 101', 'An introduction to machine learning and its applications.', 'ml_101.jpg', 4, 'approved', 32, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 120),
-	(37, 'Digital Marketing Basics', 'Learn the fundamentals of digital marketing.', 'digital_marketing.jpg', 5, 'approved', 33, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 60),
-	(38, 'Data Science with R', 'Discover the power of R for data analysis and visualization.', 'data_science_r.jpg', 6, 'approved', 34, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 90),
-	(39, 'UI/UX Design Principles', 'Master the principles of user interface and user experience design.', 'ui_ux_design.jpg', 7, 'approved', 35, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 70),
-	(40, 'Project Management for Beginners', 'Learn essential project management skills.', 'project_management.jpg', 8, 'approved', 36, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 40),
-	(41, 'Cybersecurity Basics', 'Understand the fundamentals of cybersecurity.', 'cybersecurity.jpg', 9, 'approved', 37, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 130),
-	(42, 'Creative Writing Workshop', 'Improve your creative writing skills with hands-on exercises.', 'creative_writing.jpg', 10, 'approved', 38, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 30),
-	(43, 'Financial Analysis for Beginners', 'Learn to analyze financial data effectively.', 'financial_analysis.jpg', 11, 'approved', 39, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, 50),
-	(44, 'Photography Masterclass', 'Master the art of photography with this comprehensive course.', 'photography.jpg', 12, 'rejected', 40, '2025-01-15 21:07:39', '2025-01-15 23:53:59', 0, 60),
-	(45, 'Spanish for Beginners', 'Start your journey in learning Spanish.', 'spanish_beginners.jpg', 13, 'rejected', 41, '2025-01-15 21:07:39', '2025-01-15 23:53:59', 0, 20),
-	(46, 'Yoga and Wellness', 'Achieve wellness through yoga practices.', 'yoga_wellness.jpg', 14, 'rejected', 42, '2025-01-15 21:07:39', '2025-01-15 23:53:59', 0, 25),
-	(47, 'Graphic Design Essentials', 'A complete guide to graphic design principles.', 'graphic_design.jpg', 15, 'rejected', 43, '2025-01-15 21:07:39', '2025-01-15 23:53:59', 0, 70),
-	(48, 'Blockchain and Cryptocurrency', 'Understand the basics of blockchain technology and cryptocurrencies.', 'blockchain_crypto.jpg', 16, 'rejected', 44, '2025-01-15 21:07:39', '2025-01-15 23:53:59', 0, 200),
-	(49, 'French Language Advanced', 'Improve your advanced French language skills.', 'french_advanced.jpg', 17, 'pending', 45, '2025-01-15 21:07:39', '2025-01-15 23:51:43', 0, 40),
-	(50, 'Public Speaking Mastery', 'Learn to speak confidently in public settings.', 'public_speaking.jpg', 18, 'pending', 46, '2025-01-15 21:07:39', '2025-01-15 23:51:43', 0, 50),
-	(51, 'Fitness and Nutrition', 'Combine fitness and nutrition to achieve your health goals.', 'fitness_nutrition.jpg', 19, 'pending', 47, '2025-01-15 21:07:39', '2025-01-15 23:51:43', 0, 30),
-	(52, 'Music Theory for Beginners', 'Explore the basics of music theory.', 'music_theory.jpg', 20, 'pending', 48, '2025-01-15 21:07:39', '2025-01-15 21:07:39', 0, 20);
+-- Listage des données de la table youdemy_croise.courses : ~28 rows (environ)
+INSERT INTO `courses` (`id_course`, `title`, `picture`, `prix`, `description`, `status`, `id_teacher`, `id_categorie`, `created_at`, `updated_at`, `archived`, `type`) VALUES
+	(33, 'Introduction to Programming', 'intro_programming.jpg', 50, 'Learn the basics of programming with this beginner-friendly course.', 'approved', 1, 29, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(34, 'Advanced Python', 'advanced_python.jpg', 100, 'Master advanced Python programming concepts.', 'rejected', 2, 30, '2025-01-15 21:07:39', '2025-01-16 09:55:06', 0, NULL),
+	(35, 'Web Development Fundamentals', 'web_dev.jpg', 80, 'A comprehensive guide to web development for beginners.', 'approved', 3, 31, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(36, 'Machine Learning 101', 'ml_101.jpg', 120, 'An introduction to machine learning and its applications.', 'approved', 4, 32, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(37, 'Digital Marketing Basics', 'digital_marketing.jpg', 60, 'Learn the fundamentals of digital marketing.', 'approved', 5, 33, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(38, 'Data Science with R', 'data_science_r.jpg', 90, 'Discover the power of R for data analysis and visualization.', 'rejected', 6, 34, '2025-01-15 21:07:39', '2025-01-16 09:07:02', 0, NULL),
+	(39, 'UI/UX Design Principles', 'ui_ux_design.jpg', 70, 'Master the principles of user interface and user experience design.', 'approved', 7, 35, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(40, 'Project Management for Beginners', 'project_management.jpg', 40, 'Learn essential project management skills.', 'approved', 8, 36, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(41, 'Cybersecurity Basics', 'cybersecurity.jpg', 130, 'Understand the fundamentals of cybersecurity.', 'approved', 9, 37, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(42, 'Creative Writing Workshop', 'creative_writing.jpg', 30, 'Improve your creative writing skills with hands-on exercises.', 'approved', 10, 38, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(43, 'Financial Analysis for Beginners', 'financial_analysis.jpg', 50, 'Learn to analyze financial data effectively.', 'approved', 11, 39, '2025-01-15 21:07:39', '2025-01-15 23:53:15', 0, NULL),
+	(44, 'Photography Masterclass', 'photography.jpg', 60, 'Master the art of photography with this comprehensive course.', 'rejected', 12, 40, '2025-01-15 21:07:39', '2025-01-15 23:53:59', 0, NULL),
+	(45, 'Spanish for Beginners', 'spanish_beginners.jpg', 20, 'Start your journey in learning Spanish.', 'rejected', 13, 41, '2025-01-15 21:07:39', '2025-01-15 23:53:59', 0, NULL),
+	(46, 'Yoga and Wellness', 'yoga_wellness.jpg', 25, 'Achieve wellness through yoga practices.', 'rejected', 14, 42, '2025-01-15 21:07:39', '2025-01-15 23:53:59', 0, NULL),
+	(47, 'Graphic Design Essentials', 'graphic_design.jpg', 70, 'A complete guide to graphic design principles.', 'pending', 15, 43, '2025-01-15 21:07:39', '2025-01-16 09:07:38', 0, NULL),
+	(48, 'Blockchain and Cryptocurrency', 'blockchain_crypto.jpg', 200, 'Understand the basics of blockchain technology and cryptocurrencies.', 'approved', 16, 44, '2025-01-15 21:07:39', '2025-01-16 09:06:54', 0, NULL),
+	(49, 'French Language Advanced', 'french_advanced.jpg', 40, 'Improve your advanced French language skills.', 'rejected', 17, 45, '2025-01-15 21:07:39', '2025-01-16 09:07:31', 0, NULL),
+	(50, 'Public Speaking Mastery', 'public_speaking.jpg', 50, 'Learn to speak confidently in public settings.', 'pending', 18, 46, '2025-01-15 21:07:39', '2025-01-15 23:51:43', 0, NULL),
+	(51, 'Fitness and Nutrition', 'fitness_nutrition.jpg', 30, 'Combine fitness and nutrition to achieve your health goals.', 'pending', 19, 47, '2025-01-15 21:07:39', '2025-01-15 23:51:43', 0, NULL),
+	(52, 'Music Theory for Beginners', 'music_theory.jpg', 20, 'Explore the basics of music theory.', 'pending', 20, 48, '2025-01-15 21:07:39', '2025-01-15 21:07:39', 0, NULL),
+	(53, 'Consequat Totam obc', 'uploads/678955ca46f69-Capture d’écran_13-1-2025_203113_edumall.thememove.com.jpeg', 66, 'Velit nemo consecte', 'pending', NULL, 46, '2025-01-16 19:54:02', '2025-01-16 19:54:02', 0, NULL),
+	(54, 'Ex enim voluptas qui', 'uploads/67895636af8e2-Capture d’écran_13-1-2025_203056_edumall.thememove.com.jpeg', 62, 'Dolore voluptatem ip', 'pending', 20, 33, '2025-01-16 19:55:50', '2025-01-16 19:55:50', 0, NULL),
+	(55, 'Veniam voluptas et ', 'uploads/678971455ef44-Capture d’écran_13-1-2025_203113_edumall.thememove.com.jpeg', 25, 'Cumque quibusdam arc', 'pending', 20, 42, '2025-01-16 21:51:17', '2025-01-16 21:51:17', 0, NULL),
+	(56, 'Aut voluptatem totam', 'uploads/6789729c54949-Capture d’écran_13-1-2025_203113_edumall.thememove.com.jpeg', 33, 'Voluptas laudantium', 'pending', 20, 34, '2025-01-16 21:57:00', '2025-01-16 21:57:00', 0, NULL),
+	(57, 'Aut voluptatem totam', 'uploads/678972d619bb2-Capture d’écran_13-1-2025_203113_edumall.thememove.com.jpeg', 33, 'Voluptas laudantium', 'pending', 20, 34, '2025-01-16 21:57:58', '2025-01-16 21:57:58', 0, NULL),
+	(58, 'Aut voluptatem totam', 'uploads/678972e98883f-Capture d’écran_13-1-2025_203113_edumall.thememove.com.jpeg', 33, 'Voluptas laudantium', 'pending', 20, 34, '2025-01-16 21:58:17', '2025-01-16 21:58:17', 0, NULL),
+	(59, 'Aut voluptatem totam', 'uploads/6789737048499-Capture d’écran_13-1-2025_203113_edumall.thememove.com.jpeg', 33, 'Voluptas laudantium', 'pending', 20, 34, '2025-01-16 22:00:32', '2025-01-17 11:24:02', 1, NULL),
+	(60, 'test', 'uploads/678973a0e8f07-Capture d’écran_13-1-2025_203113_edumall.thememove.com.jpeg', 55, 'Sit nihil quidem rei', 'pending', 20, 36, '2025-01-16 22:01:20', '2025-01-17 17:12:44', 0, 'video'),
+	(61, 'Magni ad ipsam quam ', 'uploads/678a65b65f2c2-Capture d’écran_13-1-2025_203113_edumall.thememove.com.jpeg', 36, 'Repellendus Tempor ', 'pending', 20, 29, '2025-01-17 15:14:14', '2025-01-17 17:14:26', 0, 'texte');
+
+-- Listage de la structure de table youdemy_croise. coursetags
+CREATE TABLE IF NOT EXISTS `coursetags` (
+  `id_course` int NOT NULL,
+  `id_tag` int NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id_course`,`id_tag`),
+  KEY `id_tag` (`id_tag`),
+  CONSTRAINT `coursetags_ibfk_1` FOREIGN KEY (`id_course`) REFERENCES `courses` (`id_course`),
+  CONSTRAINT `coursetags_ibfk_2` FOREIGN KEY (`id_tag`) REFERENCES `tags` (`id_tag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Listage des données de la table youdemy_croise.coursetags : ~0 rows (environ)
 
 -- Listage de la structure de table youdemy_croise. enrollments
 CREATE TABLE IF NOT EXISTS `enrollments` (
@@ -110,9 +160,9 @@ CREATE TABLE IF NOT EXISTS `enrollments` (
   KEY `id_course` (`id_course`),
   CONSTRAINT `enrollments_ibfk_1` FOREIGN KEY (`id_student`) REFERENCES `users` (`id_user`),
   CONSTRAINT `enrollments_ibfk_2` FOREIGN KEY (`id_course`) REFERENCES `courses` (`id_course`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table youdemy_croise.enrollments : ~74 rows (environ)
+-- Listage des données de la table youdemy_croise.enrollments : ~72 rows (environ)
 INSERT INTO `enrollments` (`id_enrollements`, `id_student`, `id_course`, `enrollment_date`, `archived`, `created_at`) VALUES
 	(1, 61, 33, '2025-01-15 22:38:53', 0, '2025-01-15 22:38:53'),
 	(2, 62, 34, '2025-01-15 22:38:53', 0, '2025-01-15 22:38:53'),
@@ -202,7 +252,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   KEY `id_course` (`id_course`) USING BTREE,
   CONSTRAINT `fk_reviews_users` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`),
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`id_course`) REFERENCES `courses` (`id_course`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Listage des données de la table youdemy_croise.reviews : ~78 rows (environ)
 INSERT INTO `reviews` (`id_review`, `id_course`, `comment`, `created_at`, `archived`, `id_user`) VALUES
@@ -307,28 +357,18 @@ CREATE TABLE IF NOT EXISTS `tags` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_tag`),
   UNIQUE KEY `name_tag` (`name_tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table youdemy_croise.tags : ~5 rows (environ)
+-- Listage des données de la table youdemy_croise.tags : ~7 rows (environ)
 INSERT INTO `tags` (`id_tag`, `name_tag`, `archived`, `created_at`) VALUES
 	(1, 'help', 0, '2025-01-15 19:38:14'),
 	(2, 'hy', 0, '2025-01-15 19:38:14'),
 	(3, 'xx', 0, '2025-01-15 19:38:14'),
 	(4, 'heh', 0, '2025-01-15 19:38:53'),
-	(5, 'azeaz', 0, '2025-01-15 19:38:53');
-
--- Listage de la structure de table youdemy_croise. tag_course
-CREATE TABLE IF NOT EXISTS `tag_course` (
-  `id_course` int NOT NULL,
-  `id_tag` int NOT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_course`,`id_tag`),
-  KEY `id_tag` (`id_tag`),
-  CONSTRAINT `tag_course_ibfk_1` FOREIGN KEY (`id_course`) REFERENCES `courses` (`id_course`),
-  CONSTRAINT `tag_course_ibfk_2` FOREIGN KEY (`id_tag`) REFERENCES `tags` (`id_tag`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- Listage des données de la table youdemy_croise.tag_course : ~0 rows (environ)
+	(5, 'azeaz', 0, '2025-01-15 19:38:53'),
+	(6, 'ho', 0, '2025-01-16 10:21:38'),
+	(7, 'ce', 0, '2025-01-16 10:21:38'),
+	(8, 'me', 0, '2025-01-16 10:21:38');
 
 -- Listage de la structure de table youdemy_croise. teachers
 CREATE TABLE IF NOT EXISTS `teachers` (
@@ -377,9 +417,9 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`),
   KEY `id_role` (`id_role`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Listage des données de la table youdemy_croise.users : ~64 rows (environ)
+-- Listage des données de la table youdemy_croise.users : ~60 rows (environ)
 INSERT INTO `users` (`id_user`, `email`, `password`, `name_full`, `avatar`, `id_role`, `created_at`, `archived`, `suspended`) VALUES
 	(1, 'john.smith@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John Smith', 'john_avatar.jpg', 2, '2025-01-15 00:13:35', 0, 0),
 	(2, 'emma.johnson@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Emma Johnson', 'emma_avatar.jpg', 2, '2025-01-15 00:13:35', 0, 1),
@@ -446,6 +486,34 @@ INSERT INTO `users` (`id_user`, `email`, `password`, `name_full`, `avatar`, `id_
 	(83, 'michael.johnson@example.com', 'password63', 'Michael Johnson', 'avatar63.jpg', 3, '2025-01-15 22:07:25', 0, 0),
 	(84, 'emily.brown@example.com', 'password64', 'Emily Brown', 'avatar64.jpg', 3, '2025-01-15 22:07:25', 0, 0);
 
+-- Listage de la structure de vue youdemy_croise. viewcourses
+-- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
+CREATE TABLE `viewcourses` (
+	`id_course` INT(10) NOT NULL,
+	`title` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`picture` VARCHAR(255) NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`prix` DECIMAL(10,0) NULL,
+	`description` TEXT NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`status` ENUM('pending','approved','rejected') NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`id_teacher` INT(10) NULL,
+	`id_categorie` INT(10) NULL,
+	`created_at` DATETIME NULL,
+	`updated_at` DATETIME NULL,
+	`archived` TINYINT(1) NULL,
+	`id_content` INT(10) NOT NULL,
+	`type` ENUM('texte','video','autre') NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`category_name` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`teacher_name` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`instructor_email` VARCHAR(255) NOT NULL COLLATE 'utf8mb4_0900_ai_ci',
+	`review_count` BIGINT(19) NOT NULL,
+	`student_count` BIGINT(19) NOT NULL
+) ENGINE=MyISAM;
+
+-- Listage de la structure de vue youdemy_croise. viewcourse_student
+-- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
+CREATE TABLE `viewcourse_student` 
+) ENGINE=MyISAM;
+
 -- Listage de la structure de vue youdemy_croise. viewteacher
 -- Création d'une table temporaire pour palier aux erreurs de dépendances de VIEW
 CREATE TABLE `viewteacher` (
@@ -461,6 +529,16 @@ CREATE TABLE `viewteacher` (
 	`approved` ENUM('pending','approved','rejected') NULL COLLATE 'utf8mb4_0900_ai_ci',
 	`message` VARCHAR(255) NULL COLLATE 'utf8mb4_0900_ai_ci'
 ) ENGINE=MyISAM;
+
+-- Listage de la structure de vue youdemy_croise. viewcourses
+-- Suppression de la table temporaire et création finale de la structure d'une vue
+DROP TABLE IF EXISTS `viewcourses`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `viewcourses` AS select `c`.`id_course` AS `id_course`,`c`.`title` AS `title`,`c`.`picture` AS `picture`,`c`.`prix` AS `prix`,`c`.`description` AS `description`,`c`.`status` AS `status`,`c`.`id_teacher` AS `id_teacher`,`c`.`id_categorie` AS `id_categorie`,`c`.`created_at` AS `created_at`,`c`.`updated_at` AS `updated_at`,`c`.`archived` AS `archived`,`cont`.`id_content` AS `id_content`,`cont`.`type` AS `type`,`ct`.`name` AS `category_name`,`u`.`name_full` AS `teacher_name`,`u`.`email` AS `instructor_email`,count(distinct `r`.`id_review`) AS `review_count`,count(distinct `e`.`id_student`) AS `student_count` from (((((`courses` `c` join `users` `u` on((`u`.`id_user` = `c`.`id_teacher`))) join `categories` `ct` on((`ct`.`id_categorie` = `c`.`id_categorie`))) join `content` `cont` on((`c`.`id_course` = `cont`.`id_course`))) left join `reviews` `r` on((`c`.`id_course` = `r`.`id_course`))) left join `enrollments` `e` on((`c`.`id_course` = `e`.`id_course`))) group by `c`.`id_course`,`c`.`title`,`ct`.`name`,`u`.`name_full`,`u`.`email`,`cont`.`id_content`,`cont`.`type`;
+
+-- Listage de la structure de vue youdemy_croise. viewcourse_student
+-- Suppression de la table temporaire et création finale de la structure d'une vue
+DROP TABLE IF EXISTS `viewcourse_student`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `viewcourse_student` AS select `v`.`id_course` AS `id_course`,`v`.`title` AS `title`,`v`.`description` AS `description`,`v`.`picture` AS `picture`,`v`.`id_teacher` AS `id_teacher`,`v`.`status` AS `status`,`v`.`id_categorie` AS `id_categorie`,`v`.`created_at` AS `created_at`,`v`.`updated_at` AS `updated_at`,`v`.`archived` AS `archived`,`v`.`prix` AS `prix`,`v`.`categorie_name` AS `categorie_name`,`v`.`teacher_name` AS `teacher_name`,`v`.`email` AS `email`,`v`.`review_count` AS `review_count`,`v`.`student_count` AS `student_count`,`e`.`id_student` AS `id_student`,`e`.`enrollment_date` AS `enrollment_date` from (`viewcourses` `v` join `enrollments` `e` on((`v`.`id_course` = `e`.`id_course`)));
 
 -- Listage de la structure de vue youdemy_croise. viewteacher
 -- Suppression de la table temporaire et création finale de la structure d'une vue

@@ -1,7 +1,7 @@
 <?php
 namespace classes;
 use config\DataBaseManager;
-use Exception ;
+use Exception , PDO;
 class Teacher extends Member
 {
   
@@ -81,6 +81,21 @@ class Teacher extends Member
 
     public function getMyCourses(): array {
         return $this->db->selectBy("viewcourses", ["id_teacher" => $this->id_user  , 'archived'=>0]);
+    }
+
+    public function getCountCoursesByTeacher(): int  {
+        $query = "select count(*) as count_course from courses where id_teacher = :id_teacher" ;
+        $dataBase = $this->db ;
+        $cnx = $dataBase->getConnection();
+        $stmt = $cnx->prepare($query);
+        $stmt->bindvalue(':id_teacher' , $this->id_user , PDO::PARAM_INT);
+         $stmt->execute();
+         $result = $stmt->fetch() ; 
+
+         print_r($result['count_course']) ; 
+         die();
+         return $result ;
+
     }
 
 

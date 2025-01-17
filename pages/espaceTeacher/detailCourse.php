@@ -5,10 +5,12 @@ require_once("../uploadimage.php");
 ob_start();
 
 use classes\Course;
-use classes\Categorie;
+use classes\CourseTags;
+use classes\Review;
 use config\DataBaseManager;
 use classes\ContentText;
 use classes\ContentVideo;
+use classes\Teacher;
 
 $dbManager = new DataBaseManager();
 $id_course = $_GET['id_course'] ?? null;
@@ -19,7 +21,7 @@ if (!$id_course || !is_numeric($id_course)) {
 try {
     $newCourse = new Course($dbManager, $id_course);
     $course = $newCourse->getDetailCourse(); // je selection d apres viewcourse 
-     print_r($course) ; 
+    //  print_r($course);
     if (!$course) {
         throw new Exception("Le cours avec l'ID $id_course n'existe pas.");
     }
@@ -34,12 +36,11 @@ try {
 
     // verif si le contenu est trouve on le recupere via l id_course
     if ($newContent) {
-        $newContent->id_course = $id_course ;
-        $ObjetContent = $newContent->getByIdCourse() ;
+        $newContent->id_course = $id_course;
+        $ObjetContent = $newContent->getByIdCourse();
     } else {
         throw new Exception("Le contenu associe au cours n'a pas ete trouve.");
     }
-
 } catch (Exception $e) {
     // Gerer les erreurs
     error_log($e->getMessage());
@@ -63,45 +64,45 @@ try {
 <body class="bg-gray-50">
     <!-- Navigation -->
     <nav class="bg-white shadow-sm py-4">
-        <div class="container mx-auto px-4 flex items-center justify-between">
+        <div class="container mx-auto px-4 flex items-center justify-between flex-wrap">
             <div class="flex items-center gap-8">
                 <img src="logo.png" alt="NarutoEdu" class="h-8">
                 <button class="flex items-center gap-2 text-gray-600">
                     <i class="fas fa-th"></i>
-                    Category
+                    Catégorie
                 </button>
-                <div class="relative">
-                    <input type="search" placeholder="Search course here"
+                <div class="relative hidden sm:block">
+                    <input type="search" placeholder="Rechercher un cours ici"
                         class="w-64 pl-10 pr-4 py-2 bg-gray-100 rounded-full">
                     <i class="fas fa-search absolute left-4 top-3 text-gray-400"></i>
                 </div>
             </div>
             <div class="flex items-center gap-6">
-                <a href="#" class="text-indigo-600">Courses</a>
+                <a href="#" class="text-indigo-600">Cours</a>
                 <a href="#" class="text-gray-600">Blog</a>
                 <a href="#" class="text-gray-600"><i class="fas fa-shopping-cart"></i></a>
-                <a href="#" class="bg-indigo-600 text-white px-6 py-2 rounded-full">Try for free</a>
+                <a href="#" class="bg-indigo-600 text-white px-6 py-2 rounded-full">Essayer gratuitement</a>
             </div>
         </div>
     </nav>
 
     <!-- Breadcrumb -->
     <div class="container mx-auto px-4 py-4">
-        <div class="flex items-center gap-2 text-sm">
-            <a href="#" class="text-indigo-600">Home</a>
+        <div class="flex items-center gap-2 text-sm flex-wrap">
+            <a href="dashboard.php" class="text-indigo-600">Home</a>
             <i class="fas fa-chevron-right text-gray-400"></i>
-            <a href="#" class="text-indigo-600">Courses</a>
+            <a href="mesCoures.php" class="text-indigo-600">Mes Courses</a>
             <i class="fas fa-chevron-right text-gray-400"></i>
-            <span class="text-gray-600">Programming with Python</span>
+            <span class="text-gray-600"><?= $course->title ?></span>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Course Info -->
-            <div class="col-span-2">
-                <h1 class="text-3xl font-bold mb-6"><?= $course->title ?></h1>
+            <div class="col-span-1 md:col-span-2">
+                <h1 class="text-3xl sm:text-4xl font-bold mb-6"><?= $course->title ?></h1>
 
                 <!-- Course Meta -->
                 <div class="flex items-center gap-8 mb-6">
@@ -119,17 +120,16 @@ try {
 
                 </div>
 
-
                 <!-- Course Details -->
-                <div class="flex items-center gap-8 mb-8 text-sm text-gray-600">
+                <div class="grid grid-cols-2  lg:grid-cols-4 items-center gap-8 mb-8 text-sm text-gray-600">
                     <div>
-                        <div class="font-medium mb-1">Last Updates</div>
-                        <div><?= $course->updated_at?></div>
+                        <div class="font-medium mb-1">Derniere Modification</div>
+                        <div><?= $course->updated_at ?></div>
                     </div>
-                  
+
                     <div>
-                        <div class="font-medium mb-1">Students</div>
-                        <div><?= $course->student_count?></div>
+                        <div class="font-medium mb-1">Apprenant</div>
+                        <div><?= $course->student_count ?></div>
                     </div>
 
                     <!-- Social Actions -->
@@ -143,22 +143,38 @@ try {
                             <span>Share</span>
                         </button>
                     </div>
+                </div>
 
+                <!-- Tags -->
+                <div class="flex space-x-2 mb-8">
+                    <?php
+                    $newtag = new CourseTags($dbManager, $course->id_course);
+                    $result = $newtag->getTagsBycourse();
+
+                    // Couleur 
+                    $colors = ['bg-blue-200', 'bg-green-200', 'bg-red-200', 'bg-yellow-200', 'bg-purple-200', 'bg-pink-200', 'bg-indigo-200', 'bg-teal-200', 'bg-orange-200', 'bg-gray-300'];
+
+                    foreach ($result as $index => $Objet_tag) {
+                        // Sélectionner une couleur en fonction de l'index du tag
+                        $colorClass = $colors[$index % count($colors)];
+                        echo '<span class="' . $colorClass . ' text-gray-700 px-3 py-1 rounded-full">' . $Objet_tag->name_tag . '</span>';
+                    }
+                    ?>
                 </div>
 
                 <!-- Course Video -->
                 <div class="bg-gray-200 aspect-video rounded-lg mb-8">
-                <img src="<?php echo '../'.$course->picture ?: 'https://via.placeholder.com/300x200.png?text=Image+Non+Disponible'; ?>"  alt="Course preview" class="w-full h-full object-cover rounded-lg">
+                    <img src="<?php echo '../' . $course->picture ?: 'https://via.placeholder.com/300x200.png?text=Image+Non+Disponible'; ?>" alt="Course preview" class="w-full h-full object-cover rounded-lg">
                 </div>
 
                 <!-- Course Overview -->
                 <section class="bg-white rounded-lg p-8 mb-8">
-    <div class="leading-relaxed"> <?= $ObjetContent->content_text ?></div>
-</section>
+                    <div class="leading-relaxed  whitespace-normal break-words"  > <?= $ObjetContent->content_text ?></div>
+                </section>
                 <!-- Reviews Section -->
                 <section class="bg-white rounded-lg p-8 mb-8">
-                    <h2 class="text-2xl font-bold mb-2">Reviews</h2>
-                    <p class="text-gray-600 mb-8">Our students says about this course</p>
+                    <h2 class="text-2xl font-bold mb-2">Avis</h2>
+                    <p class="text-gray-600 mb-8">Nos Apprenants parlent de ce cours</p>
 
                     <!-- Rating Overview -->
                     <div class="flex gap-12 mb-8">
@@ -172,195 +188,114 @@ try {
                                 <i class="fas fa-star"></i>
                                 <i class="fas fa-star"></i>
                             </div>
-                            <div class="text-gray-500 text-sm">12 Reviews</div>
-                        </div>
-
-                        <!-- Rating Bars -->
-                        <div class="flex-1">
-                            <div class="space-y-2">
-                                <!-- Excellent -->
-                                <div class="flex items-center gap-2">
-                                    <span class="text-sm w-20">Excellent</span>
-                                    <div class="flex-1 bg-gray-200 h-2 rounded-full">
-                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 100%"></div>
-                                    </div>
-                                    <span class="text-sm text-gray-500 w-12">100%</span>
-                                </div>
-
-                                <!-- Very Good -->
-                                <div class="flex items-center gap-2">
-                                    <span class="text-sm w-20">Very Good</span>
-                                    <div class="flex-1 bg-gray-200 h-2 rounded-full">
-                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 20%"></div>
-                                    </div>
-                                    <span class="text-sm text-gray-500 w-12">20%</span>
-                                </div>
-
-                                <!-- Average -->
-                                <div class="flex items-center gap-2">
-                                    <span class="text-sm w-20">Average</span>
-                                    <div class="flex-1 bg-gray-200 h-2 rounded-full">
-                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 10%"></div>
-                                    </div>
-                                    <span class="text-sm text-gray-500 w-12">10%</span>
-                                </div>
-
-                                <!-- Poor -->
-                                <div class="flex items-center gap-2">
-                                    <span class="text-sm w-20">Poor</span>
-                                    <div class="flex-1 bg-gray-200 h-2 rounded-full">
-                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                    <span class="text-sm text-gray-500 w-12">0%</span>
-                                </div>
-
-                                <!-- Terrible -->
-                                <div class="flex items-center gap-2">
-                                    <span class="text-sm w-20">Terrible</span>
-                                    <div class="flex-1 bg-gray-200 h-2 rounded-full">
-                                        <div class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
-                                    </div>
-                                    <span class="text-sm text-gray-500 w-12">0%</span>
-                                </div>
-                            </div>
+                            <div class="text-gray-500 text-sm"><?= $course->student_count ?></div>
                         </div>
                     </div>
 
                     <!-- Individual Reviews -->
                     <div class="space-y-6 mb-6">
-                        <!-- Review 1 -->
-                        <div class="border-b pb-6">
-                            <div class="flex gap-4 mb-3">
-                                <img src="/api/placeholder/48/48" alt="Rakabuming Suhu" class="w-12 h-12 rounded-full">
-                                <div>
-                                    <h3 class="font-semibold">Rakabuming Suhu</h3>
-                                    <div class="flex items-center gap-2">
-                                        <div class="flex text-yellow-400">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <span class="text-sm text-gray-500">Sep 2, 2021</span>
+                        <!-- reviewaires des users -->
+                        <?php
+                        $newreview = new review($dbManager);
+                        $newreview->id_course = $course->id_course;
+                        $result = $newreview->getReviewByCourse();
+                        foreach ($result as $objet_Cmt):
+                        ?>
+                            <div class="bg-gray-50 p-4 m-8 rounded-lg shadow-sm">
+                                <div class="flex items-center mb-2">
+                                    <img alt="Photo de profil du commentateur" class="w-10 h-10 rounded-full mr-3" height="40" src="<?php echo !empty($newreview->avatar) ? $newreview->avatar : 'https://storage.googleapis.com/a1aa/image/1ZK6eQz7uGxKOahfeQHlR1zQxhXhr8QxTxrVwEFg60TCDUGoA.jpg'; ?>" width="40" />
+                                    <div>
+                                        <p class="font-semibold">
+                                            <?= $objet_Cmt->name_full ?>
+                                        </p>
+                                        <p class="text-sm text-gray-500">
+                                            <?= $objet_Cmt->created_at ?>
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
-                            <p class="text-gray-600">Quisque et quam lacus amet. Tincidunt auctor phasellus purus faucibus lectus mattis.</p>
-                        </div>
-
-                        <!-- Review 2 -->
-                        <div class="border-b pb-6">
-                            <div class="flex gap-4 mb-3">
-                                <div class="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold">
-                                    JB
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold">Jovanca Beby</h3>
-                                    <div class="flex items-center gap-2">
-                                        <div class="flex text-yellow-400">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <span class="text-sm text-gray-500">Sep 2, 2021</span>
-                                    </div>
+                                <p class="text-gray-700 mb-2">
+                                    <?= $objet_Cmt->comment ?>
+                                </p>
+                                <div class="flex items-center text-gray-500">
+                                    <i class="fas fa-heart mr-1">
+                                    </i>
+                                    <span class="mr-4">
+                                        11 Likes
+                                    </span>
+                                    <i class="fas fa-reply mr-1">
+                                    </i>
                                 </div>
                             </div>
-                            <p class="text-gray-600">Quisque et quam lacus amet. Tincidunt auctor phasellus purus faucibus lectus mattis.</p>
+                        <?php endforeach; ?>
+                        <!-- More Reviews Button -->
+                        <div class="text-center">
+                            <button class="text-indigo-600 font-medium hover:underline">More reviews</button>
                         </div>
-                    </div>
-
-                    <!-- More Reviews Button -->
-                    <div class="text-center">
-                        <button class="text-indigo-600 font-medium hover:underline">More reviews</button>
-                    </div>
                 </section>
             </div>
 
             <!-- Sidebar -->
             <div class="col-span-1">
-                <div class="bg-white rounded-lg shadow-lg p-6 sticky top-4">
+                <!-- Prix et Achat -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="text-2xl font-bold">Rp 220.400</div>
-                        <div class="text-sm line-through text-gray-400">Rp 440.000</div>
+                        <div class="text-2xl font-bold"><?= $course->prix ?>€</div>
+                        <div class="text-sm line-through text-gray-400"><?= $course->prix  - 20  ?>€</div>
                     </div>
-
                     <button class="w-full bg-indigo-600 text-white py-3 rounded-lg mb-3">
                         Add to Cart
                     </button>
                     <button class="w-full border border-indigo-600 text-indigo-600 py-3 rounded-lg mb-6">
                         Buy Now
                     </button>
+                </div>
 
-                    <div class="space-y-4">
-                        <h3 class="font-bold mb-4">This course includes</h3>
-                        <div class="flex items-center gap-3 text-sm text-gray-600">
-                            <i class="fas fa-clock"></i>
-                            <span>2 hours on-demand video</span>
+
+                <!-- À propos de l'Instructeur -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">
+                        À propos de l'Instructeur
+                    </h2>
+                    <div class="flex items-center mb-4">
+                        <img
+                            alt="Image de l'Instructeur"
+                            class="h-12 w-12 rounded-full mr-4"
+                            src="<?= $course->teacher_avatar ?: 'https://via.placeholder.com/50' ?>" />
+                        <div>
+                            <h3 class="text-gray-800 font-semibold">
+                                Dr. <?= $course->teacher_name ?>
+                            </h3>
+                            <p class="text-gray-600 text-sm">
+                                Fondateur Naruto Edu
+                            </p>
                         </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-600">
-                            <i class="fas fa-file-alt"></i>
-                            <span>1 article</span>
-                        </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-600">
-                            <i class="fas fa-download"></i>
-                            <span>50 downloadable resources</span>
-                        </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-600">
-                            <i class="fas fa-infinity"></i>
-                            <span>Full lifetime access</span>
-                        </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-600">
-                            <i class="fas fa-mobile-alt"></i>
-                            <span>Access on mobile and TV</span>
-                        </div>
-                        <div class="flex items-center gap-3 text-sm text-gray-600">
-                            <i class="fas fa-certificate"></i>
-                            <span>Certificate of completion</span>
+                    </div>
+
+                    <div class="flex justify-between items-center text-yellow-500">
+                        <span class="text-sm font-semibold mr-1">5.0</span>
+                        <div>
+                            <?php for ($i = 0; $i < 5; $i++): ?>
+                                <i class="fas fa-star"></i>
+                            <?php endfor; ?>
                         </div>
 
-                        <div class="bg-white rounded-lg p-6 mb-8">
-                            <h2 class="text-xl font-bold mb-6">About the Instructor</h2>
-
-                            <div class="flex items-center gap-4">
-                                <!-- Instructor Photo -->
-                                <img src="/api/placeholder/64/64" alt="DR. Soman Jumakir"
-                                    class="w-16 h-16 rounded-full object-cover">
-
-                                <!-- Instructor Info -->
-                                <div class="flex-1">
-                                    <div class="flex items-center justify-between mb-1">
-                                        <h3 class="font-semibold text-lg">DR. Soman Jumakir</h3>
-                                        <div class="flex items-center gap-2 text-sm">
-                                            <i class="fas fa-book-open"></i>
-                                            <span>12 Courses</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="text-gray-600 text-sm mb-2">Founder Naruto Edu</div>
-
-                                    <!-- Rating -->
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-semibold">5.0</span>
-                                        <div class="flex text-yellow-400">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-800">
+                            <i class="fas fa-book-open"></i>
+                            <span class="text-gray-600 text-sm ml-2 ">
+                                <?php
+                                $newTeacher = new Teacher($dbManager, $course->id_teacher);
+                                echo $newTeacher->getCountCoursesByTeacher() . " Cours";
+                                ?>
+                            </span>
                         </div>
+
+
+
                     </div>
                 </div>
             </div>
+
         </div>
-    </div>
 </body>
 
 </html>

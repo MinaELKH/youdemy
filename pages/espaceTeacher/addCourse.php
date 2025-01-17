@@ -174,7 +174,27 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
 
                 <!-- Champs Vidéo -->
                 <div id="videoFields" class="hidden">
-                    <div>
+
+
+                <h2 class="text-2xl font-bold mb-4">Téléchargez ou Intégrez une Vidéo</h2>
+
+                    <!-- Option 1 : Upload vidéo -->
+                    <div class="mb-4">
+                        <label for="videoUpload" class="block text-gray-700">Télécharger une vidéo</label>
+                        <input type="file" id="videoUpload" name="videoUpload" accept="video/*" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
+                    </div>
+
+                    <!-- Option 2 : URL YouTube -->
+                    <div class="mb-4">
+                        <label for="videoURL" class="block text-gray-700">Ou, collez une URL YouTube</label>
+                        <input type="url" id="videoURL" name="videoURL" placeholder="https://www.youtube.com/watch?v=exemple" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
+                    </div>
+
+
+
+
+
+                    <!-- <div>
                         <label for="url" class="block text-sm font-medium text-gray-700 mb-2">
                             URL de la Vidéo <span class="text-red-500">*</span>
                         </label>
@@ -185,7 +205,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Entrez l'URL de la vidéo">
                         <div id="urlError" class="text-red-500 text-sm hidden">L'URL de la vidéo est obligatoire.</div>
-                    </div>
+                    </div> -->
 
                     <div>
                         <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">
@@ -200,23 +220,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                         <div id="durationError" class="text-red-500 text-sm hidden">La durée de la vidéo est obligatoire.</div>
                     </div>
                 </div>
-
-                <!-- Champs Texte -->
-                <!-- <div id="textFields" class="hidden">
-                    <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
-                            Contenu Texte <span class="text-red-500">*</span>
-                        </label>
-                        <textarea
-                            id="content"
-                            name="content"
-                            rows="4"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Entrez le contenu texte"></textarea>
-                        <div id="contentError" class="text-red-500 text-sm hidden">Le contenu texte est obligatoire.</div>
-                    </div>
-                </div> -->
-
 
                 <div id="textFields" class="hidden">
                     <div>
