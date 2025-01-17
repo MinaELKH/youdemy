@@ -12,7 +12,7 @@ $dbManager = new DataBaseManager();
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
     try {
         $newcourse = new Course($dbManager, $_POST['id_course']);
-        $result = $newcourse->archived();
+        $result = $newcourse->archive();
 
         if ($result) {
             setSweetAlertMessage('Succès', 'Le cour a été archivé avec succès.', 'success', 'gerecourse.php');
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
     try {
         $newcourse = new course($dbManager, $_POST['id_course']);
         $status  = $_POST["status"];
-        $result = $newcourse->approved($status);
+        $result = $newcourse->approve($status);
         if ($result) {
             setSweetAlertMessage('Succès', 'L\'operation a étè effectué en succès.', 'success', '');
         } else {
@@ -111,15 +111,8 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                     //  echo '<pre>';
                     //  print_r($courses);  // Affiche les données sous un format lisible
                     //  echo '</pre>';
-
-
                     foreach ($courses as $course):
-
-
-
                     ?>
-
-
                         <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition duration-300 text-sm  ">
                             <!-- Colonne Titre -->
                             <td class="px-4 py-2">

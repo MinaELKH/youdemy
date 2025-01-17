@@ -69,12 +69,21 @@ abstract class Member extends User
     
         return $this->db->update("users" , $data , $whereColumn , $whereValue) ;
     }
-
-
-
+  
     abstract public function getAll() ;
    
     abstract function getStatistics();
 
 
+
+
+
+public static function findByEmail($email)
+{
+
+    return null;
 }
+
+}
+
+

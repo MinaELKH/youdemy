@@ -7,17 +7,13 @@ use config\DataBaseManager;
 use classes\Course;
 use classes\Teacher;
 
-// Dependency Injection and Error Handling
+// affichage 
 try {
     $dbManager = new DataBaseManager();
-    
-    // Get teacher ID from session or authentication
-    $teacherId =$_SESSION['teacher_id'] ?? 20;
-    
+    $teacherId = $_SESSION['teacher_id'] ?? 20;
     if (!$teacherId) {
-        throw new Exception("Unauthorized access");
+        throw new Exception(" access interdit ");
     }
-
     $newTeacher = new Teacher($dbManager, $teacherId);
     $courses = $newTeacher->getMyCourses();
 } catch (Exception $e) {
@@ -25,9 +21,27 @@ try {
     error_log($e->getMessage());
     $courses = [];
 }
+// Archivage d'un cours
+if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
+    try {
+        $course = new Course($dbManager, $_POST['id_course']);
+        $result = $course->archive();
+
+        if ($result) {
+            setSweetAlertMessage('Succès', 'Le cours a été archivé avec succès.', 'success', '');
+        } else {
+            setSweetAlertMessage('Erreur', 'Aucun archivage n\'a eu lieu. Veuillez contacter l\'administrateur.', 'error', '');
+        }
+    } catch (Exception $e) {
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', '');
+    }
+}
+
+
+
 ?>
 
-<section class="container mx-auto px-4 lg:px-32">
+<section class="container mx-auto px-4 lg:px-24">
     <div class="flex justify-between items-center mb-6">
         <h2 class="text-xl font-semibold text-gray-700">Mes Cours en Cours</h2>
         <a href="/courses" class="text-sm text-blue-600 hover:underline">Voir tous les cours</a>
@@ -41,65 +55,59 @@ try {
             </a>
         </div>
     <?php else: ?>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <?php foreach ($courses as $course): ?>
-                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
-                    <div class="relative">
-                        <img 
-                            src="<?= htmlspecialchars($course->picture ?? '../../src/images/default-course.jpg') ?>" 
-                            alt="<?= htmlspecialchars($course->title) ?>" 
-                            class="w-full h-48 object-cover"
-                        >
-                        <div class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded-full text-xs">
-                            En cours
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start mb-3">
-                            <div class="w-3/4">
-                                <h3 class="font-bold text-base truncate mb-1">
-                                    <?= htmlspecialchars($course->title) ?>
-                                </h3>
-                                <p class="text-sm text-gray-500">
-                                    <?= htmlspecialchars($course->teacher_name) ?>
-                                </p>
-                            </div>
-                            <div class="flex items-center">
-                                <svg class="h-5 w-5 text-yellow-400 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
-                                </svg>
-                                <span class="text-sm text-gray-600">
-                                    <?= number_format($course->rating ?? 0, 1) ?>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="flex items-center mt-3">
-                            <div class="w-full bg-gray-200 rounded-full h-2 mr-3">
-                                <div 
-                                    class="bg-blue-600 h-2 rounded-full" 
-                                    style="width: <?= number_format($course->progress ?? 0, 0) ?>%"
-                                ></div>
-                            </div>
-                            <span class="text-sm text-gray-500">
-                                <?= number_format($course->progress ?? 0, 0) ?>%
-                            </span>
-                        </div>
-                        <div class="mt-4 flex justify-between items-center">
-                            <a 
-                                href="/course/<?= $course->id ?>/continue" 
-                                class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-2 rounded-lg text-sm transition-colors"
-                            >
-                                Continuer
-                            </a>
-                            <span class="text-sm text-gray-400">
-                                <?= htmlspecialchars($course->duration ?? '0h 0m') ?>
-                            </span>
-                        </div>
+     <!-- Grille des cours -->
+     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+    <?php foreach ($courses as $course): ?>
+        <div class="bg-white rounded-md shadow-sm overflow-hidden relative group">
+            <!-- Lien vers les détails du cours qui couvre toute la carte -->
+            <a href="detailCourse.php?idCourse=<?= htmlspecialchars($course->id_course); ?>" class="block">
+                <img src="<?php echo '../'.$course->picture ?: 'https://via.placeholder.com/300x200.png?text=Image+Non+Disponible'; ?>" 
+                    alt="<?php echo htmlspecialchars($course->title); ?>" 
+                    class="w-full h-32 object-cover">
+
+                <div class="p-3">
+                    <div class="text-xs text-green-600 truncate"><?php echo $course->category_name; ?></div>
+                    <h3 class="text-sm font-medium truncate"><?php echo $course->title; ?></h3>
+                    <div class="flex justify-between text-xs text-gray-500 mt-1">
+                        <span><i class="fas fa-users mr-1"></i><?php echo $course->student_count; ?></span>
+                        <span><i class="fas fa-comments mr-1"></i><?php echo $course->review_count; ?></span>
+                        <span>1h30</span>
                     </div>
                 </div>
-            <?php endforeach; ?>
+            </a>
+
+            <!-- Conteneur des icônes d'action -->
+            <div class="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <!-- Icône d'archivage -->
+                <form action="" method="post" class="inline-block">
+                    <input type="hidden" name="id_course" value="<?= htmlspecialchars($course->id_course); ?>">
+                    <button name="archive" class="bg-gray-200/50 rounded-full p-1 hover:bg-gray-300/70">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Icône de modification -->
+                <a href="updateCourse.php?idCourse=<?= htmlspecialchars($course->id_course); ?>" 
+                   class="bg-gray-200/50 rounded-full p-1 hover:bg-gray-300/70">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </a>
+            </div>
         </div>
+    <?php endforeach; ?>
+</div>
+
+
+
     <?php endif; ?>
+
+
+
+
+  
 </section>
 
 <?php

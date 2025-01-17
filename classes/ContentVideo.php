@@ -45,4 +45,9 @@ class ContentVideo extends AbstractContent {
         $result = $this->db->selectBy("content", ["id_content" => $this->id_content]);
         return $result ? $result[0] : null;
     }
+
+    public function getByIdCourse(): ?object {
+        $result = $this->db->selectBy("content", ["id_course" => $this->id_course]);
+        return $result ? $result[0] : null;
+    }
 }

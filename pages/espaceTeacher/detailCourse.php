@@ -1,3 +1,54 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
+require_once("../sweetAlert.php");
+require_once("../uploadimage.php");
+ob_start();
+
+use classes\Course;
+use classes\Categorie;
+use config\DataBaseManager;
+use classes\ContentText;
+use classes\ContentVideo;
+
+$dbManager = new DataBaseManager();
+$id_course = $_GET['id_course'] ?? null;
+if (!$id_course || !is_numeric($id_course)) {
+    die("ID de cours invalide ou manquant.");
+}
+// charger les donnees du cours
+try {
+    $newCourse = new Course($dbManager, $id_course);
+    $course = $newCourse->getDetailCourse(); // je selection d apres viewcourse 
+     print_r($course) ; 
+    if (!$course) {
+        throw new Exception("Le cours avec l'ID $id_course n'existe pas.");
+    }
+    // Recuperer le contenu du cours en fonction de son type
+    $newContent = null;
+
+    if ($course->type == 'texte') {
+        $newContent = new ContentText($dbManager);
+    } else if ($course->type == 'video') {
+        $newContent = new ContentVideo($dbManager);
+    }
+
+    // verif si le contenu est trouve on le recupere via l id_course
+    if ($newContent) {
+        $newContent->id_course = $id_course ;
+        $ObjetContent = $newContent->getByIdCourse() ;
+    } else {
+        throw new Exception("Le contenu associe au cours n'a pas ete trouve.");
+    }
+
+} catch (Exception $e) {
+    // Gerer les erreurs
+    error_log($e->getMessage());
+    die("Erreur : Impossible de charger les donnees du cours.");
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -50,11 +101,11 @@
         <div class="grid grid-cols-3 gap-8">
             <!-- Course Info -->
             <div class="col-span-2">
-                <h1 class="text-3xl font-bold mb-6">Programming with Python : HandsOn Introduction for Beginners</h1>
+                <h1 class="text-3xl font-bold mb-6"><?= $course->title ?></h1>
 
                 <!-- Course Meta -->
                 <div class="flex items-center gap-8 mb-6">
-                    <span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm">Programming Language</span>
+                    <span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm"><?= $course->category_name ?></span>
                     <div class="flex items-center gap-1">
                         <span class="font-bold">5.0</span>
                         <div class="flex text-yellow-400">
@@ -65,77 +116,45 @@
                             <i class="fas fa-star"></i>
                         </div>
                     </div>
-                    
+
                 </div>
 
-            
+
                 <!-- Course Details -->
                 <div class="flex items-center gap-8 mb-8 text-sm text-gray-600">
                     <div>
                         <div class="font-medium mb-1">Last Updates</div>
-                        <div>Aug 2021</div>
+                        <div><?= $course->updated_at?></div>
                     </div>
-                    <div>
-                        <div class="font-medium mb-1">Level</div>
-                        <div>Advance</div>
-                    </div>
+                  
                     <div>
                         <div class="font-medium mb-1">Students</div>
-                        <div>150,668</div>
-                    </div>
-                    <div>
-                        <div class="font-medium mb-1">Language</div>
-                        <div>English</div>
+                        <div><?= $course->student_count?></div>
                     </div>
 
-                        <!-- Social Actions -->
-                <div class="flex gap-4 mb-8">
-                    <button class="flex items-center gap-2 px-6 py-2 border rounded-lg hover:bg-gray-50">
-                        <i class="far fa-heart"></i>
-                        <span>Wishlist</span>
-                    </button>
-                    <button class="flex items-center gap-2 px-6 py-2 border rounded-lg hover:bg-gray-50">
-                        <i class="fas fa-share-alt"></i>
-                        <span>Share</span>
-                    </button>
-                </div>
+                    <!-- Social Actions -->
+                    <div class="flex gap-4 mb-8">
+                        <button class="flex items-center gap-2 px-6 py-2 border rounded-lg hover:bg-gray-50">
+                            <i class="far fa-heart"></i>
+                            <span>Wishlist</span>
+                        </button>
+                        <button class="flex items-center gap-2 px-6 py-2 border rounded-lg hover:bg-gray-50">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
+                        </button>
+                    </div>
 
                 </div>
 
                 <!-- Course Video -->
                 <div class="bg-gray-200 aspect-video rounded-lg mb-8">
-                    <img src="/api/placeholder/800/450" alt="Course preview" class="w-full h-full object-cover rounded-lg">
+                <img src="<?php echo '../'.$course->picture ?: 'https://via.placeholder.com/300x200.png?text=Image+Non+Disponible'; ?>"  alt="Course preview" class="w-full h-full object-cover rounded-lg">
                 </div>
 
                 <!-- Course Overview -->
-                <section class="mb-8">
-                    <h2 class="text-xl font-bold mb-4">Overview</h2>
-                    <p class="text-gray-600 mb-4">
-                        This course has been specifically designed for beginners who have been looking to obtain
-                        a hands-on learning experience with Python, teaching you concepts of programming right
-                        from the basics and Python being the most simplest language for a beginner to start with.
-                    </p>
-                </section>
-
-                <!-- What you'll learn -->
-                <section class="mb-8">
-                    <h2 class="text-xl font-bold mb-4">What you'll learn</h2>
-                    <ul class="space-y-3">
-                        <li class="flex items-center gap-3">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Obtain a strong understanding on the fundamentals of programming</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Write your own independent programs in Python</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fas fa-check text-green-500"></i>
-                            <span>Understand the basics of Python language</span>
-                        </li>
-                    </ul>
-                </section>
-
+                <section class="bg-white rounded-lg p-8 mb-8">
+    <div class="leading-relaxed"> <?= $ObjetContent->content_text ?></div>
+</section>
                 <!-- Reviews Section -->
                 <section class="bg-white rounded-lg p-8 mb-8">
                     <h2 class="text-2xl font-bold mb-2">Reviews</h2>
@@ -304,46 +323,41 @@
                         </div>
 
                         <div class="bg-white rounded-lg p-6 mb-8">
-    <h2 class="text-xl font-bold mb-6">About the Instructor</h2>
-    
-    <div class="flex items-center gap-4">
-        <!-- Instructor Photo -->
-        <img src="/api/placeholder/64/64" alt="DR. Soman Jumakir" 
-             class="w-16 h-16 rounded-full object-cover">
-        
-        <!-- Instructor Info -->
-        <div class="flex-1">
-            <div class="flex items-center justify-between mb-1">
-                <h3 class="font-semibold text-lg">DR. Soman Jumakir</h3>
-                <div class="flex items-center gap-2 text-sm">
-                    <i class="fas fa-book-open"></i>
-                    <span>12 Courses</span>
-                </div>
-            </div>
-            
-            <div class="text-gray-600 text-sm mb-2">Founder Naruto Edu</div>
-            
-            <!-- Rating -->
-            <div class="flex items-center gap-2">
-                <span class="font-semibold">5.0</span>
-                <div class="flex text-yellow-400">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-                    </div>
-                
-                
-                
-                </div>
+                            <h2 class="text-xl font-bold mb-6">About the Instructor</h2>
 
-                
+                            <div class="flex items-center gap-4">
+                                <!-- Instructor Photo -->
+                                <img src="/api/placeholder/64/64" alt="DR. Soman Jumakir"
+                                    class="w-16 h-16 rounded-full object-cover">
+
+                                <!-- Instructor Info -->
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <h3 class="font-semibold text-lg">DR. Soman Jumakir</h3>
+                                        <div class="flex items-center gap-2 text-sm">
+                                            <i class="fas fa-book-open"></i>
+                                            <span>12 Courses</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-gray-600 text-sm mb-2">Founder Naruto Edu</div>
+
+                                    <!-- Rating -->
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-semibold">5.0</span>
+                                        <div class="flex text-yellow-400">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

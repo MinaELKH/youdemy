@@ -80,7 +80,7 @@ class Teacher extends Member
     }
 
     public function getMyCourses(): array {
-        return $this->db->selectBy("viewcourses", ["id_teacher" => $this->id_user]);
+        return $this->db->selectBy("viewcourses", ["id_teacher" => $this->id_user  , 'archived'=>0]);
     }
 
 

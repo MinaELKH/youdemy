@@ -202,7 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                 </div>
 
                 <!-- Champs Texte -->
-                <!-- <div id="textFields" class="hidden">
+                <div id="textFields" class="hidden">
                     <div>
                         <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
                             Contenu Texte <span class="text-red-500">*</span>
@@ -215,19 +215,8 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                             placeholder="Entrez le contenu texte"></textarea>
                         <div id="contentError" class="text-red-500 text-sm hidden">Le contenu texte est obligatoire.</div>
                     </div>
-                </div> -->
-
-
-                <div id="textFields" class="hidden">
-                    <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
-                            Contenu Texte <span class="text-red-500">*</span>
-                        </label>
-                        <div id="quill-editor" class="w-full h-40 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                        <input type="hidden" name="content" id="content">
-                        <div id="contentError" class="text-red-500 text-sm hidden">Le contenu texte est obligatoire.</div>
-                    </div>
                 </div>
+
                 <!-- Prix -->
                 <div>
                     <label for="prix" class="block text-sm font-medium text-gray-700 mb-2">
@@ -344,38 +333,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
     }
 </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Initialiser Quill
-        const quill = new Quill('#quill-editor', {
-            theme: 'snow',
-            placeholder: 'Entrez le contenu texte ici...',
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'], // Options de mise en forme
-                    [{ 'header': 1 }, { 'header': 2 }],        // Options d'en-têtes
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['link', 'image'],                        // Liens et images
-                    ['clean']                                 // Supprimer les formats
-                ]
-            }
-        });
-
-        // Synchroniser le contenu de Quill avec l'input caché
-        const contentInput = document.getElementById('content');
-        quill.on('text-change', () => {
-            contentInput.value = quill.root.innerHTML; // Récupère le HTML généré par Quill
-        });
-
-        // Vérification du formulaire
-        document.getElementById('courseForm').addEventListener('submit', (e) => {
-            if (document.getElementById('type').value === 'text' && contentInput.value.trim() === '') {
-                e.preventDefault();
-                document.getElementById('contentError').classList.remove('hidden');
-            }
-        });
-    });
-</script>
 
 
 
