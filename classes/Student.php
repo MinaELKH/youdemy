@@ -53,11 +53,6 @@ class student extends Member
         return $this->db->selectBy("viewcourse_Student", ["id_student" => $this->id_user]);
     }
 
-    
-
-    
-
-
 
     // Appeler la fonction d'ajout de cours depuis la classe Course
    

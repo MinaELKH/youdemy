@@ -3,8 +3,7 @@
 namespace classes;
 
 use config\DataBaseManager;
-use stdClass;
-use Exception;
+use stdClass, PDO, Exception;
 
 class Course
 {
@@ -22,8 +21,9 @@ class Course
 
     // Constantes pour le statut
     const STATUS_PENDING = 'pending';
-    const STATUS_ACTIVE = 'active';
-    const STATUS_ARCHIVED = 'archived';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_REJECTED = 'rejected';
+ 
 
     public function __construct(
         ?DataBaseManager $db,
@@ -35,10 +35,10 @@ class Course
         ?int $id_categorie = null,
         ?string $status = self::STATUS_PENDING,
         ?int $archived = 0,
-        ?float $prix = null , 
+        ?float $prix = null,
         ?string $type = null,
     ) {
-        
+
         $this->db = $db;
         $this->id_course = $id_course;
         $this->title = $title;
@@ -47,7 +47,7 @@ class Course
         $this->id_teacher = $id_teacher;
         $this->id_categorie = $id_categorie;
         $this->status = $status;
-        $this->archived = $archived ;
+        $this->archived = $archived;
         $this->prix = $prix;
         $this->type = $type;
     }
@@ -93,19 +93,19 @@ class Course
             "id_teacher" => $this->id_teacher,
             "type" => $this->type,
         ];
-    
+
         $whereColumn = "id_course";
         $whereValue = $this->id_course;
-        
+
         return $this->db->update("courses", $data, $whereColumn, $whereValue);
     }
-    
+
     public function convert_array_to_objet(array|stdClass $data): void
     {
         if (is_array($data)) {
             $data = (object) $data; // Convertir un tableau en objet
         }
-        $this->id_course = $data->id_course ;
+        $this->id_course = $data->id_course;
         $this->title = $data->title;
         $this->description = $data->description;
         $this->picture = $data->picture;
@@ -113,8 +113,8 @@ class Course
         $this->id_categorie = $data->id_categorie;
         $this->status = $data->status;
         $this->archived = $data->archived;
-        $this->prix = $data->prix;    
-        $this->type = $data->type;  
+        $this->prix = $data->prix;
+        $this->type = $data->type;
     }
 
     public function getById()
@@ -128,13 +128,12 @@ class Course
             return false;
         }
     }
-  
-   
+
+
     public function getDetailCourse()
     {
-        $result = $this->db->selectBy("viewcourses", ["id_course" => $this->id_course]); 
+        $result = $this->db->selectBy("viewcourses", ["id_course" => $this->id_course]);
         return (object)$result[0];
-     
     }
     public function archive(): bool
     {
@@ -145,7 +144,7 @@ class Course
     }
     public function approve(string $status): bool
     {
-        if (!in_array($status, [self::STATUS_PENDING, self::STATUS_ACTIVE, self::STATUS_ARCHIVED])) {
+        if (!in_array($status, [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED])) {
             throw new \InvalidArgumentException("Statut invalide.");
         }
         $data = ["status" => $status];
@@ -166,5 +165,46 @@ class Course
     public static function getAll(DataBaseManager $db): array
     {
         return $db->selectAll("viewcourses");
+    }
+
+    public static function getSearch($db , $MotSearch): ?array
+    {
+        $query = "SELECT DISTINCT 
+                            v.*
+                        FROM viewcourses v
+                        inner JOIN 
+                            courses c ON c.id_course = v.id_course
+                        JOIN 
+                            users u ON u.id_user = c.id_teacher
+                        JOIN 
+                            categories ct ON ct.id_categorie = c.id_categorie
+                        LEFT JOIN 
+                            content cont ON c.id_course = cont.id_course
+                        LEFT JOIN 
+                            coursetags ctg ON c.id_course = ctg.id_course
+                        LEFT JOIN 
+                            tags tg ON tg.id_tag = ctg.id_tag
+                        WHERE  
+                        LOWER(c.status) = 'approved'
+                        AND c.archived = 0
+                        AND (
+                            c.title LIKE :MotSearch OR 
+                            c.description LIKE :MotSearch OR 
+                            u.name_full LIKE :MotSearch OR 
+                            tg.name_tag LIKE :MotSearch OR 
+                            ct.name LIKE :MotSearch OR 
+                            cont.title LIKE :MotSearch OR 
+                            cont.content_text LIKE :MotSearch
+                        )
+                ";
+
+        $db = $db->getConnection();
+        $stmt = $db->prepare($query);
+        $stmt->bindValue(":MotSearch", '%' . $MotSearch . '%', PDO::PARAM_STR);
+        if ($stmt->execute()) {
+            return $stmt->fetchALL(PDO::FETCH_OBJ);
+        } else {
+            return false;
+        }
     }
 }

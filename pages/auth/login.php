@@ -9,7 +9,7 @@ $error = ''; // Initialize error message variable
 
 // auth
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
-
+    
     try {
         session::start(); 
         $email = trim($_POST["email"] ?? '');
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
         if (empty($user)) {
             throw new Exception("Inscription échouée.");
         }
-
+    
         // Si l'utilisateur est trouvé, création de la session
         Session::set('logged_in', true);
         Session::set('user', [
@@ -46,7 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
 
     } catch (Exception $e) {
         $error = $e->getMessage();
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', '');
     }
+
 }
 
 
@@ -59,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - YourUdemy</title>
+    <title>Connexion - Youdemy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .bg-blur {
@@ -78,9 +80,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
     <!-- Login Container -->
     <div class="relative w-full max-w-md px-6 py-8 m-4">
         <!-- Logo Section -->
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-white mb-2">YourUdemy</h1>
+     <div class="text-center mb-8">
+     <a href='../home.php'>
+            <h1 class="text-4xl font-bold text-white mb-2">You<span class="text-yellow-500">Demy</span></h1>
             <p class="text-gray-200">Votre plateforme d'apprentissage en ligne</p>
+        
+    </a>
         </div>
 
         <!-- Login Form -->
@@ -180,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
             <!-- Sign Up Link -->
             <p class="mt-8 text-center text-sm text-white">
                 Pas encore de compte ?
-                <a href="#" class="font-semibold text-blue-300 hover:text-blue-400">
+                <a href="register.php" class="font-semibold text-blue-300 hover:text-blue-400">
                     Inscrivez-vous gratuitement
                 </a>
             </p>

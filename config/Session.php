@@ -39,7 +39,7 @@ class Session {
     }
 
     public static function gotoLocation($role){
-
+    
         if ($role == "student") {
       
             header('Location: ../home.php');
@@ -48,7 +48,8 @@ class Session {
         } elseif ($role == "teacher") {
             header('Location: ../espaceTeacher/dashboard.php');
             exit();
-        }  elseif ($role == "Admin") {
+        }  elseif ($role == "admin") {
+           
             header('Location: ../espaceAdmin/dashboard.php');
             exit();
         }

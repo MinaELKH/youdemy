@@ -11,8 +11,7 @@ CREATE  view viewcourse_Student AS
 SELECT v.*  ,e.id_student , e.enrollment_date FROM viewcourses v
 INNER JOIN enrollments e  ON  v.id_course = e.id_course
 
-  SELECT * FROM  viewcourse_Student  
-  
+  SELECT * FROM  categories
   
   SELECT * FROM enrollments
 
@@ -26,6 +25,7 @@ SELECT
     c.*, 
     ct.name AS category_name, 
     u.name_full AS teacher_name, 
+    u.avatar AS teacher_avatar, 
     u.email AS instructor_email, 
     COUNT(DISTINCT r.id_review) AS review_count, 
     COUNT(DISTINCT e.id_student) AS student_count  
@@ -40,7 +40,19 @@ LEFT JOIN
 LEFT JOIN 
     enrollments e ON c.id_course = e.id_course
 GROUP BY 
-    c.id_course, c.title, ct.name, u.name_full, u.email ;
+    c.id_course, c.title, ct.name, u.name_full, u.email , teacher_avatar ;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     SELECT distinct(title) FROM  viewcourses  WHERE id_teacher = 20
@@ -50,4 +62,4 @@ GROUP BY
     content AS cont ON c.id_course = cont.id_course
     WHERE id_teacher = 20
     
-    DELETE FROM courses WHERE  77
+    DELETE FROM courses WHERE  

@@ -65,10 +65,9 @@ public function archived():bool{
 
 
 
-public static function getAll($db): array {
+public static function getAll(DataBaseManager $db): array {
     $results = $db->selectAll("categories");
     $categories = [];
-
     if ($results) {
         foreach ($results as $result) {
             $categories[] = new Categorie(null, $result->id_categorie, $result->name, $result->description, $result->archived);

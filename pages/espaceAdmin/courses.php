@@ -107,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                 <tbody>
                     <?php
                     $newcourse = new Course($dbManager);
-                    $courses = $newcourse->getAll();
+                    $courses = Course::getAll($dbManager  );
                     //  echo '<pre>';
                     //  print_r($courses);  // Affiche les données sous un format lisible
                     //  echo '</pre>';
@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                             <!-- Colonne Catégorie -->
                             <td class="px-4 py-2 text-center">
                                 <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-semibold">
-                                    <?= htmlspecialchars($course->categorie_name) ?>
+                                    <?= htmlspecialchars($course->category_name) ?>
                                 </span>
                             </td>
 

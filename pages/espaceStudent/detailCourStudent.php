@@ -67,16 +67,14 @@ try {
         if (is_numeric($_GET['id_content'])) {
             $newContent->id_content = intval($_GET['id_content']);
             $ObjetContent = $newContent->getById();
-        }
-        else {
-    
+        } else {
+
             throw new Exception("ID content invalide ");
         }
-     } else if ($newContent) {
+    } else if ($newContent) {
         $newContent->id_course = $id_course;
         $ObjetContent = $newContent->getByIdCourse();
-   
-    }else {
+    } else {
         throw new Exception("Le contenu associe au cours n'a pas ete trouve.");
     }
 } catch (Exception $e) {
@@ -136,7 +134,7 @@ if (isset($_POST["deletereview"])) {
 
             <!-- Course Video -->
             <div class="bg-gray-200 aspect-video rounded-lg mb-2">
-                <img src="<?php echo $course->picture ?: 'https://via.placeholder.com/300x200.png?text=Image+Non+Disponible'; ?>" alt="Course preview" class="w-full h-full object-cover rounded-lg">
+                <img src="<?= '../../' . $course->picture ?>" alt="Course preview" class="w-full h-full object-cover rounded-lg">
             </div>
             <!-- Course Details -->
             <div class="grid grid-cols-2  lg:grid-cols-4 items-center gap-2 mb-2 text-xs text-gray-600">
@@ -193,37 +191,51 @@ if (isset($_POST["deletereview"])) {
             <!-- Reviews Section -->
             <section class="bg-white rounded-lg p-2 mb-2">
 
-
-
-                <h2 class="text-2xl font-bold mb-2">Avis</h2>
-                <p class="text-gray-600 mb-2">Nos Apprenants parlent de ce cours</p>
-                <div class="flex gap-12 mb-2 justify-between  mx-8">
-
-
-                    <span class="mr-10 flex items-center">
-                        <?= htmlspecialchars($course->student_count); ?>
-                        <i class="fas fa-user mr-1"></i>
-                        <p>Apprenants</p>
-                    </span>
-                    <span class="mr-2 flex items-center">
-                        <?= htmlspecialchars($course->review_count); ?>
-                        <i class="fas fa-comment mr-1"></i>
-
-
-                    </span>
-                </div>
-
                 <!-- Individual Reviews -->
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="flex items-center justify-between bg-gray-50 p-4 border-b border-gray-100">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center bg-blue-100 rounded-full px-3 py-1">
+                                <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                <span class="font-semibold text-gray-700">
+                                    <?= htmlspecialchars($course->student_count); ?>
+                                    Apprenants
+                                </span>
+                            </div>
 
-                <div class="bg-white shadow-lg rounded-lg mt-8 p-8 relative z-10">
-                    <h2 class="text-2xl font-bold text-indigo-900 mb-4">Leave a comment</h2>
-                    <div class="mb-4">
+                            <div class="flex items-center bg-green-100 rounded-full px-3 py-1">
+                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                                <span class="font-semibold text-gray-700">
+                                    <?= htmlspecialchars($course->review_count); ?>
+                                    Commentaires
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <svg class="w-8 h-8 text-indigo-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-lienjoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+                            </svg>
+                            <h2 class="text-2xl font-bold text-indigo-900 flex-grow">
+                                Laisser un Commentaire
+                            </h2>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm">
+                            Partagez vos réflexions, questions ou retours sur ce cours.
+                        </p>
+                        <div class="mb-4">
                         <form method="post">
                             <input type=hidden name="id_article" value="<?= htmlspecialchars($course->id_course) ?>">
                             <textarea name="textComment" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Write a comment..." rows="3"></textarea>
                             <div class="flex justify-between items-center mt-2">
                                 <button name="addreview" class="bg-blue-600 text-white px-4 py-2 rounded-lg">
-                                    Post comment
+                                    commenter
                                 </button>
                                 <div class="flex space-x-2 text-gray-500">
                                     <i class="fas fa-paperclip">
@@ -234,6 +246,13 @@ if (isset($_POST["deletereview"])) {
                             </div>
                         </form>
                     </div>
+                
+                    </div>
+                </div>
+
+                <div class="bg-white shadow-lg rounded-lg mt-2 p-2 relative z-10">
+
+                
                     <div class="space-y-6 mb-6">
                         <!-- reviewaires des users -->
                         <?php
@@ -247,14 +266,11 @@ if (isset($_POST["deletereview"])) {
                                 <div class="flex items-center mb-2">
 
                                     <img
-                                        img src="<?= !empty($objet_Cmt->avatar) ? 'http://localhost/youdemy/pages/'.$objet_Cmt->avatar : 'http://localhost/youdemy/pages/uploads/avatar_1.jpg' ?>"
+                                        img src="<?= !empty($objet_Cmt->avatar) ? '../../' . $objet_Cmt->avatar : '../../avatar_1.jpg' ?>"
                                         alt="Profil"
                                         class="w-10 h-10 rounded-full mr-3"
                                         height="40"
                                         width="40" />
-
-
-
                                     <div class='w-full flex justify-between'>
                                         <div>
                                             <p class="font-semibold">
@@ -276,15 +292,6 @@ if (isset($_POST["deletereview"])) {
                                     </div>
 
                                 </div>
-
-
-
-
-
-
-
-
-
                                 <p class="text-gray-700 mb-2">
                                     <?= $objet_Cmt->comment ?>
                                 </p>
@@ -301,7 +308,7 @@ if (isset($_POST["deletereview"])) {
                         <?php endforeach; ?>
                         <!-- More Reviews Button -->
                         <div class="text-center">
-                            <button class="text-indigo-600 font-medium hover:underline">More reviews</button>
+                            <button class="text-indigo-600 font-medium hover:underline">plusde commentaires </button>
                         </div>
             </section>
         </div>
@@ -318,39 +325,41 @@ if (isset($_POST["deletereview"])) {
                     À propos de l'Instructeur
                 </h2>
                 <div class="flex items-center mb-2">
-                    <img
-                        alt="Image de l'Instructeur"
-                        class="h-12 w-12 rounded-full mr-4"
-                        src="<?= $course->teacher_avatar ?: 'https://via.placeholder.com/50' ?>" />
-                    <div>
-                        <h3 class="text-gray-800 font-semibold">
-                            Dr. <?= $course->teacher_name ?>
-                        </h3>
-                        <p class="text-gray-600 text-sm">
-                            Fondateur Naruto Edu
-                        </p>
-                    </div>
+                    <img src="<?= !empty($course->teacher_avatar) ? '../../' . $course->teacher_avatar : '../../avatar_1.jpg' ?>"
+                        alt="Profil"
+                        class="w-10 h-10 rounded-full mr-3"
+                        height="40"
+                        width="40" />
+                    <h3 class="text-gray-800 font-semibold">
+                        Dr. <?= $course->teacher_name ?>
+                    </h3>
+                    <p class="text-gray-600 text-sm">
+                        Fondateur Naruto Edu
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center text-yellow-500">
+                <span class="text-sm font-semibold mr-1">5.0</span>
+                <div>
+                    <?php for ($i = 0; $i < 5; $i++): ?>
+                        <i class="fas fa-star"></i>
+                    <?php endfor; ?>
                 </div>
 
-                <div class="flex justify-between items-center text-yellow-500">
-                    <span class="text-sm font-semibold mr-1">5.0</span>
-                    <div>
-                        <?php for ($i = 0; $i < 5; $i++): ?>
-                            <i class="fas fa-star"></i>
-                        <?php endfor; ?>
-                    </div>
-
-                    <div class="flex items-center gap-2 text-sm text-gray-800">
+                <!-- <div class="flex items-center gap-2 text-sm text-gray-800">
                         <i class="fas fa-book-open"></i>
                         <span class="text-gray-600 text-sm ml-2 ">
                             <?php
-                            // $newTeacher = new Teacher($dbManager, $course->id_teacher);
-                            // echo $newTeacher->getCountCoursesByTeacher() . " Cours";
+                            //    $newTeacher = new Teacher($dbManager, $course->id_teacher);
+                            //     $countCourses =  $newTeacher->getCountCoursesByTeacher() . " Cours";
+                            //      echo 'livre :' . $countCourses ;
+
                             ?>
                         </span>
-                    </div>
-                </div>
+                    </div> -->
             </div>
+
 
             <!-- sommaire -->
             <div class="bg-white rounded-lg shadow-md border border-gray-100 p-6 mt-4">
@@ -373,10 +382,10 @@ if (isset($_POST["deletereview"])) {
                             </span>
                             <a
                                 href="detailCourStudent.php?id_course=<?= $id_course ?>&id_content=<?= $content->id_content ?>"
-                                class="text-gray-700 hover:text-blue-700 hover:underline transition-colors duration-200 ease-in-out flex-grow">
+                                class="text-indigo-700  font-semibold hover:text-blue-700 hover:underline transition-colors duration-200 ease-in-out flex-grow">
                                 <?= $content->title ?>
                             </a>
-                            <svg class="w-5 h-5 text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="w-5 h-5  text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                             </svg>
                         </li>

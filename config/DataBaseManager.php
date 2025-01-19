@@ -75,6 +75,7 @@ class DataBaseManager
     public function selectAll(string $table): array |bool
     {
         $query = "SELECT * FROM $table where archived = 0  ";
+      
         $stmt = $this->connection->prepare($query);
         if ($stmt->execute()) {
             return $stmt->fetchAll(PDO::FETCH_OBJ);

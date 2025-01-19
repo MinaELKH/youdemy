@@ -1,7 +1,9 @@
 <?php
+
 namespace Classes;
-use config\DataBaseManager ;
-use PDO ;
+
+use config\DataBaseManager;
+use PDO;
 
 class Enrollment
 {
@@ -38,23 +40,32 @@ class Enrollment
         $name  = $value;
     }
 
-// &ffiche les tag dans l article
+
+    public function inscrit()
+    {
+        $param = ['id_course' => $this->id_course, 'id_student' => $this->id_student];
+
+        $result = $this->dbManager->selectBy('enrollments', $param);
+
+        return (!empty($result)) ? true : false;
+    }
+
+    // &ffiche les tag dans l article
     public function getStudentsByCourse(): array
     {
-       $query = "select * from  users u
+        $query = "select * from  users u
                  inner join enrollment e on e.id_student = u.id_user
-                 where id_course = :id_course " ;
-       $db = $this->dbManager->getConnection();
-       $stmt=  $db->prepare($query);
-       $stmt->bindParam(":id_course" , $this->id_course , PDO::PARAM_INT) ;
-    //    var_dump($stmt->execute());
-    //    die();
-       if($stmt->execute()){
-             return $stmt->fetchAll(PDO::FETCH_OBJ) ; 
-       }else {
+                 where id_course = :id_course ";
+        $db = $this->dbManager->getConnection();
+        $stmt =  $db->prepare($query);
+        $stmt->bindParam(":id_course", $this->id_course, PDO::PARAM_INT);
+        //    var_dump($stmt->execute());
+        //    die();
+        if ($stmt->execute()) {
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } else {
 
-             return false ; 
-       }
-       
+            return false;
+        }
     }
 }

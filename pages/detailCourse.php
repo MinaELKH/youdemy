@@ -96,25 +96,115 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
 
 <body class="bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm py-4">
-        <div class="container mx-auto px-4 flex items-center justify-between flex-wrap">
-            <div class="flex items-center gap-2">
-                <img src="logo.png" alt="NarutoEdu" class="h-8"> YOUDEMY
-                <button class="flex items-center gap-2 text-gray-600">
-                    <i class="fas fa-th"></i>
-                    Catégorie
+    <nav class="bg-white shadow-md fixed w-full z-10 top-0">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img alt="EduMall Logo" class="h-10" src="https://placehold.co/40x40" />
+                <span class="text-xl font-bold">
+                    YOUDEMY
+                </span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a class="text-gray-700" href="#">
+                    Categorie
+                </a>
+                <div class="relative">
+                    <input class="border rounded-full py-2 px-4 pl-10" placeholder="Search..." type="text" />
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    </i>
+                </div>
+                <a class="text-gray-700" href="#">
+                    Demo
+                </a>
+
+                <!-- la partie qui se change selon user  -->
+
+                <div class="flex items-center space-x-4 relative">
+    <?php if (!Session::isLoggedIn()) : ?>
+        <nav class="flex items-center space-x-4">
+            <a class="text-gray-700 hover:text-gray-900" href="#">
+                Enseigner in Youdemy
+            </a>
+            <a class="text-gray-700 hover:text-gray-900" href="#">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            <a class="text-gray-700 hover:text-gray-900" href="auth/login.php">
+                Log In
+            </a>
+            <a class="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition" href="auth/register.php">
+                Sign Up
+            </a>
+        </nav>
+    <?php endif; ?>
+
+    <?php if (Session::isLoggedIn()) : ?>
+        <div class="flex items-center space-x-4">
+            <!-- Notifications -->
+            <div class="relative">
+                <button class="text-gray-700 hover:text-gray-900">
+                    <i class="fas fa-bell text-lg"></i>
+                    <span class="bg-red-500 text-white rounded-full px-2 py-1 text-xs absolute -top-2 -right-2">3</span>
                 </button>
-                <div class="relative hidden sm:block">
-                    <input type="search" placeholder="Rechercher un cours ici"
-                        class="w-64 pl-10 pr-4 py-2 bg-gray-100 rounded-full">
-                    <i class="fas fa-search absolute left-4 top-3 text-gray-400"></i>
+            </div>
+
+            <!-- Profile Dropdown -->
+            <div x-data="{ open: false }" class="relative">
+                <button 
+                    @click="open = !open" 
+                    class="flex items-center focus:outline-none"
+                >
+                    <img
+                        src="<?= isset($s_userAvatar) ? $s_userAvatar : 'uploads/avatar_1.jpg' ?>"
+                        alt="Profil"
+                        class="w-10 h-10 rounded-full mr-3"
+                    >
+                    <div class="flex flex-col">
+                        <span class="text-sm font-medium text-gray-700"><?= $s_userName ?></span>
+                        <span class="text-xs text-gray-500">
+                            <?= Session::hasRole('student') ? 'Apprenant' : 'Enseignant' ?>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Dropdown Menu -->
+                <div 
+                    x-show="open" 
+                    @click.away="open = false"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 scale-90"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-300"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-90"
+                    class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-20 border"
+                >
+                    <a href="<?= Session::hasRole('student') ? '/student/dashboard' : '/teacher/dashboard' ?>" 
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <i class="fas fa-chart-line mr-2"></i> Tableau de Bord
+                    </a>
+                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <i class="fas fa-user mr-2"></i> Profil
+                    </a>
+                    <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <i class="fas fa-cog mr-2"></i> Paramètres
+                    </a>
+                    <div class="border-t my-1"></div>
+                    <a href="auth/logout.php" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+                    </a>
                 </div>
             </div>
-            <div class="flex items-center gap-6">
-                <a href="#" class="text-indigo-600">Cours</a>
-                <a href="#" class="text-gray-600">Blog</a>
-                <a href="#" class="text-gray-600"><i class="fas fa-shopping-cart"></i></a>
-                <a href="#" class="bg-indigo-600 text-white px-6 py-2 rounded-full">Essayer gratuitement</a>
+        </div>
+    <?php endif; ?>
+</div>
+
+<!-- Include Alpine.js for interactivity -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+            
+        
+
+                <!-- fin de la partie qui se change selon user  -->
             </div>
         </div>
     </nav>
@@ -131,7 +221,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
     </div>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8 text-xs">
+    <div class="container mx-auto px-4 py-8 text-xs mt-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
             <!-- Course Info -->
             <div class="col-span-1 md:col-span-2">
@@ -241,8 +331,15 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
                         ?>
                             <div class="bg-gray-200 p-2 m-8 rounded-lg shadow-sm">
                                 <div class="flex items-center mb-2">
-                                    <img alt="Photo de profil du commentateur" class="w-10 h-10 rounded-full mr-3" height="40" src="<?php echo !empty($newreview->avatar) ? $objet_Cmt->avatar : 'https://storage.googleapis.com/a1aa/image/1ZK6eQz7uGxKOahfeQHlR1zQxhXhr8QxTxrVwEFg60TCDUGoA.jpg'; ?>" width="40" />
-                                    <div>
+                                   
+                                <img
+                                        img src="<?= !empty($objet_Cmt->avatar) ? 'http://localhost/youdemy/pages/'.$objet_Cmt->avatar : 'http://localhost/youdemy/pages/uploads/avatar_1.jpg' ?>"
+                                        alt="Profil"
+                                        class="w-10 h-10 rounded-full mr-3"
+                                        height="40"
+                                        width="40" />
+                                        
+                                        <div>
                                         <p class="font-semibold">
                                             <?= $objet_Cmt->name_full ?>
                                         </p>
@@ -273,7 +370,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
             </div>
 
             <!-- Sidebar -->
-            <div class="col-span-1">
+            <div class="col-span-1  mt-24">
                 <!-- Prix et Achat -->
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
                 <form action="" method="post">
@@ -302,11 +399,16 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
                         À propos de l'Instructeur
                     </h2>
                     <div class="flex items-center mb-2">
-                        <img
-                            alt="Image de l'Instructeur"
-                            class="h-12 w-12 rounded-full mr-4"
-                            src="<?= $course->teacher_avatar ?: 'https://via.placeholder.com/50' ?>" />
+                     
                         <div>
+
+                     
+                                        <img src="<?= !empty($course->teacher_avatar) ? 'http://localhost/youdemy/pages/'.$course->teacher_avatar : 'http://localhost/youdemy/pages/uploads/avatar_1.jpg' ?>"
+                                        alt="Profil"
+                                        class="w-10 h-10 rounded-full mr-3"
+                                        height="40"
+                                        width="40" />
+
                             <h3 class="text-gray-800 font-semibold">
                                 Dr. <?= $course->teacher_name ?>
                             </h3>

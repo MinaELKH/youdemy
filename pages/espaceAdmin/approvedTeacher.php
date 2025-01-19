@@ -28,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
 
 ?>
 <!-- Gestion des Enseignants -->
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 p-8">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 p-2">
     <div class="container mx-auto">
-        <div class="flex justify-between items-center mb-10">
+        <div class="flex justify-between items-center mb-4">
             <h1 class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                 Les demandes en attente
             </h1>

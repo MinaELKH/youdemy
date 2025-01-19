@@ -53,11 +53,14 @@ function afficher($dbManager)
 {
     try {
         $categorie = new Categorie($dbManager);
-        $categories = $categorie->getAll();
+        $categories = $categorie::getAll($dbManager);
 
         echo "<div class='min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 p-8'>
                 <div class='container mx-auto'>
-                    <div class='bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden p-6'>";
+                      <div class='flex justify-between items-center mb-4'>
+            <h1 class='text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600'>
+                Categories
+            </h1> </div>  ";
 
         if (!empty($categories)) {
             echo "<table id='DataTable' class='w-full'>
@@ -72,6 +75,7 @@ function afficher($dbManager)
                     <tbody>";
 
             foreach ($categories as $objet) {
+             
                 echo "<tr class='border-b border-gray-100 hover:bg-blue-50/50 transition duration-300'>
                         <td class='px-6 py-4 text-gray-800'>{$objet->id_categorie}</td>
                         <td class='px-6 py-4'>
@@ -173,26 +177,13 @@ function afficher($dbManager)
     </div>
 </section>
 
-<section class="mb-4">
-    <h3 class="text-xl font-semibold mb-2">Liste des Catégories</h3>
+<section class="mb-2">
+   
     <div class="bg-white p-4 rounded-lg shadow-lg">
         <?php afficher($dbManager); ?>
     </div>
 </section>
 
-<!-- <script>
-    $(document).ready(function() {
-        $('#categoriesTable').DataTable({
-            paging: true, // Activer la pagination
-            searching: true, // Activer la recherche
-            info: true, // Activer les informations sur les résultats
-            responsive: true, // Mode responsive
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.13.5/i18n/fr-FR.json" // Français
-            },
-        });
-    });
-</script> -->
 
 <?php
 $content = ob_get_clean();

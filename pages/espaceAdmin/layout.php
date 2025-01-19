@@ -1,9 +1,30 @@
 <?php
-require_once("../sweetAlert.php");
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
+require_once("../sweetAlert.php");
 
+use config\session;
 use classes\Role;
+
+session::start();
+if (Session::isLoggedIn() && session::hasRole('admin')) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $s_userName = Session::get('user')['name'];
+    $s_userEmail = Session::get('user')['email'];
+    $s_userRole = Session::get('user')['role'];
+    $s_userAvatar = Session::get('user')['avatar'];
+    //  var_dump($userAvatar); 
+} else {
+    setSweetAlertMessage(
+        'Authentification requise ⚠️',
+        'Veuillez vous authentifier en tant qu admin pour  accéder a cette page.',
+        'warning',
+        '../auth/login.php'
+    );
+}
 ?>
+
+
 <html lang="en">
 
 <head>
@@ -47,8 +68,7 @@ use classes\Role;
         <!-- Sidebar -->
 
 
-        <nav class="bg-gradient-to-b from-blue-600 to-indigo-700 shadow-2xl rounded-2xl p-4 space-y-2">
-            <!-- Dashboard -->
+        <nav class="fixed top-0 left-0 h-screen w-16 bg-gradient-to-b from-blue-600 to-indigo-700 shadow-2xl rounded-2xl p-2 space-y-2 z-50"> <!-- Dashboard -->
             <a href="dashboard.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
                 <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <i class="fas fa-tachometer-alt text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
@@ -138,178 +158,94 @@ use classes\Role;
             }
         </style>
 
-
         <!-- Main Content -->
 
-        <div class="flex-1 flex flex-col">
+        <div class="ml-16 flex-1 overflow-x-hidden">
             <!-- Top Bar -->
-            <header class="bg-white shadow py-4 px-4 flex justify-between items-center">
-                <div>
-                    <h2 class="text-2xl font-semibold"> Bienvenue Name </h2>
+            <nav class="bg-white shadow-md fixed w-full z-10 top-0">
+                <div class="container px-4 py-4 flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        
+
+                        <div class="flex-shrink-0">
+                            <h2 class="text-2xl text-indigo-500 font-bold ">
+                                You<span class="text-yellow-500">Demy</span>
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                    
+
+                        <!-- la partie qui se change selon user  -->
+
+                        <div class="flex items-center space-x-4 relative">
+                            <?php if (Session::isLoggedIn()) : ?>
+                                <div class="flex items-center space-x-4">
+                                    <!-- Notifications -->
+                                    <div class="relative">
+                                        <button class="text-gray-700 hover:text-gray-900">
+                                            <i class="fas fa-bell text-lg"></i>
+                                            <span class="bg-red-500 text-white rounded-full px-2 py-1 text-xs absolute -top-2 -right-2">3</span>
+                                        </button>
+                                    </div>
+
+                                    <!-- Profile Dropdown -->
+                                    <div x-data="{ open: false }" class="relative">
+                                        <button
+                                            @click="open = !open"
+                                            class="flex items-center focus:outline-none">
+                                            <img
+                                                src="<?= isset($s_userAvatar) ? '../'.$s_userAvatar : '../../uploads/avatar_1.jpg' ?>"
+                                                alt="Profil"
+                                                class="w-10 h-10 rounded-full mr-3">
+                                            <div class="flex flex-col">
+                                                <span class="text-sm font-medium text-gray-700"><?= $s_userName ?></span>
+                                                <span class="text-xs text-yellow-500">
+                                                    Administrateur 
+                                                </span>
+                                            </div>
+                                        </button>
+
+                                        <!-- Dropdown Menu -->
+                                        <div
+                                            x-show="open"
+                                            @click.away="open = false"
+                                            x-transition:enter="transition ease-out duration-300"
+                                            x-transition:enter-start="opacity-0 scale-90"
+                                            x-transition:enter-end="opacity-100 scale-100"
+                                            x-transition:leave="transition ease-in duration-300"
+                                            x-transition:leave-start="opacity-100 scale-100"
+                                            x-transition:leave-end="opacity-0 scale-90"
+                                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-20 border">
+                                            
+                                            <a href="../auth/logout.php" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                                <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Include Alpine.js for interactivity -->
+                        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+
+
+
+                        <!-- fin de la partie qui se change selon user  -->
+                    </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button class="text-gray-600">
-                        <i class="fas fa-bell"></i>
-                    </button>
-                    <button class="text-gray-600">
-                        <i class="fas fa-user-circle"></i>
-                    </button>
-                </div>
-            </header>
+            </nav>
             <!-- Main Section -->
-            <main class="flex-1 bg-gray-100 p-6">
+            <main class="flex-1 bg-gray-100 p-2">
                 <?php
                 echo isset($content) ? $content : '<p>Bienvenue sur Votre Dashorad .</p>';
                 ?>
-
-
-
-                <!-- Gestion des utilisateurs -->
-                <section class="mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Gestion des utilisateurs</h3>
-                    <div class="bg-white p-6 rounded-lg shadow-lg">
-                        <p class="text-gray-600">Activation, suspension ou suppression des utilisateurs...</p>
-                        <!-- Add your content here -->
-                    </div>
-                </section>
-                <!-- Gestion des contenus -->
-                <section class="mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Gestion des contenus</h3>
-                    <div class="bg-white p-6 rounded-lg shadow-lg">
-                        <p class="text-gray-600">Gestion des cours, catégories et tags...</p>
-                        <!-- Add your content here -->
-                    </div>
-                </section>
-                <!-- Insertion en masse de tags -->
-                <section class="mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Insertion en masse de tags</h3>
-                    <div class="bg-white p-6 rounded-lg shadow-lg">
-                        <p class="text-gray-600">Insertion en masse de tags pour gagner en efficacité...</p>
-                        <!-- Add your content here -->
-                    </div>
-                </section>
-                <!-- Statistiques globales -->
-                <section class="mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Statistiques globales</h3>
-                    <div class="bg-white p-6 rounded-lg shadow-lg">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <!-- Total Courses -->
-                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-lg font-semibold">Total Courses</h3>
-                                        <p class="text-gray-600">1,234</p>
-                                    </div>
-                                    <div class="bg-blue-500 text-white p-3 rounded-full">
-                                        <i class="fas fa-book"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Courses by Category -->
-                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-lg font-semibold">Courses by Category</h3>
-                                        <p class="text-gray-600">Details...</p>
-                                    </div>
-                                    <div class="bg-green-500 text-white p-3 rounded-full">
-                                        <i class="fas fa-chart-pie"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Course with Most Students -->
-                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-lg font-semibold">Course with Most Students</h3>
-                                        <p class="text-gray-600">Course Name</p>
-                                    </div>
-                                    <div class="bg-yellow-500 text-white p-3 rounded-full">
-                                        <i class="fas fa-user-graduate"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Top 3 Teachers -->
-                            <div class="bg-white p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
-                                <div class="flex items-center justify-between">
-                                    <div>
-                                        <h3 class="text-lg font-semibold">Top 3 Teachers</h3>
-                                        <p class="text-gray-600">Teacher Names</p>
-                                    </div>
-                                    <div class="bg-red-500 text-white p-3 rounded-full">
-                                        <i class="fas fa-chalkboard-teacher"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
             </main>
         </div>
     </div>
-    <script>
-        // Line Chart
-        const lineCtx = document.getElementById('lineChart').getContext('2d');
-        const lineChart = new Chart(lineCtx, {
-            type: 'line',
-            data: {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                    label: 'Sales',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
 
-        // Bar Chart
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        const barChart = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: 'Revenue',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
 </body>
 
 </html>

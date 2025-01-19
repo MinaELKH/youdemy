@@ -4,21 +4,26 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 require_once("../sweetAlert.php");
 ob_start();
+
 use config\DataBaseManager;
 use classes\Course;
 use classes\student ;
+use config\Session;
+// affichage 
+session::start();
+if (Session::isLoggedIn()) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $userName = Session::get('user')['name'];
+    $userEmail = Session::get('user')['email'];
+    $userRole = Session::get('user')['role'];
+    $userAvatar = Session::get('user')['avatar'];
+}
+
 $dbManager = new DataBaseManager();
-
-//** a voir  */
-
-$newStudent = new student ($dbManager , 66) ; 
-//** a voir  */
-
-
+$newStudent = new student ($dbManager , $s_userId) ; 
 
 ?>
-
-
 
     <section class="lg:mx-32">
         <div class="flex justify-between items-center mb-6">
@@ -32,11 +37,11 @@ $newStudent = new student ($dbManager , 66) ;
             foreach ($courses as $course): ?>
                 <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
                     <div class="relative">
-                        <img 
-                            src="<?php echo htmlspecialchars($course->picture ?? '../../src/images/header.jpg'); ?>" 
-                            alt="Course Image" 
-                            class="w-full h-24 object-cover"
-                        >
+                    <img
+                                alt="<?= htmlspecialchars($course->title); ?>"
+                                class="w-full h-32 object-cover"
+                                src="<?php echo  '../'.$course->picture ?: 'https://storage.googleapis.com/a1aa/image/noC8xPRPcuBWd_C1xQmYNlvvgBKWFaAuuJPWmdQmvPM.jpg'; ?>" />
+                            
                         <div class="absolute top-2 right-2 bg-blue-500 text-white px-1.5 py-0.5 rounded-full text-[10px]">
                             En cours
                         </div>
@@ -65,9 +70,12 @@ $newStudent = new student ($dbManager , 66) ;
                             <span class="text-[10px] text-gray-500">45%</span>
                         </div>
                         <div class="mt-2 flex justify-between items-center">
+                        <a href="detailCourStudent.php/?id_course=<?= htmlspecialchars($course->id_course); ?>" class="block">
                             <button class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded-lg text-[10px] transition-colors">
                                 Continuer
                             </button>
+                            </a>
+
                             <span class="text-[10px] text-gray-400">
                                 <?php echo htmlspecialchars($course->duration ?? '6h 30m'); ?>
                             </span>

@@ -60,15 +60,20 @@ if (Session::isLoggedIn() && session::hasRole('student')) {
             <div class="flex items-center justify-between h-16">
                 <!-- Logo et Menu Mobile -->
                 <div class="flex items-center">
+                 
+
+
                     <div class="flex-shrink-0">
-                        <h1 class="text-2xl font-bold text-blue-600">Youdemy</h1>
+                        <h2 class="text-2xl text-indigo-500 font-bold ">
+                            You<span class="text-yellow-500">Demy</span>
+                        </h2>
                     </div>
 
                     <!-- Menu Desktop -->
                     <div class="hidden md:block ml-10">
                         <div class="flex items-baseline space-x-4">
                         <a href="../../home.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Acceuil</a>
-                            <a href="mesCourses.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Mes Cours</a>
+                            <a href="../mesCourses.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Mes Cours</a>
                             <a href="detailCourStudent.php/?id_course=33" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Recommandés</a>
                             <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Favoris</a>
                            
@@ -80,10 +85,19 @@ if (Session::isLoggedIn() && session::hasRole('student')) {
                 <!-- Recherche et Profil -->
                 <div class="flex items-center space-x-4">
                     <div class="w-64">
-                        <input type="text"
-                            placeholder="Rechercher un cours..."
-                            class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500" />
-                    </div>
+                    <form action="http://localhost/youdemy/pages/searchResult.php" method="post">
+                        <div class="relative">
+                            <input
+                                type="text"
+                                name="search"
+                                class="border rounded-full py-2 px-4 pl-10"
+                                placeholder="Search...">
+                                <input type="submit"   name="btnsearch" style="display: none;">
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                        </div>
+                    </form>
+                   
+                        </div>
 
                  
 
