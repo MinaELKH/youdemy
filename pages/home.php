@@ -168,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
                         <i class="fas fa-cog mr-2"></i> Paramètres
                     </a>
                     <div class="border-t my-1"></div>
-                    <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                    <a href="auth/logout.php" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
                         <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
                     </a>
                 </div>

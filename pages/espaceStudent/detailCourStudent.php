@@ -34,12 +34,10 @@ $dbManager = new DataBaseManager();
 
 $id_course = $_GET['id_course'] ?? null;
 
-$id_content = $_GET['id_conten'] ?? null;
+$id_content = $_GET['id_content'] ?? null;
 
 
-if (!$id_course || !is_numeric($id_course)) {
-    die("ID de cours invalide ou manquant.");
-}
+
 // charger les donnees du cours
 if (!$id_course || !is_numeric($id_course)) {
     die("ID de cours invalide ou manquant.");
@@ -62,15 +60,23 @@ try {
         $newContent = new ContentVideo($dbManager);
     }
 
-    // verif si le contenu est trouve on le recupere via l id_course
-    if ($newContent) {
+
+    /// on verifie si le id_content dans l url , ou on va recupere le premier chapitre par defaut 
+    if (isset($_GET['id_content'])) {
+        // verif si le contenu est trouve on le recupere via l id_course
+        if (is_numeric($_GET['id_content'])) {
+            $newContent->id_content = intval($_GET['id_content']);
+            $ObjetContent = $newContent->getById();
+        }
+        else {
+    
+            throw new Exception("ID content invalide ");
+        }
+     } else if ($newContent) {
         $newContent->id_course = $id_course;
         $ObjetContent = $newContent->getByIdCourse();
-        //    var_dump( $ObjetContent ) ;
-        //  die();
-
-
-    } else {
+   
+    }else {
         throw new Exception("Le contenu associe au cours n'a pas ete trouve.");
     }
 } catch (Exception $e) {
@@ -179,6 +185,7 @@ if (isset($_POST["deletereview"])) {
             <section class="bg-white rounded-lg p-2 mb-2">
                 <div class="flex space-x-2 mb-2  ">
                     <?php
+                    //var_dump($ObjetContent);
                     echo nl2br($ObjetContent->display());
                     ?>
                 </div>
@@ -235,9 +242,19 @@ if (isset($_POST["deletereview"])) {
                         $result = $newreview->getReviewByCourse();
                         foreach ($result as $objet_Cmt):
                         ?>
+
                             <div class="bg-gray-200 p-2 m-8 rounded-lg shadow-sm">
                                 <div class="flex items-center mb-2">
-                                    <img alt="Photo de profil du commentateur" class="w-10 h-10 rounded-full mr-3" height="40" src="<?php echo !empty($newreview->avatar) ? $objet_Cmt->avatar : 'https://storage.googleapis.com/a1aa/image/1ZK6eQz7uGxKOahfeQHlR1zQxhXhr8QxTxrVwEFg60TCDUGoA.jpg'; ?>" width="40" />
+
+                                    <img
+                                        img src="<?= !empty($objet_Cmt->avatar) ? 'http://localhost/youdemy/pages/'.$objet_Cmt->avatar : 'http://localhost/youdemy/pages/uploads/avatar_1.jpg' ?>"
+                                        alt="Profil"
+                                        class="w-10 h-10 rounded-full mr-3"
+                                        height="40"
+                                        width="40" />
+
+
+
                                     <div class='w-full flex justify-between'>
                                         <div>
                                             <p class="font-semibold">

@@ -72,10 +72,22 @@ class ContentText extends AbstractContent
         return $this->db->delete("content", "id_content", $this->id_content);
     }
 
-    public function getById(): ?object
+    public function getById(): ?ContentText
     {
         $result = $this->db->selectBy("content", ["id_content" => $this->id_content]);
-        return $result ? $result[0] : null;
+        if ($result) {
+            $firstRow = $result[0];
+            return new ContentText(
+                $this->db,
+                $firstRow->id_content,
+                $firstRow->id_course,
+                $firstRow->title,
+                $firstRow->type,
+                $firstRow->content_text 
+            );
+        }
+    
+        return null;
     }
 
     public function getByIdCourse(): ?ContentText
@@ -97,7 +109,24 @@ class ContentText extends AbstractContent
         return null;
     }
     
-
+    public function getByIdContent(): ?ContentText
+    {
+        $result = $this->db->selectBy("content", ["id_content" => $this->id_content, "type" => "texte"]);
+    
+        if ($result) {
+            $firstRow = $result[0];
+            return new ContentText(
+                $this->db,
+                $firstRow->id_content,
+                $firstRow->id_course,
+                $firstRow->title,
+                $firstRow->type,
+                $firstRow->content_text 
+            );
+        }
+    
+        return null;
+    }
     static public function getAllByIdCourse($db, $id_course): ?array
     {
         $result = $db->selectBy("content", ["id_course" => $id_course, "type" => "texte"]);

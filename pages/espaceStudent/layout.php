@@ -1,6 +1,26 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 require_once("../sweetAlert.php");
+
+use config\session;
+
+session::start();
+if (Session::isLoggedIn() && session::hasRole('student')) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $userName = Session::get('user')['name'];
+    $userEmail = Session::get('user')['email'];
+    $userRole = Session::get('user')['role'];
+    $userAvatar = Session::get('user')['avatar'];
+    //  var_dump($userAvatar); 
+} else {
+    setSweetAlertMessage(
+        'Authentification requise ⚠️',
+        'Veuillez vous authentifier pour accéder cette page.',
+        'warning',
+        '../auth/login.php'
+    );
+}
 ?>
 
 
@@ -26,6 +46,11 @@ require_once("../sweetAlert.php");
     <title>Dashboard Youdemy</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<!-- Include Alpine.js for interactivity pour dropdown profil-->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+      
+
 </head>
 
 <body class="bg-gray-50">
@@ -42,9 +67,12 @@ require_once("../sweetAlert.php");
                     <!-- Menu Desktop -->
                     <div class="hidden md:block ml-10">
                         <div class="flex items-baseline space-x-4">
+                        <a href="../../home.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Acceuil</a>
                             <a href="mesCourses.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Mes Cours</a>
                             <a href="detailCourStudent.php/?id_course=33" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Recommandés</a>
                             <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Favoris</a>
+                           
+                       
                         </div>
                     </div>
                 </div>
@@ -57,7 +85,54 @@ require_once("../sweetAlert.php");
                             class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500" />
                     </div>
 
-                    <img src="/api/placeholder/32/32" alt="Profile" class="w-8 h-8 rounded-full ring-2 ring-blue-500" />
+                 
+
+
+                    <!-- Profile Dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button
+                            @click="open = !open"
+                            class="flex items-center focus:outline-none">
+                            <img
+                                src="<?= isset($userAvatar) ? 'http://localhost/youdemy/pages/' . $userAvatar : 'http://localhost/youdemy/pages/uploads/avatar_1.jpg' ?>"
+                                alt="Profil"
+                                class="w-10 h-10 rounded-full mr-3">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-medium text-gray-700"><?= $userName ?></span>
+                                <span class="text-xs text-gray-500">
+                                    <?= Session::hasRole('student') ? 'Apprenant' : 'Enseignant' ?>
+                                </span>
+                            </div>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div
+                            x-show="open"
+                            @click.away="open = false"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-90"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-300"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-90"
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-20 border">
+                            <a href="<?= Session::hasRole('student') ? '/student/dashboard' : '/teacher/dashboard' ?>"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                <i class="fas fa-chart-line mr-2"></i> Tableau de Bord
+                            </a>
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                <i class="fas fa-user mr-2"></i> Profil
+                            </a>
+                            <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                                <i class="fas fa-cog mr-2"></i> Paramètres
+                            </a>
+                            <div class="border-t my-1"></div>
+                            <a href="../auth/logout.php" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+                            </a>
+                        </div>
+                    </div>
+
 
                     <!-- Bouton Menu Mobile -->
                     <div class="md:hidden">

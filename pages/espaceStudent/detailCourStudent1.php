@@ -34,12 +34,11 @@ $dbManager = new DataBaseManager();
 
 $id_course = $_GET['id_course'] ?? null;
 
-$id_content = $_GET['id_conten'] ?? null;
+$id_content = $_GET['id_content'] ?? null;
 
 
-if (!$id_course || !is_numeric($id_course)) {
-    die("ID de cours invalide ou manquant.");
-}
+
+
 // charger les donnees du cours
 if (!$id_course || !is_numeric($id_course)) {
     die("ID de cours invalide ou manquant.");
