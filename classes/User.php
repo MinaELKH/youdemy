@@ -190,17 +190,4 @@ class User
         return $user;
     }
 
-
-    public static function gotoLocation($role){
-        if ($role == "student") {
-            header("Location: ../espaceStudent/dashboard.php");
-            exit(); 
-        } elseif ($role == "teacher") {
-            header("Location: ../espaceTeacher/dashboard.php");
-            exit();
-        }  elseif ($role == "Admin") {
-            header("Location: ../espaceAdmin/dashboard.php");
-            exit();
-        }
-    }
 }

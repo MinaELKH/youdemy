@@ -18,6 +18,8 @@
     public static function get_IdRole_ByName($role)
     {
         $db = Database::getInstance()->getConnection();
+        // var_dump($role);
+        // exit ;
         $stmt = $db->prepare("SELECT id_role FROM roles WHERE role LIKE :role");
         $stmt->bindValue(':role', '%' . $role . '%', PDO::PARAM_STR);
         $stmt->execute();

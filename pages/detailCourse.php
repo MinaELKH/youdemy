@@ -1,7 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
-require_once("../sweetAlert.php");
-require_once("../uploadimage.php");
+require_once $_SERVER['DOCUMENT_ROOT'] .'/youdemy/pages/sweetAlert.php';
+
 ob_start();
 
 use classes\Course;
@@ -10,7 +10,20 @@ use classes\Review;
 use config\DataBaseManager;
 use classes\ContentText;
 use classes\ContentVideo;
+use Classes\Enrollment;
 use classes\Teacher;
+use config\Session;
+
+session::start();
+if (Session::isLoggedIn()) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $s_userName = Session::get('user')['name'];
+    $s_userEmail = Session::get('user')['email'];
+    $s_userRole = Session::get('user')['role'];
+    $s_userAvatar = Session::get('user')['avatar'];
+  //  var_dump($userAvatar); 
+} 
 
 $dbManager = new DataBaseManager();
 $id_course = $_GET['id_course'] ?? null;
@@ -21,31 +34,51 @@ if (!$id_course || !is_numeric($id_course)) {
 try {
     $newCourse = new Course($dbManager, $id_course);
     $course = $newCourse->getDetailCourse(); // je selection d apres viewcourse 
-    //  print_r($course);
+    // echo"<pre>" ;
+    // var_dump($course);
+    // echo"<pre>" ;
     if (!$course) {
         throw new Exception("Le cours avec l'ID $id_course n'existe pas.");
-    }
-    // Recuperer le contenu du cours en fonction de son type
-    $newContent = null;
-
-    if ($course->type == 'texte') {
-        $newContent = new ContentText($dbManager);
-    } else if ($course->type == 'video') {
-        $newContent = new ContentVideo($dbManager);
-    }
-
-    // verif si le contenu est trouve on le recupere via l id_course
-    if ($newContent) {
-        $newContent->id_course = $id_course;
-        $ObjetContent = $newContent->getByIdCourse();
-    } else {
-        throw new Exception("Le contenu associe au cours n'a pas ete trouve.");
     }
 } catch (Exception $e) {
     // Gerer les erreurs
     error_log($e->getMessage());
     die("Erreur : Impossible de charger les donnees du cours.");
 }
+
+
+//acheter 
+
+if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
+    try {
+        if (Session::isLoggedIn() && Session ::hasRole('student')){
+        $enroll = new enrollment($dbManager, $course->id_course , $s_userId  );
+        $result = $enroll->add();
+
+        if ($result) {
+            setSweetAlertMessage(
+                'Inscription réussie 🎉',
+                'Félicitations ! Vous êtes maintenant inscrit au cours . Préparez-vous à apprendre et à explorer de nouvelles compétences passionnantes ! 🚀',
+                'success',
+                'espaceStudent/detailCourStudent.php/?id_course='.$id_course
+            );
+        } else {
+            setSweetAlertMessage('Erreur', 'Aucun inscription n\'a eu lieu. Veuillez contacter l\'administrateur.', 'error', '');
+        }
+    }
+    else{
+        setSweetAlertMessage(
+            'Authentification requise ⚠️',
+            'Veuillez vous authentifier pour accéder aux cours.',
+            'warning',
+            'auth/login.php'
+        );
+    }
+    } catch (Exception $e) {
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', '');
+    }
+}
+
 
 ?>
 
@@ -56,7 +89,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programming with Python - HandsOn Introduction</title>
+    <title></title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
@@ -65,8 +98,8 @@ try {
     <!-- Navigation -->
     <nav class="bg-white shadow-sm py-4">
         <div class="container mx-auto px-4 flex items-center justify-between flex-wrap">
-            <div class="flex items-center gap-8">
-                <img src="logo.png" alt="NarutoEdu" class="h-8">
+            <div class="flex items-center gap-2">
+                <img src="logo.png" alt="NarutoEdu" class="h-8"> YOUDEMY
                 <button class="flex items-center gap-2 text-gray-600">
                     <i class="fas fa-th"></i>
                     Catégorie
@@ -89,23 +122,23 @@ try {
     <!-- Breadcrumb -->
     <div class="container mx-auto px-4 py-4">
         <div class="flex items-center gap-2 text-sm flex-wrap">
-            <a href="dashboard.php" class="text-indigo-600">Home</a>
+            <a href="dashboard.php" class="text-indigo-600">Accueil</a>
             <i class="fas fa-chevron-right text-gray-400"></i>
-            <a href="mesCoures.php" class="text-indigo-600">Mes Courses</a>
+            <a href="mesCoures.php" class="text-indigo-600">Courses</a>
             <i class="fas fa-chevron-right text-gray-400"></i>
             <span class="text-gray-600"><?= $course->title ?></span>
         </div>
     </div>
 
     <!-- Main Content -->
-    <div class="container mx-auto px-4 py-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="container mx-auto px-4 py-8 text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
             <!-- Course Info -->
             <div class="col-span-1 md:col-span-2">
-                <h1 class="text-3xl sm:text-4xl font-bold mb-6"><?= $course->title ?></h1>
+                <h1 class="text-3xl sm:text-2xl font-bold mb-6"><?= $course->title ?></h1>
 
                 <!-- Course Meta -->
-                <div class="flex items-center gap-8 mb-6">
+                <div class="flex items-center gap-2 mb-6">
                     <span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm"><?= $course->category_name ?></span>
                     <div class="flex items-center gap-1">
                         <span class="font-bold">5.0</span>
@@ -120,10 +153,17 @@ try {
 
                 </div>
 
-                <!-- Course Details -->
-                <div class="grid grid-cols-2  lg:grid-cols-4 items-center gap-8 mb-8 text-sm text-gray-600">
+          
+                
+
+                <!-- Course Video -->
+                <div class="bg-gray-200 aspect-video rounded-lg mb-2">
+                    <img src="<?php echo $course->picture ?: 'https://via.placeholder.com/300x200.png?text=Image+Non+Disponible'; ?>" alt="Course preview" class="w-full h-full object-cover rounded-lg">
+                </div>
+      <!-- Course Details -->
+      <div class="grid grid-cols-2  lg:grid-cols-4 items-center gap-2 mb-2 text-xs text-gray-600">
                     <div>
-                        <div class="font-medium mb-1">Derniere Modification</div>
+                        <div class="font-medium mb-1">Dernière mise à jour</div>
                         <div><?= $course->updated_at ?></div>
                     </div>
 
@@ -133,7 +173,7 @@ try {
                     </div>
 
                     <!-- Social Actions -->
-                    <div class="flex gap-4 mb-8">
+                    <div class="flex gap-2 mb-2">
                         <button class="flex items-center gap-2 px-6 py-2 border rounded-lg hover:bg-gray-50">
                             <i class="far fa-heart"></i>
                             <span>Wishlist</span>
@@ -146,7 +186,7 @@ try {
                 </div>
 
                 <!-- Tags -->
-                <div class="flex space-x-2 mb-8">
+                <div class="flex space-x-2 mb-2  ">
                     <?php
                     $newtag = new CourseTags($dbManager, $course->id_course);
                     $result = $newtag->getTagsBycourse();
@@ -162,36 +202,32 @@ try {
                     ?>
                 </div>
 
-                
-
-                <!-- Course Video -->
-                <div class="bg-gray-200 aspect-video rounded-lg mb-8">
-                    <img src="<?php echo '../' . $course->picture ?: 'https://via.placeholder.com/300x200.png?text=Image+Non+Disponible'; ?>" alt="Course preview" class="w-full h-full object-cover rounded-lg">
-                </div>
-
                 <!-- Course Overview -->
-                <section class="bg-white rounded-lg p-8 mb-8">
-                    <div class="leading-relaxed  whitespace-normal break-words"  > <?= $ObjetContent->content_text ?></div>
+                <section class="bg-white rounded-lg p-2 mb-2">
+                <h4 class="underline text-lg font-bold text-gray-800">Ce que vous apprendrez</h4>
+                    <div class="leading-relaxed  whitespace-normal break-words"  > <?= $course->description ?></div>
                 </section>
                 <!-- Reviews Section -->
-                <section class="bg-white rounded-lg p-8 mb-8">
-                    <h2 class="text-2xl font-bold mb-2">Avis</h2>
-                    <p class="text-gray-600 mb-8">Nos Apprenants parlent de ce cours</p>
+                <section class="bg-white rounded-lg p-2 mb-2">
+                
 
-                    <!-- Rating Overview -->
-                    <div class="flex gap-12 mb-8">
-                        <!-- Overall Score -->
-                        <div class="flex flex-col items-center">
-                            <div class="text-5xl font-bold mb-2">5</div>
-                            <div class="flex text-yellow-400 mb-1">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <div class="text-gray-500 text-sm"><?= $course->student_count ?></div>
-                        </div>
+                
+                    <h2 class="text-2xl font-bold mb-2">Avis</h2>
+                    <p class="text-gray-600 mb-2">Nos Apprenants parlent de ce cours</p>
+                    <div class="flex gap-12 mb-2 justify-between  mx-8">
+                 
+                   
+                    <span class="mr-10 flex items-center">
+                    <?= htmlspecialchars($course->student_count); ?>
+                        <i class="fas fa-user mr-1"></i>
+                        <p>Apprenants</p>
+                    </span>
+                    <span class="mr-2 flex items-center">
+                    <?= htmlspecialchars($course->review_count); ?>
+                        <i class="fas fa-comment mr-1"></i>
+                      
+
+                    </span>
                     </div>
 
                     <!-- Individual Reviews -->
@@ -203,9 +239,9 @@ try {
                         $result = $newreview->getReviewByCourse();
                         foreach ($result as $objet_Cmt):
                         ?>
-                            <div class="bg-gray-50 p-4 m-8 rounded-lg shadow-sm">
+                            <div class="bg-gray-200 p-2 m-8 rounded-lg shadow-sm">
                                 <div class="flex items-center mb-2">
-                                    <img alt="Photo de profil du commentateur" class="w-10 h-10 rounded-full mr-3" height="40" src="<?php echo !empty($objet_Cmt->avatar) ? $objet_Cmt->avatar : 'https://storage.googleapis.com/a1aa/image/1ZK6eQz7uGxKOahfeQHlR1zQxhXhr8QxTxrVwEFg60TCDUGoA.jpg'; ?>" width="40" />
+                                    <img alt="Photo de profil du commentateur" class="w-10 h-10 rounded-full mr-3" height="40" src="<?php echo !empty($newreview->avatar) ? $objet_Cmt->avatar : 'https://storage.googleapis.com/a1aa/image/1ZK6eQz7uGxKOahfeQHlR1zQxhXhr8QxTxrVwEFg60TCDUGoA.jpg'; ?>" width="40" />
                                     <div>
                                         <p class="font-semibold">
                                             <?= $objet_Cmt->name_full ?>
@@ -240,25 +276,32 @@ try {
             <div class="col-span-1">
                 <!-- Prix et Achat -->
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                    <div class="flex items-center justify-between mb-4">
+                <form action="" method="post">
+                    <input name='id_course' type="hidden"  value="<?= $course->id_course ?>">
+                    <div class="flex items-center justify-between mb-2">
                         <div class="text-2xl font-bold"><?= $course->prix ?>€</div>
                         <div class="text-sm line-through text-gray-400"><?= $course->prix  - 20  ?>€</div>
                     </div>
-                    <button class="w-full bg-indigo-600 text-white py-3 rounded-lg mb-3">
-                        Add to Cart
+                    <div class="w-full flex justify-between ">
+                    <button class="w-2/3 bg-indigo-200 text-white py-3 rounded-lg mb-3">
+                        Ajouter au panier
                     </button>
-                    <button class="w-full border border-indigo-600 text-indigo-600 py-3 rounded-lg mb-6">
-                        Buy Now
+                    <i class="h-8 w-8 mr-4 text-lg text-center item-center fas fa-heart text-white  bg-yellow-500 p-1 rounded-full"></i>
+                    </div>
+                  
+                    <button name="acheter" class="w-full border border-indigo-600 text-indigo-600 py-3 rounded-lg mb-6 hover:bg-indigo-600 hover:text-white">
+                        Acheter 
                     </button>
+                    </form>
                 </div>
 
 
                 <!-- À propos de l'Instructeur -->
                 <div class="bg-white rounded-lg shadow-sm p-6">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">
                         À propos de l'Instructeur
                     </h2>
-                    <div class="flex items-center mb-4">
+                    <div class="flex items-center mb-2">
                         <img
                             alt="Image de l'Instructeur"
                             class="h-12 w-12 rounded-full mr-4"
@@ -298,6 +341,7 @@ try {
             </div>
 
         </div>
+    </div>
 </body>
 
 </html>

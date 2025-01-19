@@ -47,7 +47,33 @@ class ContentVideo extends AbstractContent {
     }
 
     public function getByIdCourse(): ?object {
-        $result = $this->db->selectBy("content", ["id_course" => $this->id_course]);
+        $result = $this->db->selectBy("content", ["id_course" => $this->id_course  , "type"=>"video"]);
         return $result ? $result[0] : null;
     }
+    static public function getAllByIdCourse($db ,$id_course ): ?array
+    {
+       $result = $db->selectBy("content", ["id_course" => $id_course , "type"=>"video"]);
+       return $result;
+   }
+   public function display(): string {
+   
+    
+    return '<div class="course-video">
+                <h2 class="text-2xl font-bold mb-4">' . htmlspecialchars($this->title) . '</h2>
+                <div class="video-container mb-4">
+                    <video 
+                        class="w-full rounded-lg" 
+                        controls
+                        poster="' . htmlspecialchars($courseInfo['thumbnail'] ?? '') . '"
+                    >
+                        <source src="' . htmlspecialchars($this->video_url) . '" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture de vidéos.
+                    </video>
+                </div>
+                <div class="video-info mb-4">
+                    <span class="text-sm text-gray-600">Durée: ' . htmlspecialchars($this->duration) . '</span>
+                </div>
+            </div>';
 }
+}
+

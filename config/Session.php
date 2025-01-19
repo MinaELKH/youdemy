@@ -1,12 +1,20 @@
 <?php
 namespace config ;
+
 class Session {
 
     public static function start() {
-        if (session_status() == PHP_SESSION_NONE) {
+        if (session_status() == PHP_SESSION_NONE) {   
             session_start();
         }
     }
+    public static function destroy() {
+        if (session_status() != PHP_SESSION_NONE) {
+            session_unset(); 
+            session_destroy();
+        }
+    }
+
     public static function set($key, $value) {
         $_SESSION[$key] = $value;
     }
@@ -23,16 +31,31 @@ class Session {
         return self::exists('logged_in') && self::get('logged_in') === true;
     }
 
-
     public static function hasRole($role) {
-        return self::get('role') === $role;
+        if (self::exists('user') && isset($_SESSION['user']['role'])) {
+            return $_SESSION['user']['role'] === $role;
+        }
+        return false; 
     }
 
- 
-    public static function destroy() {
-        session_unset();  // supprime toutes les variables de session
-        session_destroy(); // détruit la session
+    public static function gotoLocation($role){
+
+        if ($role == "student") {
+      
+            header('Location: ../home.php');
+         
+            exit(); 
+        } elseif ($role == "teacher") {
+            header('Location: ../espaceTeacher/dashboard.php');
+            exit();
+        }  elseif ($role == "Admin") {
+            header('Location: ../espaceAdmin/dashboard.php');
+            exit();
+        }
     }
+
+
+
 }
 
 ?>

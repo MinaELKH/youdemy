@@ -65,8 +65,8 @@ public function archived():bool{
 
 
 
-public function getAll(): array {
-    $results = $this->db->selectAll("categories");
+public static function getAll($db): array {
+    $results = $db->selectAll("categories");
     $categories = [];
 
     if ($results) {

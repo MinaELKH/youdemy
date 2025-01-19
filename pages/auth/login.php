@@ -1,30 +1,33 @@
 <?php
-require("../sweetAlert.php"); 
+require("../sweetAlert.php");
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
-use classes\User ;
-use config\Session ; 
 
+use classes\User;
+use config\Session;
 
+$error = ''; // Initialize error message variable
 
- ?>
- <!-- auth -->
-
-
-<?php
+// auth
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
+
     try {
-        // Récupération des données du formulaire
+        session::start(); 
         $email = trim($_POST["email"] ?? '');
         $password = $_POST["password"] ?? '';
-        // Validation des champs
+
         if (empty($email) || empty($password)) {
             throw new Exception("Tous les champs sont obligatoires.");
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new Exception("Adresse email invalide.");
         }
-        // Vérification des informations utilisateur
+
         $user = User::signin($email, $password);
+
+        //var_dump($user) ;
+        if (empty($user)) {
+            throw new Exception("Inscription échouée.");
+        }
 
         // Si l'utilisateur est trouvé, création de la session
         Session::set('logged_in', true);
@@ -36,143 +39,160 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["login"])) {
             'avatar' => $user->getAvatar(),
         ]);
 
-        // SweetAlert pour succès
-        $_SESSION['msgSweetAlert'] = [
-            'title' => 'Connexion réussie',
-            'text' => 'Bienvenue, ' . htmlspecialchars($user->getname_full()) . '!',
-            'status' => 'success'
-        ];
-        sweetAlert('dashboard.php'); // Redirection vers le tableau de bord
-        exit;
+
+       // header('Location: ../test.php');
+        session::gotoLocation($user->getRole());
+    
 
     } catch (Exception $e) {
-        // Gestion des erreurs
-        $_SESSION['msgSweetAlert'] = [
-            'title' => 'Erreur de connexion',
-            'text' => $e->getMessage(),
-            'status' => 'error'
-        ];
-       // var_dump($_SESSION['msgSweetAlert']) ; 
-        sweetAlert('login.php'); // Redirection vers la page de connexion
-        exit;
+        $error = $e->getMessage();
     }
 }
 
-if (isset($_SESSION['msgSweetAlert'])) {
-  sweetAlert('');
-}
 
 ?>
 
+
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youdemy</title>
+    <title>Connexion - YourUdemy</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
-
+    <style>
+        .bg-blur {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+    </style>
 </head>
- <body class="bg-gray-100">
-   <!-- Header -->
-  <header class="bg-white shadow">
-   <div class="container mx-auto flex justify-between items-center py-4 px-6">
-    <div class="flex items-center">
-     <img alt="Udemy logo" class="h-10" src="https://placehold.co/100x40"/>
-     <nav class="ml-6 hidden md:flex">
-      <a class="text-gray-700 hover:text-gray-900 mx-3" href="#">
-          Accueil
-      </a>
-     </nav>
-    </div>
-   </div>
-  </header>
-  
-  <div class="flex w-full max-w-4xl bg-white shadow-md rounded-lg overflow-hidden">
-   <div class="w-full md:w-1/2 p-8">
-    <div class="flex justify-center mb-4">
-     <i class="fas fa-wave-square text-4xl text-indigo-600">
-     </i>
-    </div>
-    <h2 class="text-2xl font-bold text-gray-900 mb-2">
-     Sign in to your account
-    </h2>
-    <p class="text-sm text-gray-600 mb-6">
-     Not a member?
-     <a class="text-indigo-600" href="#">
-      Start a 14 day free trial
-     </a>
-    </p>
-    <form hx-post="login.php" hx-trigger="confirmed" hx-target="#result">
-     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
-       Email address
-      </label>
-      <input name="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" placeholder="Email address" type="email"/>
-     </div>
-     <div class="mb-4">
-      <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-       Password
-      </label>
-      <input    name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="password" placeholder="Password" type="password"/>
-     </div>
-    
-     <div class="mb-4">
-      <button hx-get="/confirmed" 
-        onClick="Swal.fire({title: 'Confirm', text:'Do you want to continue?'}).then((result)=>{
-            if(result.isConfirmed){
-              htmx.trigger(this, 'confirmed');  
-            } 
-        })"  name="login" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-       Sign in
-      </button>
-     </div>
-     <div class="text-center text-gray-600 mb-4">
-      Or continue with
-     </div>
-     <div class="flex justify-center space-x-4">
-      <button class="flex items-center border border-gray-300 rounded py-2 px-4 text-gray-700">
-       <img alt="Google logo" class="mr-2" src="https://placehold.co/20x20"/>
-       Google
-      </button>
-      <button class="flex items-center border border-gray-300 rounded py-2 px-4 text-gray-700">
-       <img alt="GitHub logo" class="mr-2" src="https://placehold.co/20x20"/>
-       GitHub
-      </button>
-     </div>
-    </form>
-    <div id="result">
 
+<body class="min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+    style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+
+    <!-- Dark overlay -->
+    <div class="absolute inset-0 bg-black opacity-50"></div>
+
+    <!-- Login Container -->
+    <div class="relative w-full max-w-md px-6 py-8 m-4">
+        <!-- Logo Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">YourUdemy</h1>
+            <p class="text-gray-200">Votre plateforme d'apprentissage en ligne</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="bg-white bg-opacity-20 p-8 rounded-2xl shadow-xl bg-blur">
+            <h2 class="text-2xl font-semibold text-white mb-6">Connexion</h2>
+
+            <?php if ($error): ?>
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                    <?php echo htmlspecialchars($error); ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" class="space-y-6">
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-white text-sm font-medium mb-2">Email</label>
+                    <input type="email"
+                        id="email"
+                        name="email"
+                        required
+                        class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-300"
+                        placeholder="votreemail@exemple.com">
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label for="password" class="block text-white text-sm font-medium mb-2">Mot de passe</label>
+                    <div class="relative">
+                        <input type="password"
+                            id="password"
+                            name="password"
+                            required
+                            class="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-300"
+                            placeholder="••••••••">
+                        <button type="button"
+                            onclick="togglePassword()"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input type="checkbox"
+                            id="remember"
+                            name="remember"
+                            class="h-4 w-4 text-blue-500 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="remember" class="ml-2 block text-sm text-white">
+                            Se souvenir de moi
+                        </label>
+                    </div>
+                    <a href="#" class="text-sm text-blue-300 hover:text-blue-400">
+                        Mot de passe oublié ?
+                    </a>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit"  name="login"
+                    class="w-full px-4 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition duration-200">
+                    Se connecter
+                </button>
+
+                <!-- Divider -->
+                <div class="relative py-4">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <span class="px-4 bg-transparent text-white text-sm">Ou continuez avec</span>
+                    </div>
+                </div>
+
+                <!-- Social Login -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button type="button"
+                        class="px-4 py-3 rounded-lg bg-white bg-opacity-20 hover:bg-opacity-30 flex items-center justify-center transition duration-200">
+                        <svg class="h-5 w-5 text-white mr-2" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.747-1.026 2.747-1.026.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                        </svg>
+                        GitHub
+                    </button>
+                    <button type="button"
+                        class="px-4 py-3 rounded-lg bg-white bg-opacity-20 hover:bg-opacity-30 flex items-center justify-center transition duration-200">
+                        <svg class="h-5 w-5 text-white mr-2" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5.36 14.3c-.24.7-.71 1.2-1.21 1.63-.5.43-1.03.76-1.56 1.03-.53.27-1.07.47-1.63.62-.56.15-1.12.23-1.69.23-.57 0-1.13-.08-1.69-.23-.56-.15-1.1-.35-1.63-.62-.53-.27-1.06-.6-1.56-1.03-.5-.43-.97-.93-1.21-1.63-.24-.7-.36-1.47-.36-2.3 0-.83.12-1.6.36-2.3.24-.7.71-1.2 1.21-1.63.5-.43 1.03-.76 1.56-1.03.53-.27 1.07-.47 1.63-.62.56-.15 1.12-.23 1.69-.23.57 0 1.13.08 1.69.23.56.15 1.1.35 1.63.62.53.27 1.06.6 1.56 1.03.5.43.97.93 1.21 1.63.24.7.36 1.47.36 2.3 0 .83-.12 1.6-.36 2.3z" />
+                        </svg>
+                        Google
+                    </button>
+                </div>
+            </form>
+
+            <!-- Sign Up Link -->
+            <p class="mt-8 text-center text-sm text-white">
+                Pas encore de compte ?
+                <a href="#" class="font-semibold text-blue-300 hover:text-blue-400">
+                    Inscrivez-vous gratuitement
+                </a>
+            </p>
+        </div>
     </div>
-   </div>
-   <div class="hidden md:block md:w-1/2">
-    <img alt="A desk with a laptop, keyboard, mouse, and other office items" class="object-cover w-full h-full" src="https://placehold.co/600x800"/>
-   </div>
-  </div>
-  <script>
-  document.addEventListener("htmx:confirm", function(e) {
-    // The event is triggered on every trigger for a request, so we need to check if the element
-    // that triggered the request has a hx-confirm attribute, if not we can return early and let
-    // the default behavior happen
-    if (!e.detail.target.hasAttribute('hx-confirm')) return
 
-    // This will prevent the request from being issued to later manually issue it
-    e.preventDefault()
+    <script>
+        function togglePassword() {
+            const password = document.getElementById('password');
+            password.type = password.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+</body>
 
-    Swal.fire({
-      title: "Proceed?",
-      text: `I ask you... ${e.detail.question}`
-    }).then(function(result) {
-      if (result.isConfirmed) {
-        // If the user confirms, we manually issue the request
-        e.detail.issueRequest(true); // true to skip the built-in window.confirm()
-      }
-    })
-  })
-</script>
- </body>
 </html>

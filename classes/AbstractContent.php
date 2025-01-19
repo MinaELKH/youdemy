@@ -4,7 +4,7 @@ namespace classes;
 use config\DataBaseManager;
 
 abstract class AbstractContent {
-    protected ?DataBaseManager $db;
+    protected ?\config\DataBaseManager $db;
     protected ?int $id_content;
     protected ?int $id_course;
     protected ?string $title;
@@ -29,8 +29,8 @@ abstract class AbstractContent {
     abstract public function update(): bool;
     abstract public function delete(): bool;
     abstract public function getById(): ?object;
-    abstract public function getByIdCourse(): ?object;
-
+   // abstract public function getByIdCourse(): ?object;
+    abstract static public function getAllByIdCourse($db ,$id_course ): ?array;
     // Getters génériques
 
     public function __get($att) {
@@ -49,7 +49,9 @@ abstract class AbstractContent {
     public function getCourseId(): ?int {
         return $this->id_course;
     }
-
+    public function getTitle(): ?int {
+        return $this->title;
+    }
     // Setters avec chaînage
     public function setTitle(?string $title): self {
         $this->title = $title;

@@ -7,9 +7,14 @@ GROUP BY  id_course
 
 SELECT * FROM viewcourses  WHERE id_teacher = 20
 
-SELECT * FROM content
-
+SELECT * FROM content WHERE id_course = 33 
+SELECT * FROM courses WHERE id_categorie = 39
+select * FROM categories 
 SELECT * FROM users 
+
+SELECT * FROM tags 
+
+SELECT * FROM coursetags 
 
 select count(*) from courses where id_teacher = 20
 
@@ -24,7 +29,7 @@ SELECT * FROM courses WHERE id_course = 60
 SELECT * FROM courses WHERE id_teacher= 20
 
 
-SELECT * from content WHERE id_course = 60
+SELECT * from content WHERE id_course = 33
 
 
 
@@ -37,12 +42,14 @@ SET type = 'texte'
 WHERE id_course = 61 ; 
 
 
-UPDATE courses
-SET type = 'video'
-WHERE id_course = 60 ; 
+UPDATE categories
+SET name = 'finance public'
+WHERE id_categorie = 39 ; 
 
 
 
+
+DELETE FROM categories WHERE id_categorie = 39
 
 
 CREATE TABLE content (
@@ -60,5 +67,3 @@ CREATE TABLE content (
 
 
 
-
-ALTER TABLE  Coursetag RENAME to  Coursetags

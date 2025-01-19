@@ -128,7 +128,8 @@ class Course
             return false;
         }
     }
-
+  
+   
     public function getDetailCourse()
     {
         $result = $this->db->selectBy("viewcourses", ["id_course" => $this->id_course]); 
@@ -162,8 +163,8 @@ class Course
         return $this->db->selectBy("viewcourses", $params);
     }
 
-    public function getAll(): array
+    public static function getAll(DataBaseManager $db): array
     {
-        return $this->db->selectAll("viewcourses");
+        return $db->selectAll("viewcourses");
     }
 }

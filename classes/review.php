@@ -43,6 +43,7 @@ class Review
             'id_user' => $this->id_user,
             'archived' => $this->archived,
         ];
+      //  var_dump($data) ; die();
         return $this->dbManager->insert('reviews', $data);
     }
 
@@ -68,7 +69,8 @@ class Review
     {
         $query = "select c.*  , name_full , avatar from reviews c
         inner join users  u on u.id_user = c.id_user
-        where id_course = :id_course";
+        where id_course = :id_course
+        order by created_at desc";
         $connection = $this->dbManager->getConnection();
         $stmt = $connection->prepare($query);
         $stmt->bindparam(":id_course", $this->id_course, PDO::PARAM_INT);

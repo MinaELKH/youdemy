@@ -1,34 +1,31 @@
 <?php
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 require_once("../sweetAlert.php");
-ob_start();
-
-use config\DataBaseManager;
-use classes\Course;
-use classes\student;
-
-$dbManager = new DataBaseManager();
-
-//** a voir  */
-
-$newStudent = new student($dbManager, 66);
-//** a voir  */
-
-
-
 ?>
 
 
 <!DOCTYPE html>
 <html lang="fr" x-data="{ mobileMenuOpen: false }">
 
+<!-- <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Youdemy</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js"></script>
+
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+</head> -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Youdemy</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 </head>
 
 <body class="bg-gray-50">
@@ -45,8 +42,8 @@ $newStudent = new student($dbManager, 66);
                     <!-- Menu Desktop -->
                     <div class="hidden md:block ml-10">
                         <div class="flex items-baseline space-x-4">
-                            <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Mes Cours</a>
-                            <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Recommandés</a>
+                            <a href="mesCourses.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Mes Cours</a>
+                            <a href="detailCourStudent.php/?id_course=33" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Recommandés</a>
                             <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Favoris</a>
                         </div>
                     </div>
@@ -92,8 +89,9 @@ $newStudent = new student($dbManager, 66);
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-90">
             <div class="px-2 pt-2 pb-3 space-y-1">
-                <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Mes Cours</a>
-                <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Recommandés</a>
+                <a href="mesCourses.php" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Mes Cours</a>
+
+                <a href="detailCourStudent.php/?id_course=33" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Recommandés</a>
                 <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Favoris</a>
             </div>
         </div>

@@ -1,18 +1,54 @@
 <?php
+
 namespace classes;
+
 use config\DataBaseManager;
 
 namespace classes;
 
-class ContentText extends AbstractContent {
-    private ?string $content;
+class ContentText extends AbstractContent
+{
+    private ?string $content = null; // Initialisez explicitement la propriété
 
-    public function setContent(?string $content): self {
+    public function __construct(
+        ?\config\DataBaseManager $db,
+        ?int $id_content = null,
+        ?int $id_course = null,
+        ?string $title = null,
+        ?string $type = null,
+        ?string $content = null // Ajoutez l'initialisation ici
+    ) {
+        parent::__construct($db, $id_content, $id_course, $title, $type);
+        $this->content = $content; // Initialise le contenu
+    }
+
+    public function setContent(?string $content): self
+    {
         $this->content = $content;
         return $this;
     }
 
-    public function add(): bool {
+    public function getContent(): string
+    {
+        return $this->content ?? ''; // Retourne une chaîne vide si non définie
+    }
+
+    public function display(): string
+    {
+        return '<div class="course-text">
+        <h2 class="text-2xl font-bold mb-4">' . ($this->title) . '</h2>
+        <div class="bg-white rounded-lg p-8 mb-8">
+            <div class="">
+                ' . nl2br(($this->getContent())) . '
+            </div>
+        </div>
+       </div>';
+    }
+
+
+
+    public function add(): bool
+    {
         $data = [
             "id_course" => $this->id_course,
             "title" => $this->title,
@@ -22,7 +58,8 @@ class ContentText extends AbstractContent {
         return $this->db->insert("content", $data);
     }
 
-    public function update(): bool {
+    public function update(): bool
+    {
         $data = [
             "title" => $this->title,
             "content" => $this->content
@@ -30,17 +67,55 @@ class ContentText extends AbstractContent {
         return $this->db->update("content", $data, "id_content", $this->id_content);
     }
 
-    public function delete(): bool {
+    public function delete(): bool
+    {
         return $this->db->delete("content", "id_content", $this->id_content);
     }
 
-    public function getById(): ?object {
+    public function getById(): ?object
+    {
         $result = $this->db->selectBy("content", ["id_content" => $this->id_content]);
         return $result ? $result[0] : null;
     }
 
-    public function getByIdCourse(): ?object {
-        $result = $this->db->selectBy("content", ["id_course" => $this->id_course]);
-        return $result ? $result[0] : null;
+    public function getByIdCourse(): ?ContentText
+    {
+        $result = $this->db->selectBy("content", ["id_course" => $this->id_course, "type" => "texte"]);
+    
+        if ($result) {
+            $firstRow = $result[0];
+            return new ContentText(
+                $this->db,
+                $firstRow->id_content,
+                $firstRow->id_course,
+                $firstRow->title,
+                $firstRow->type,
+                $firstRow->content_text 
+            );
+        }
+    
+        return null;
     }
+    
+
+    static public function getAllByIdCourse($db, $id_course): ?array
+    {
+        $result = $db->selectBy("content", ["id_course" => $id_course, "type" => "texte"]);
+        $contents = [];
+        foreach ($result as $row) {
+            $contents[] = new ContentText(
+                $db,
+                $row->id_content,
+                $row->id_course,
+                $row->title,
+                $row->type,
+                $row->content_text
+            );
+        }
+        return $contents;
+    }
+
+
+
+    
 }
