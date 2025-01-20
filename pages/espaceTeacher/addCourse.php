@@ -2,23 +2,49 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 require_once("../sweetAlert.php");
 require_once("../uploadimage.php");
-ob_start();
-
-$_SESSION['user_id'] = 20;
-
-
 
 use classes\Course;
 use classes\Categorie;
 use classes\ContentText;
 use classes\ContentVideo;
 use config\DataBaseManager;
+use classes\Tag;
+use classes\CourseTags;
+use config\session;
+
+
+ob_start();
+
+session::start();
+if (Session::isLoggedIn() && session::hasRole('teacher')) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $s_userName = Session::get('user')['name'];
+    $s_userEmail = Session::get('user')['email'];
+    $s_userRole = Session::get('user')['role'];
+    $s_userAvatar = Session::get('user')['avatar'];
+    //  var_dump($userAvatar); 
+} else {
+    setSweetAlertMessage(
+        'Authentification requise ⚠️',
+        'Veuillez vous authentifier en tant qu enseignant pour  accéder a cette page.',
+        'warning',
+        '../auth/login.php'
+    );
+}
+
+
+
+
+
+
 
 $dbManager = new DatabaseManager();
 
 // Récupérer les catégories pour le select
-$categorieObj = new Categorie($dbManager);
-$categories = $categorieObj->getAll();
+
+$categories = Categorie::getAll($dbManager);
+
 
 // Ajout de cours
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
@@ -39,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
             $_POST['title'],
             $_POST['description'],
             $picture,
-            $_SESSION['user_id'], // Supposant que l'ID du professeur est dans la session
+            $s_userId, // Supposant que l'ID du professeur est dans la session
             $_POST['id_categorie'],
             Course::STATUS_PENDING,
             0,
@@ -47,7 +73,36 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
         );
 
         $result = $newCourse->add();
+        $id_course = $dbManager->getLastInsertId();
+        // echo("id_course") ; 
+        // var_dump($id_course);
+        if ($result) {
+         
+          if (!empty($_POST['tags'])) {
+            // Nettoyage et traitement des tags
+            $tags_input = htmlspecialchars(trim($_POST['tags']));
+            $tags = array_unique(array_filter(array_map('trim', explode(',', $tags_input))));
+    
+            foreach ($tags as $tag_name) {
+                var_dump($tag_name) ;
+                die();
+              $tag = new Tag($dbManager, 0, $tag_name);
+              // Vérifier si le tag existe
+              $objetTag = $tag->getTagByName();
+              if ($objetTag != null) {
+                $tag_id = $objetTag->id_tag;
+              }
+    
+              // Ajouter la relation entre l'course et le tag
+              $tag_course = new courseTags($dbManager, $id_course, $tag_id);
+              $tag_course->linkTagTocourse();
+            }
+          } else {
+            echo " l article n est pas ajouté";
+          }
+        }
 
+        
         if ($result) {
             $courseId = $dbManager->getLastInsertId();
 
@@ -176,7 +231,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                 <div id="videoFields" class="hidden">
 
 
-                <h2 class="text-2xl font-bold mb-4">Téléchargez ou Intégrez une Vidéo</h2>
+                    <h2 class="text-2xl font-bold mb-4">Téléchargez ou Intégrez une Vidéo</h2>
 
                     <!-- Option 1 : Upload vidéo -->
                     <div class="mb-4">
@@ -220,6 +275,41 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                         <div id="durationError" class="text-red-500 text-sm hidden">La durée de la vidéo est obligatoire.</div>
                     </div>
                 </div>
+                <div class="mb-4">
+                    <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                    <input id="tags" name="tags" placeholder="Tapez pour ajouter des tags" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+
+                <?php
+                // Récupérer tous les tags depuis la base de données
+                $tags = Tag::getAll($dbManager);
+
+                // Créer un tableau contenant les noms des tags
+                $tagsArray = array_map(function ($tag) {
+                    return $tag->name_tag; // Récupère uniquement le nom des tags
+                }, $tags);
+
+                // Convertir les tags en format JSON pour les utiliser dans JavaScript
+                echo '<script>';
+                echo 'var tagsList = ' . json_encode($tagsArray) . ';';
+                echo '</script>';
+                ?>
+
+                <script>
+                    var input = document.querySelector('input[name=tags]');
+
+                    // Initialiser Tagify avec la liste des tags récupérés depuis la base de données
+                    var tagify = new Tagify(input, {
+                        whitelist: tagsList, // Remplir le whitelist avec les tags récupérés
+                        maxTags: 5, // Limite du nombre de tags que l'utilisateur peut ajouter
+                        dropdown: {
+                            enabled: 1, // Montre les suggestions immédiatement
+                            maxItems: 10, // Nombre d'éléments à afficher dans le menu de suggestions
+                            classname: 'tags-look', // Classe personnalisée pour le style
+                            searchKeys: ['name'], // Recherche par nom
+                        }
+                    });
+                </script>
 
                 <div id="textFields" class="hidden">
                     <div>
@@ -355,14 +445,58 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
             placeholder: 'Entrez le contenu texte ici...',
             modules: {
                 toolbar: [
-                    ['bold', 'italic', 'underline', 'strike'], // Options de mise en forme
-                    [{ 'header': 1 }, { 'header': 2 }],        // Options d'en-têtes
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                    ['link', 'image'],                        // Liens et images
-                    ['clean']                                 // Supprimer les formats
+                    // Mise en forme de texte
+                    ['bold', 'italic', 'underline', 'strike'], // Gras, italique, souligné, barré
+                    [{
+                        'color': []
+                    }, {
+                        'background': []
+                    }], // Couleur du texte et arrière-plan
+                    [{
+                        'font': []
+                    }], // Choix de la police
+                    [{
+                        'size': ['small', 'normal', 'large', 'huge']
+                    }], // Taille de police
+
+                    // Alignement du texte
+                    [{
+                        'align': []
+                    }],
+
+                    // Options d'en-têtes
+                    [{
+                        'header': 1
+                    }, {
+                        'header': 2
+                    }, {
+                        'header': 3
+                    }],
+
+                    // Listes
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }],
+
+                    // Liens et images
+                    ['link', 'image', 'video'], // Liens, images et vidéos
+                    [{
+                        'indent': '-1'
+                    }, {
+                        'indent': '+1'
+                    }], // Augmenter ou diminuer le retrait
+
+                    // Citation et code
+                    ['blockquote', 'code-block'], // Citation et bloc de code
+
+                    // Outils supplémentaires
+                    ['clean'] // Supprimer la mise en forme
                 ]
             }
         });
+
 
         // Synchroniser le contenu de Quill avec l'input caché
         const contentInput = document.getElementById('content');

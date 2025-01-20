@@ -3,6 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/pages/sweetAlert.php';
 ob_start();
 
+
 use classes\Course;
 use classes\CourseTags;
 use classes\Review;
@@ -81,11 +82,10 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
         </div>
         <div class="lg:w-1/2 mt-6 lg:mt-0 flex flex-col space-y-3">
             <div class="flex space-x-3">
-                <img alt="Two people discussing" class="w-1/2 rounded-lg h-24 object-cover" src="uploads/1.jpg" />
-                <img alt="Woman working on laptop" class="w-1/2 rounded-lg h-24 object-cover" src="uploads/2.jpg" />
+                <img alt="Two people discussing" class="w-1/3 rounded-lg h-36 object-content" src="uploads/avatar16.jpg" />
+                <img alt="Woman working on laptop" class="w-1/3 rounded-lg h-36 object-cover" src="uploads/2.jpg" />
             </div>
             <div class="flex space-x-3">
-                <img alt="Woman studying" class="w-1/2 rounded-lg h-24 object-cover" src="uploads/3.jpg" />
                 <div class="bg-white shadow-md rounded-lg p-3 flex items-center">
                     <i class="fas fa-bell text-yellow-500 text-lg"></i>
                     <div class="ml-3">
@@ -97,6 +97,8 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
                         </p>
                     </div>
                 </div>
+                <img alt="Woman studying" class="w-1/2 rounded-lg h-24 object-cover" src="uploads/3.jpg" />
+
             </div>
         </div>
     </div>
@@ -159,13 +161,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
             foreach ($categories as $categorie):
                 if ($counter > 11) break;
                 $counter++;
-            ?>
-                <div class="bg-gray-100 p-1 rounded-lg text-center">
-
-                    <p>
+            ?><a href="http://localhost/youdemy/pages/searchResult.php?id_categorie=<?= htmlspecialchars($categorie->id_categorie) ?>">
+                    <div class="bg-gray-100 p-1 rounded-lg text-center">
                         <?= htmlspecialchars($categorie->name) ?>
-                    </p>
-                </div>
+                    </div>
+                </a>
+
 
             <?php endforeach; ?>
         </div>

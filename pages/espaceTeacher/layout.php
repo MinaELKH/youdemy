@@ -1,3 +1,39 @@
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
+require_once("../sweetAlert.php");
+
+use classes\Role;
+use classes\Teacher;
+use config\DataBaseManager;
+use config\session;
+
+session::start();
+if (Session::isLoggedIn() && session::hasRole('teacher')) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $s_userName = Session::get('user')['name'];
+    $s_userEmail = Session::get('user')['email'];
+    $s_userRole = Session::get('user')['role'];
+    $s_userAvatar = Session::get('user')['avatar'];
+} else {
+    setSweetAlertMessage(
+        'Authentification requise ⚠️',
+        'Veuillez vous authentifier en tant qu enseignant pour  accéder a cette page.',
+        'warning',
+        '../auth/login.php'
+    );
+}
+
+$dbManager = new DatabaseManager();
+$teacher = new Teacher($dbManager, $s_userId);
+$teacher_statut = $teacher->hasStatut();
+$message = '';
+
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -20,6 +56,14 @@
 
     <!-- JS Quill -->
     <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+    <!-- Tagify CSS -->
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
+
+<!-- Tagify JS -->
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js"></script>
+
+
 </head>
 
 <body class="bg-gray-100 font-sans">
@@ -29,9 +73,11 @@
             <div class="flex items-center justify-between h-16">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <a href="#" class="flex-shrink-0">
-                        <img class="h-8 w-8" src="https://via.placeholder.com/40" alt="Logo">
-                    </a>
+                    <div class="flex-shrink-0">
+                        <h2 class="text-2xl text-indigo-500 font-bold ">
+                            You<span class="text-yellow-500">Demy</span>
+                        </h2>
+                    </div>
 
                     <!-- Menu Principal -->
                     <div class="ml-10 flex items-baseline space-x-4">
@@ -73,16 +119,46 @@
                     </div>
 
                     <!-- Profil -->
-                    <div class="flex items-center">
-                        <img
-                            src="https://via.placeholder.com/40"
-                            alt="Profil"
-                            class="w-10 h-10 rounded-full mr-3">
-                        <div class="flex flex-col">
-                            <span class="text-sm font-medium text-gray-700">John Doe</span>
-                            <span class="text-xs text-gray-500">Administrateur</span>
+
+                    <!-- Profile Dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button
+                            @click="open = !open"
+                            class="flex items-center focus:outline-none">
+                            <img
+                                src="<?= isset($s_userAvatar) ? '../' . $s_userAvatar : '../../uploads/avatar_1.jpg' ?>"
+                                alt="Profil"
+                                class="w-10 h-10 rounded-full mr-3">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-medium text-gray-700"><?= $s_userName ?></span>
+                                <span class="text-xs text-yellow-500">
+                                 enseignant
+                                </span>
+                            </div>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div
+                            x-show="open"
+                            @click.away="open = false"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-90"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-300"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-90"
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-20 border">
+
+                            <a href="../auth/logout.php" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+                            </a>
+                            <!-- Include Alpine.js for interactivity -->
+                            <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -94,9 +170,85 @@
 
 
     <main class="flex-1 bg-gray-100 p-6">
+
+
+
         <?php
-        echo isset($content) ? $content : '<p>Bienvenue sur Votre Dashorad .</p>';
-        ?>
+        if ($teacher_statut->approved == 'rejected') : ?>
+            <div class="min-h-screen bg-gray-100 flex items-center justify-center p-2">
+                <div class="bg-white shadow-xl rounded-2xl max-w-2xl w-full p-2 space-y-6">
+                    <div class="text-center">
+                        <h1 class="text-3xl font-bold text-red-600 mb-4">Demande d'Adhésion Refusée</h1>
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                            <p class="text-red-700 font-semibold">Votre candidature n'a pas été retenue</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-gray-700 leading-relaxed">
+                            Cher(e) <span class="font-bold text-gray-900">[Nom du professeur]</span>,
+                        </p>
+                        <p class="text-gray-600 leading-relaxed">
+                            Nous regrettons de vous informer que votre demande d'adhésion en tant qu'enseignant(e) sur notre plateforme a été rejetée après un examen approfondi.
+                        </p>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 my-4">
+                            <p class="text-yellow-700">
+                                Nous vous encourageons à revoir les critères d'adhésion pour améliorer votre demande à l'avenir.
+                            </p>
+                        </div>
+                        <p class="text-gray-600 leading-relaxed">
+                            Si vous avez des questions ou souhaitez obtenir des éclaircissements concernant cette décision, n'hésitez pas à nous contacter.
+                        </p>
+                        <p class="text-gray-600 leading-relaxed">
+                            Nous vous souhaitons tout de même beaucoup de succès dans vos projets futurs.
+                        </p>
+                        <div class="pt-6 border-t border-gray-200">
+                            <p class="text-gray-800 font-semibold">Cordialement,</p>
+                            <p class="text-gray-600">L'équipe Youdemy</p>
+                            <p class="text-sm text-gray-500 mt-2">
+                                📧 contact@youdemy.com<br>
+                                📞 +33 1 23 45 67 89
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <?php elseif ($teacher_statut->approved == 'pending') : ?>
+            <div class="min-h-screen bg-gray-100 flex items-center justify-center p-6">
+                <div class="bg-white shadow-xl rounded-2xl max-w-2xl w-full p-8 space-y-6">
+                    <div class="text-center">
+                        <h1 class="text-3xl font-bold text-yellow-600 mb-4">Demande d'Adhésion en Cours</h1>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 mb-6">
+                            <p class="text-yellow-700 font-semibold">Votre demande est actuellement en attente d'examen</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-gray-600 leading-relaxed">
+                            Cher(e) <span class="font-bold text-gray-900">[Nom du professeur]</span>,
+                        </p>
+                        <p class="text-gray-600 leading-relaxed">
+                            Nous vous informons que votre demande d'adhésion en tant qu'enseignant(e) est actuellement en cours d'examen. Nous vous tiendrons informé(e) dès qu'une décision sera prise.
+                        </p>
+                        <p class="text-gray-600 leading-relaxed">
+                            Nous vous remercions de votre patience et de votre compréhension.
+                        </p>
+                        <div class="pt-6 border-t border-gray-200">
+                            <p class="text-gray-800 font-semibold">Cordialement,</p>
+                            <p class="text-gray-600">L'équipe Youdemy</p>
+                            <p class="text-sm text-gray-500 mt-2">
+                                📧 contact@youdemy.com<br>
+                                📞 +33 1 23 45 67 89
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <?php else : ?>
+            <?php
+            echo isset($content) ? $content : '<p>Bienvenue sur Votre Dashorad .</p>';
+            ?>
+        <?php endif; ?>
 
         <script>
             // Graphique de Revenus

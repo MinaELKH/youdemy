@@ -27,10 +27,10 @@ class Tag
         $this->archive = $archive;
     }
 
-    public function getAll(): array
+    public static function getAll(DataBaseManager $dbManager): array
     {
         $params = ['archive' => '0'];
-        return $this->dbManager->selectAll('tags', $params);
+        return $dbManager->selectAll('tags', $params);
     }
 
 

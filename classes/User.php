@@ -78,12 +78,12 @@ class User
         try {
             $stmt = $db->prepare("INSERT INTO users (name_full, email, password, avatar , id_role) VALUES (:name_full, :email, :password, :avatar , :id_role)");
             $id_role = role::get_IdRole_ByName($this->role);
-            $this->avatar = 'avatar.jpg';
             $stmt->bindParam(':name_full', $this->name_full, PDO::PARAM_STR);
             $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindParam(':password', $this->passwordHash, PDO::PARAM_STR);
             $stmt->bindParam(':avatar', $this->avatar, PDO::PARAM_STR);
             $stmt->bindParam(':id_role', $id_role, PDO::PARAM_INT);
+           
             $stmt->execute();
             $this->id_user = $db->lastInsertId();
             return $this->id_user;

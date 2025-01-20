@@ -128,7 +128,16 @@ class Course
             return false;
         }
     }
+    public static function getByCategorie( DataBaseManager $dbManager, $id_categorie) {
+        $params = [
+            "id_categorie" => $id_categorie,
+            "archived" => 0
+        ];
+        return $dbManager->selectBy("viewcourses", $params);
+    
 
+
+    }
 
     public function getDetailCourse()
     {

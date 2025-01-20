@@ -7,7 +7,19 @@ namespace classes;
 class ContentVideo extends AbstractContent {
     private ?string $url;
     private ?int $duration ;
-
+    public function __construct(
+        ?\config\DataBaseManager $db,
+        ?int $id_content = null,
+        ?int $id_course = null,
+        ?string $title = null,
+        ?string $type = null,
+        ?string $url = null ,
+        ?int $duration = 0// Ajoutez l'initialisation ici
+    ) {
+        parent::__construct($db, $id_content, $id_course, $title, $type);
+        $this->url= $url; // Initialise le contenu
+        $this->duration = $duration;
+    }
     public function setUrl(?string $url): self {
         $this->url = $url;
         return $this;
@@ -46,9 +58,22 @@ class ContentVideo extends AbstractContent {
         return $result ? $result[0] : null;
     }
 
-    public function getByIdCourse(): ?object {
+    public function getByIdCourse(): ?ContentVideo {
         $result = $this->db->selectBy("content", ["id_course" => $this->id_course  , "type"=>"video"]);
-        return $result ? $result[0] : null;
+        if ($result) {
+            $firstRow = $result[0];
+            return new ContentVideo(
+                $this->db,
+                $firstRow->id_content,
+                $firstRow->id_course,
+                $firstRow->title,
+                $firstRow->type,
+                $firstRow->url_video , 
+                $firstRow->duration
+            );
+        }
+    
+        return null;
     }
     static public function getAllByIdCourse($db ,$id_course ): ?array
     {
@@ -56,17 +81,15 @@ class ContentVideo extends AbstractContent {
        return $result;
    }
    public function display(): string {
-   
-    
-    return '<div class="course-video">
-                <h2 class="text-2xl font-bold mb-4">' . htmlspecialchars($this->title) . '</h2>
+    return '<div class=" course-video w-full ">
+                <h2 class="text-2xl font-bold mb-4">' . ($this->title) . '</h2>
                 <div class="video-container mb-4">
                     <video 
                         class="w-full rounded-lg" 
                         controls
-                        poster="' . htmlspecialchars($courseInfo['thumbnail'] ?? '') . '"
+                        poster=""
                     >
-                        <source src="' . htmlspecialchars($this->video_url) . '" type="video/mp4">
+                        <source src="' . htmlspecialchars($this->url) . '" type="video/mp4">
                         Votre navigateur ne supporte pas la lecture de vidéos.
                     </video>
                 </div>

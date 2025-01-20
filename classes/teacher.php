@@ -6,6 +6,9 @@ class Teacher extends Member
 {
   
     private ?string $approved;
+
+
+
     public function __construct(
         ?DataBaseManager $db ,
         ?int $id_user = null,
@@ -20,7 +23,15 @@ class Teacher extends Member
         parent::__construct($db , $id_user, $name_full, $email, $role, $avatar ,$suspended , $archived ); 
         $this->approved = $approved  ;
     }
-
+    public function hasStatut(): ?object {
+    
+        $result = $this->db->selectBy("teachers", ["id_user" => $this->id_user]);
+        if (empty($result)) {
+            return null; 
+        }
+        $row = $result[0];
+        return (object) $row; 
+    }
     public function approved($statut):bool{
         $data = [
             "approved"=>$statut
@@ -30,16 +41,14 @@ class Teacher extends Member
     // j ai ajouté un table teacher qui recois la modification de l approuvation 
         return $this->db->update("teachers" , $data , $whereColumn , $whereValue) ;
     }
-    // public function getAll():array
-    // {
-    //     return $this->db->selectAll("users") ;
-    // }
+ 
     public function getAll(): array {
         $results = $this->db->selectAll("viewteacher");
         $teachers = [];
         if ($results) {
+           
             foreach ($results as $result) {
-                                   // `u`.`id_user` AS `id_user`,`u`.`email` AS `email`,`u`.`password` AS `password`,`u`.`name_full` AS `name_full`,`u`.`avatar` AS `avatar`,`u`.`id_role` AS `id_role`,`u`.`created_at` AS `created_at`,`u`.`archived` AS `archived`,`u`.`suspended` AS `suspended`,`t`.`approved` AS `approved`,`t`.`message` AS `message`
+     // `u`.`id_user` AS `id_user`,`u`.`email` AS `email`,`u`.`password` AS `password`,`u`.`name_full` AS `name_full`,`u`.`avatar` AS `avatar`,`u`.`id_role` AS `id_role`,`u`.`created_at` AS `created_at`,`u`.`archived` AS `archived`,`u`.`suspended` AS `suspended`,`t`.`approved` AS `approved`,`t`.`message` AS `message`
                 $teachers[] = new teacher
                 (null,
                  $result->id_user,
@@ -49,9 +58,9 @@ class Teacher extends Member
                 $result->avatar, 
                 $result->suspended , 
                 $result->archived, 
-                $result->approved);
-            }
-        }
+                $result->approved
+                ) ;
+        }}
         return $teachers ;
     }
 
@@ -76,6 +85,7 @@ class Teacher extends Member
                 $result->approved);
             }
         }
+        
         return $teachers ;
     }
 
@@ -98,23 +108,16 @@ class Teacher extends Member
 
     }
 
-
-
-    // Appeler la fonction d'ajout de cours depuis la classe Course
-    public function addCourse(string $title, string $description, string $content, array $tags, int $categoryId, float $price): bool
+    public function addCourse(string $title, string $description, string $content, ?array $tags, int $categoryId, float $price): bool
     {
         if ($this->approved) {
             $course = new Course($this->dbManager, $title, $description, $content, $tags, $categoryId, $price, $this->id_user); // Utilisation de id_user
-            return $course->addCourse();
+            return $course->add();
         }
         return false; // L'enseignant n'est pas approuvé
     }
 
-    // Fonction pour mettre à jour l'état d'approbation de l'enseignant
-    public function setApproval(bool $status): void
-    {
-        $this->approved = $status;
-    }
+
 
     // Fonction pour accéder aux statistiques
     public function getStatistics(): array

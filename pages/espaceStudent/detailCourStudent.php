@@ -46,7 +46,8 @@ if (!$id_course || !is_numeric($id_course)) {
 try {
     $newCourse = new Course($dbManager, $id_course);
     $course = $newCourse->getDetailCourse(); // je selection d apres viewcourse 
-    //  print_r($course);
+
+ 
     if (!$course) {
         throw new Exception("Le cours avec l'ID $id_course n'existe pas.");
     }
@@ -58,6 +59,9 @@ try {
         $result = ContentText::getAllByIdCourse($dbManager, $id_course);
     } else if ($course->type == 'video') {
         $newContent = new ContentVideo($dbManager);
+        $result = ContentVideo::getAllByIdCourse($dbManager, $id_course);
+        // var_dump($newContent) ;
+        // die() ;
     }
 
 
@@ -71,9 +75,15 @@ try {
 
             throw new Exception("ID content invalide ");
         }
-    } else if ($newContent) {
+    } elseif ($newContent) {
+        // echo "hello" ;
+        // var_dump($newContent) ;
+        // die() ; 
         $newContent->id_course = $id_course;
         $ObjetContent = $newContent->getByIdCourse();
+        // echo "hello" ;
+        // var_dump($ObjetContent) ;
+        // die() ; 
     } else {
         throw new Exception("Le contenu associe au cours n'a pas ete trouve.");
     }
@@ -183,8 +193,10 @@ if (isset($_POST["deletereview"])) {
             <section class="bg-white rounded-lg p-2 mb-2">
                 <div class="flex space-x-2 mb-2  ">
                     <?php
-                    //var_dump($ObjetContent);
-                    echo nl2br($ObjetContent->display());
+                    //    var_dump($ObjetContent);
+                    //    die();
+                    echo ($ObjetContent->display());
+                 
                     ?>
                 </div>
             </section>
@@ -339,26 +351,7 @@ if (isset($_POST["deletereview"])) {
                 </div>
             </div>
 
-            <div class="flex justify-between items-center text-yellow-500">
-                <span class="text-sm font-semibold mr-1">5.0</span>
-                <div>
-                    <?php for ($i = 0; $i < 5; $i++): ?>
-                        <i class="fas fa-star"></i>
-                    <?php endfor; ?>
-                </div>
-
-                <!-- <div class="flex items-center gap-2 text-sm text-gray-800">
-                        <i class="fas fa-book-open"></i>
-                        <span class="text-gray-600 text-sm ml-2 ">
-                            <?php
-                            //    $newTeacher = new Teacher($dbManager, $course->id_teacher);
-                            //     $countCourses =  $newTeacher->getCountCoursesByTeacher() . " Cours";
-                            //      echo 'livre :' . $countCourses ;
-
-                            ?>
-                        </span>
-                    </div> -->
-            </div>
+     
 
 
             <!-- sommaire -->
@@ -394,6 +387,8 @@ if (isset($_POST["deletereview"])) {
             </div>
 
             <!-- Course Overview -->
+            
+            <h4 class="underline text-lg font-bold text-gray-800">Ce que vous apprendrez</h4>
             <div class="bg-white rounded-lg shadow-md border border-gray-100 p-6 mt-4">
 
                 <div class="leading-relaxed  whitespace-normal break-words"> <?= $course->description ?></div>

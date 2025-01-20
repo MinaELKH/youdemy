@@ -62,8 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["activate"])) {
 
 // approved d teacher
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
-    //    var_dump($_POST);
-    //    die();
+  
     try {
         $newTeacher = new Teacher($dbManager, $_POST['id_teacher']);
         $status  = $_POST["status"];
@@ -105,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                         class="pl-10 pr-4 py-3 w-72 bg-white/80 backdrop-blur-sm rounded-full border-2 border-blue-100 focus:border-blue-300 transition duration-300 ease-in-out shadow-lg">
                     <i class="fas fa-search absolute left-4 top-4 text-blue-400"></i>
                 </div>
-                <form method="get" action="">
+                     <form method="get" action="">
                     <button value="1" name="pending" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full hover:scale-105 transform transition flex items-center shadow-xl hover:shadow-2xl">
                         <i class="fas fa-plus mr-2"></i> Demandes en attente
                     </button>

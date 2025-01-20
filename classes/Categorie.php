@@ -56,7 +56,12 @@ public function archived():bool{
     return $this->db->update("categories" , $data , $whereColumn , $whereValue) ;
 }
 
-
+public static  function getById($dbManager, $id_categorie)
+{
+    $result = $dbManager->selectBy("categories", ["id_categorie" => $id_categorie]);
+    $row = $result[0] ;
+    return $row;
+}
 // public function getAll():array
 // {
 //     return $this->db->selectAll("categories") ;

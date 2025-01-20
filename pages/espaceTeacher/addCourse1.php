@@ -2,23 +2,45 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 require_once("../sweetAlert.php");
 require_once("../uploadimage.php");
-ob_start();
-
-$_SESSION['user_id'] = 20;
-
-
 
 use classes\Course;
 use classes\Categorie;
 use classes\ContentText;
 use classes\ContentVideo;
 use config\DataBaseManager;
+use config\session;
+
+
+ob_start();
+
+session::start();
+if (Session::isLoggedIn() && session::hasRole('teacher')) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $s_userName = Session::get('user')['name'];
+    $s_userEmail = Session::get('user')['email'];
+    $s_userRole = Session::get('user')['role'];
+    $s_userAvatar = Session::get('user')['avatar'];
+    //  var_dump($userAvatar); 
+} else {
+    setSweetAlertMessage(
+        'Authentification requise ⚠️',
+        'Veuillez vous authentifier en tant qu enseignant pour  accéder a cette page.',
+        'warning',
+        '../auth/login.php'
+    );}
+
+
+
+
+
+
 
 $dbManager = new DatabaseManager();
 
 // Récupérer les catégories pour le select
-$categorieObj = new Categorie($dbManager);
-$categories = $categorieObj->getAll();
+
+$categories = Categorie::getAll($dbManager);
 
 // Ajout de cours
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
@@ -39,11 +61,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
             $_POST['title'],
             $_POST['description'],
             $picture,
-            $_SESSION['user_id'], // Supposant que l'ID du professeur est dans la session
+             $s_userId, // Supposant que l'ID du professeur est dans la session
             $_POST['id_categorie'],
             Course::STATUS_PENDING,
             0,
-            $_POST['prix']
+            $_POST['prix'] , 
+            $_POST['type']
         );
 
         $result = $newCourse->add();
@@ -63,6 +86,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                     throw new Exception("La durée de la vidéo est obligatoire et doit être un nombre.");
                 }
 
+
+
+
                 // Création du contenu vidéo
                 $videoContent = new ContentVideo($dbManager);
                 $videoContent->setCourseId($courseId);
@@ -73,6 +99,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                 if (!$videoContent->add()) {
                     throw new Exception("Échec de l'ajout du contenu vidéo.");
                 }
+
+
+
             } elseif ($type === 'text') {
                 // Validation des champs spécifiques au type "Texte"
                 if (empty($_POST['content'])) {

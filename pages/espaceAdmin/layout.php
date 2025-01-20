@@ -80,12 +80,20 @@ if (Session::isLoggedIn() && session::hasRole('admin')) {
             <!-- Valider Enseignant -->
             <a href="approvedTeacher.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
                 <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <i class="fas fa-user-check text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+               
+                <form method="get" action="gereTeacher.php">
+                    <button value="1" name="pending">
+                    <i class="fas fa-user-check text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
+                    </button>
+            </form>
+               
+               
                 <span class="absolute -right-2 -top-2 bg-green-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     5
                 </span>
             </a>
 
+        
             <!-- Gérer Enseignant -->
             <a href="gereTeacher.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
                 <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>

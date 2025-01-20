@@ -22,7 +22,7 @@ class CourseTags
         $this->archive = $archive;
     }
 
-    public function linkTagToArticle(): bool
+    public function linkTagToCourse(): bool
     {
         $data = [
             'id_course' => $this->id_course,

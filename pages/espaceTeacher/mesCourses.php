@@ -10,13 +10,28 @@ use config\DataBaseManager;
 use classes\ContentText;
 use classes\ContentVideo;
 use classes\Teacher;
+use config\session;
+session::start();
+if (Session::isLoggedIn() && session::hasRole('teacher')) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $s_userName = Session::get('user')['name'];
+    $s_userEmail = Session::get('user')['email'];
+    $s_userRole = Session::get('user')['role'];
+    $s_userAvatar = Session::get('user')['avatar'];
+   
+} else {
+    setSweetAlertMessage(
+        'Authentification requise ⚠️',
+        'Veuillez vous authentifier en tant qu enseignant pour  accéder a cette page.',
+        'warning',
+        '../auth/login.php'
+    );
+}
 // affichage 
 try {
     $dbManager = new DataBaseManager();
-    $teacherId = $_SESSION['teacher_id'] ?? 20;
-    if (!$teacherId) {
-        throw new Exception(" access interdit ");
-    }
+    $teacherId =  $s_userId ;
     $newTeacher = new Teacher($dbManager, $teacherId);
     $courses = $newTeacher->getMyCourses();
 } catch (Exception $e) {
@@ -65,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
     <?php foreach ($courses as $course): ?>
      
         <div class="bg-white rounded-md shadow-sm overflow-hidden relative group">
-        <a href="detailCourse.php?idCourse=<?= htmlspecialchars($course->id_course); ?>" class="block">
+        <a href="detailCourse.php?id_course=<?=htmlspecialchars($course->id_course); ?>" class="block">
             <div class="relative">
                 <!-- Image du cours -->
                 <img 

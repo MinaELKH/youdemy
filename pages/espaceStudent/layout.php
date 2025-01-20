@@ -27,19 +27,6 @@ if (Session::isLoggedIn() && session::hasRole('student')) {
 <!DOCTYPE html>
 <html lang="fr" x-data="{ mobileMenuOpen: false }">
 
-<!-- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Youdemy</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.min.js"></script>
-
-  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-
-</head> -->
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,9 +35,6 @@ if (Session::isLoggedIn() && session::hasRole('student')) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 <!-- Include Alpine.js for interactivity pour dropdown profil-->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-      
-
 </head>
 
 <body class="bg-gray-50">
@@ -72,9 +56,9 @@ if (Session::isLoggedIn() && session::hasRole('student')) {
                     <!-- Menu Desktop -->
                     <div class="hidden md:block ml-10">
                         <div class="flex items-baseline space-x-4">
-                        <a href="../../home.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Acceuil</a>
-                            <a href="../mesCourses.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Mes Cours</a>
-                            <a href="detailCourStudent.php/?id_course=33" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Recommandés</a>
+                        <a href="../home.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Acceuil</a>
+                            <a href="mesCourses.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Mes Cours</a>
+                            <a href="detailCourStudent.php/?id_course=33" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">en Cours</a>
                             <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Favoris</a>
                            
                        

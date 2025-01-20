@@ -38,43 +38,53 @@ if (Session::isLoggedIn()) {
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 </head>
-<body class="font-sans antialiased">
-<nav class="bg-white shadow-md fixed w-full z-10 top-0">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <img alt="youdemy" class="h-16" src="../src/images/logo.png" />
-                
-                <div class="flex-shrink-0">
-                        <h2 class="text-2xl text-indigo-500 font-bold ">
-                            You<span class="text-yellow-500">Demy</span>
-                        </h2>
-                    </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a class="text-gray-700" href="#">
-                    Categorie
-                </a>
-                <!-- <div class="relative">
-                    <input class="border rounded-full py-2 px-4 pl-10" placeholder="Search..." type="text" />
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                    </i>
-                </div> -->
 
-                <form action="http://localhost/youdemy/pages/searchResult.php" method="post">
+<body class="font-sans antialiased">
+    <nav class="w-full bg-white shadow-md fixed w-full z-10 top-0">
+        <div class="container  px-4  flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img alt="youdemy" class="h-12" src="../src/images/logo.png" />
+
+                <div class="flex items-center">
+                    <h2 class="text-2xl text-indigo-500 font-bold ">
+                        You<span class="text-yellow-500">Demy</span>
+                    </h2>
+                </div>
+                <a class="text-gray-700" href="home.php">
+                    Accueil
+                </a>
+                <a class="text-gray-700" href="#">
+                <select
+                        id="id_categorie"
+                        name="id_categorie"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">catégorie</option>
+                        <?php 
+                        $categories = Categorie::getAll($dbManager);
+                        foreach ($categories as $categorie): ?>
+                            <option value="<?= $categorie->id_categorie ?>">
+                                <?= htmlspecialchars($categorie->name) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </a>
+
+            </div>
+            <div class="flex items-center  text-center justify-between space-x-8">
+
+                <div class="mt-2">
+                    <form action="http://localhost/youdemy/pages/searchResult.php" method="post">
                         <div class="relative">
                             <input
                                 type="text"
                                 name="search"
                                 class="border rounded-full py-2 px-4 pl-10"
                                 placeholder="Search...">
-                                <input type="submit"   name="btnsearch" style="display: none;">
+                            <input type="submit" name="btnsearch" style="display: none;">
                             <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
                         </div>
                     </form>
-                <a class="text-gray-700" href="#">
-                    Demo
-                </a>
-
+                </div>
                 <!-- la partie qui se change selon user  -->
 
                 <div class="flex items-center space-x-4 relative">

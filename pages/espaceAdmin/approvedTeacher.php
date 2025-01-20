@@ -1,7 +1,25 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/youdemy/autoloader.php';
 require_once("../sweetAlert.php");
+use config\session;
 ob_start();
+session::start();
+if (Session::isLoggedIn() && session::hasRole('admin')) {
+    // Récupérer les données de session
+    $s_userId = Session::get('user')['id'];
+    $s_userName = Session::get('user')['name'];
+    $s_userEmail = Session::get('user')['email'];
+    $s_userRole = Session::get('user')['role'];
+    $s_userAvatar = Session::get('user')['avatar'];
+   
+} else {
+    setSweetAlertMessage(
+        'Authentification requise ⚠️',
+        'Veuillez vous authentifier en tant qu enseignant pour  accéder a cette page.',
+        'warning',
+        '../auth/login.php'
+    );
+}
 
 use config\DataBaseManager;
 use classes\Teacher;
@@ -44,9 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                         class="pl-10 pr-4 py-3 w-72 bg-white/80 backdrop-blur-sm rounded-full border-2 border-blue-100 focus:border-blue-300 transition duration-300 ease-in-out shadow-lg">
                     <i class="fas fa-search absolute left-4 top-4 text-blue-400"></i>
                 </div>
-          
+
             </div>
-            
+
         </div>
 
         <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden p-6">
@@ -57,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                         $headers = [
                             'Enseignant' => 'w-1/4',
                             'Contact' => 'w-1/4',
-                            'Document'=>'w-1/6' ,
+                            'Document' => 'w-1/6',
                             'Approuve' => 'w-1/6',
                         ];
 
@@ -71,12 +89,13 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
 
                 <tbody>
                     <?php
-                        $newTeacher = new teacher($dbManager);
-                        $teacherss = $newTeacher->getAll_Pending();
+                    $newTeacher = new teacher($dbManager);
+                    $teachers = $newTeacher->getAll_Pending();
                     //  echo"<pre>" ;
-                    //  var_dump($teacherss);
+                    //  var_dump($teachers);
                     //  echo"<pre>" ;
-                    foreach ($teacherss as $teacher): ?>
+                    //  die();
+                    foreach ($teachers as $teacher): ?>
                         <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition duration-300">
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-4">
@@ -93,48 +112,45 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                                 </div>
                             </td>
 
-                       
-                            <td class="px-6 py-4">
-                                <div class="text-sm text-gray-600">
+
+                            <td class="px-6 py-4 text-center">
+                                <div class="text-sm text-gray-600 ">
                                     <div><?= htmlspecialchars($teacher->getEmail()) ?></div>
                                     <div class="text-xs text-gray-400">00212 68594892</div>
                                 </div>
                             </td>
 
                             <td class="px-6 py-4">
-                            <div class="flex items-center space-x-3">
-                                        <a href="#" title="Voir le CV" class="text-blue-500 hover:text-blue-700 transition-colors">
-                                            <i class="fas fa-file-pdf text-2xl"></i>
-                                        </a>
-                                        <a href="#" title="Diplômes" class="text-green-500 hover:text-green-700 transition-colors">
-                                            <i class="fas fa-graduation-cap text-2xl"></i>
-                                        </a>
-                                    </div>
-                                </td>
+                                <div class="flex items-center justify-center space-x-3">
+                                    <a href="#" title="Voir le CV" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 transform hover:scale-110">
+                                        <i class="fas fa-file-pdf text-2xl"></i>
+                                    </a>
+                                    <a href="#" title="Diplômes" class="text-green-500 hover:text-green-700 transition-colors duration-300 transform hover:scale-110">
+                                        <i class="fas fa-graduation-cap text-2xl"></i>
+                                    </a>
+                                </div>
+                            </td>
                             <!-- approuve -->
                             <td class="px-2 py-1 text-center">
-                            <form action="" method="post">
-                                <input type="hidden" name="id_teacher" value="<?= $teacher->getid_user() ?>">
-                                <div class="inline-flex space-x-1">
-                                    <button type="submit" name="status" value="pending" class="
-                                            <?= $teacher->approved == 'pending' ? 'text-yellow-500' : 'text-gray-300' ?> 
-                                            hover:text-yellow-600 transition-colors duration-200">
-                                        <i class="fas fa-clock"></i>
-                                    </button>
+                       
+                                <form action="" method="post">
+                                <input type="hidden" name="id_teacher" value="<?= $teacher->id_user ?>">
+                                    <div class="inline-flex space-x-1">
+                                
 
-                                    <button type="submit" name="status" value="approved" class="
-                                            <?= $teacher->approved == 'approved' ? 'text-green-500' : 'text-gray-300' ?> 
+                                        <button type="submit" name="status" value="approved" class="
+                                          text-green-500 
                                             hover:text-green-600 transition-colors duration-200">
-                                        <i class="fas fa-check-circle"></i>
-                                    </button>
+                                            <i class="fas fa-check-circle"></i>
+                                        </button>
 
-                                    <button type="submit" name="status" value="rejected" class="
-            <?= $teacher->approved == 'rejected' ? 'text-red-500' : 'text-gray-300' ?> 
-            hover:text-red-600 transition-colors duration-200">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
-                                </div>
-                            </form>
+                                        <button type="submit" name="status" value="rejected" class="
+                                            text-red-500
+                                            hover:text-red-600 transition-colors duration-200">
+                                            <i class="fas fa-times-circle"></i>
+                                        </button>
+                                    </div>
+                                </form>
                             </td>
 
                         </tr>

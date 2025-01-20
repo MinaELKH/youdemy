@@ -18,8 +18,8 @@ if (!$id_course || !is_numeric($id_course)) {
 }
 
 // Récupérer les catégories pour le select
-$categorieObj = new Categorie($dbManager);
-$categories = $categorieObj->getAll();
+
+$categories = Categorie::getAll($dbManager);
 
 // Charger les données du cours pour la pré-remplir dans le formulaire
 try {
