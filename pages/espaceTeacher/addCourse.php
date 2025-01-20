@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
         if ($result) {
          
           if (!empty($_POST['tags'])) {
-            // Nettoyage et traitement des tags
+            
             $tags_input = htmlspecialchars(trim($_POST['tags']));
             $tags = array_unique(array_filter(array_map('trim', explode(',', $tags_input))));
     
@@ -117,8 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                         $url= $_POST['videoURL'];
                     } elseif (isset($_FILES['videoUpload'])) {
                         $url = uploadVideo($_FILES['videoUpload']);
-                        var_dump($url['filePath']) ;
-                        die() ;
+                     
                     }
              
               
@@ -132,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                 if (!$videoContent->add()) {
                     throw new Exception("Échec de l'ajout du contenu vidéo.");
                 }
-            } elseif ($type === 'text') {
+            } elseif ($type === 'texte') {
                 // Validation des champs spécifiques au type "Texte"
                 if (empty($_POST['content'])) {
                     throw new Exception("Le contenu texte est obligatoire.");
@@ -249,24 +248,6 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                         <label for="videoURL" class="block text-gray-700">Ou, collez une URL YouTube</label>
                         <input type="url" id="videoURL" name="videoURL" placeholder="https://www.youtube.com/watch?v=exemple" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
                     </div>
-
-
-
-
-
-                    <!-- <div>
-                        <label for="url" class="block text-sm font-medium text-gray-700 mb-2">
-                            URL de la Vidéo <span class="text-red-500">*</span>
-                        </label>
-                        <input
-                            type="url"
-                            id="url"
-                            name="url"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Entrez l'URL de la vidéo">
-                        <div id="urlError" class="text-red-500 text-sm hidden">L'URL de la vidéo est obligatoire.</div>
-                    </div>  -->
-
                     <div>
                         <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">
                             Durée de la Vidéo (en minutes) <span class="text-red-500">*</span>

@@ -80,19 +80,34 @@ class ContentVideo extends AbstractContent {
        $result = $db->selectBy("content", ["id_course" => $id_course , "type"=>"video"]);
        return $result;
    }
-   public function display(): string {
-    return '<div class=" course-video w-full ">
-                <h2 class="text-2xl font-bold mb-4">' . ($this->title) . '</h2>
+
+    public function display(): string
+{
+    $videoHtml = '';
+
+    
+    if (strpos($this->url, 'uploads') !== false) {
+        $videoHtml = '<video width="560" height="400" controls>
+                        <source src="../' . htmlspecialchars($this->url) . '" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture de vidéos.
+                      </video>';
+    } else {
+      
+        $videoHtml = '<iframe height="400" width="560" src="' . htmlspecialchars($this->url) . '"></iframe>';
+    }
+
+    return '<div class="course-video w-full">
+                <h2 class="text-2xl font-bold mb-4">' . htmlspecialchars($this->title) . '</h2>
                 <div class="video-container mb-4">
                     <div class="container flex justify-center">
-                        <iframe height="400" width="560" src='. $this->url .'></iframe>
+                        ' . $videoHtml . '
                     </div>
-
                 </div>
                 <div class="video-info mb-4">
                     <span class="text-sm text-gray-600">Durée: ' . htmlspecialchars($this->duration) . '</span>
                 </div>
             </div>';
+
 }
 }
 

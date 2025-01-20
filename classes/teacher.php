@@ -102,41 +102,16 @@ class Teacher extends Member
          $stmt->execute();
          $result = $stmt->fetch() ; 
 
-         print_r($result['count_course']) ; 
-         die();
+        //  print_r($result['count_course']) ; 
+        //  die();
          return $result ;
 
     }
 
-    public function addCourse(string $title, string $description, string $content, ?array $tags, int $categoryId, float $price): bool
-    {
-        if ($this->approved) {
-            $course = new Course($this->dbManager, $title, $description, $content, $tags, $categoryId, $price, $this->id_user); // Utilisation de id_user
-            return $course->add();
-        }
-        return false; // L'enseignant n'est pas approuvé
-    }
 
 
 
-    // Fonction pour accéder aux statistiques
-    public function getStatistics(): array
-    {
-        $totalCourses = $this->dbManager->selectBy('courses', ['id_teacher' => $this->id_user]);
-        $query = "SELECT COUNT(DISTINCT course_registrations.student_id) AS total_students 
-                  FROM course_registrations
-                  INNER JOIN courses ON course_registrations.course_id = courses.id_course
-                  WHERE courses.id_teacher = :teacherId";
-        $stmt = $this->dbManager->getConnection()->prepare($query);
-        $stmt->bindValue(':teacherId', $this->id_user, \PDO::PARAM_INT);  // Utilisation de id_user
-        $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        return [
-            'totalCourses' => count($totalCourses),
-            'totalStudents' => $result['total_students'] ?? 0,
-        ];
-    }
 
 
 }

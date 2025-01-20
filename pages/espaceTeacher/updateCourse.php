@@ -6,6 +6,8 @@ ob_start();
 
 use classes\Course;
 use classes\Categorie;
+use classes\ContentText;
+use classes\ContentVideo;
 use config\DataBaseManager;
 
 $dbManager = new DataBaseManager();
@@ -25,9 +27,21 @@ $categories = Categorie::getAll($dbManager);
 try {
     $newCourse = new Course($dbManager, $id_course);
     $course = $newCourse->getById();
+    // echo "heelo";
+    // var_dump( $course->type) ; 
+    // die();
 
     if (!$course) {
         throw new Exception("Le cours avec l'ID $id_course n'existe pas.");
+    } else {
+
+        if ($course->type == 'video') {
+            $newContent = new ContentVideo($dbManager, 0, $id_course);
+        } elseif ($course->type == 'texte') {
+
+            $newContent = new ContentText($dbManager, 0, $id_course);
+        }
+        $newContent = $newContent->getByIdCourse();
     }
 } catch (Exception $e) {
     // Gérer les erreurs
@@ -41,33 +55,71 @@ try {
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_course'])) {
     try {
-        // Hydrater l'objet Course avec les données du formulaire
+        //rempli l objet
         $newCourse->title = $_POST['title'];
         $newCourse->description = $_POST['description'];
         $newCourse->id_categorie = $_POST['id_categorie'];
         $newCourse->prix = $_POST['prix'];
-        $newCourse->status = 1; // Exemple : 1 pour actif
-        $newCourse->archived = 0; // Exemple : 0 pour non archivé
 
         // Gestion de l'image
         if (!empty($_FILES['picture']['name'])) {
-            $uploadedFile = uploadImage($_FILES['picture']); // Fonction uploadImage() pour gérer les fichiers
+            $uploadedFile = uploadImage($_FILES['picture']); // fonction uploadImage() pour gérer les fichiers
             if ($uploadedFile) {
                 $newCourse->picture = $uploadedFile;
             } else {
                 throw new Exception("Échec du téléchargement de l'image.");
             }
         }
+        $newCourse->update() ; 
 
-        // Mettre à jour les données dans la base
-        if ($newCourse->update()) {
-            echo "<script>sweetAlertSuccess('Le cours a été mis à jour avec succès.');</script>";
+        $type = $_POST['type'];
+       
+        if ($type === 'video') {
+            // Validation des champs spécifiques au type "Vidéo"
+
+
+            if (!empty($_POST['videoURL'])) {
+                $url = $_POST['videoURL'];
+            } elseif (isset($_FILES['videoUpload'])) {
+                $url = uploadVideo($_FILES['videoUpload']);
+            }
+
+
+            // Création du contenu vidéo
+            $videoContent = new ContentVideo($dbManager);
+            $videoContent->setContentId($id_content);
+            $videoContent->setCourseId($id_course);
+            $videoContent->setTitle($_POST['title']);
+            $videoContent->setUrl($url['filePath']);
+            $videoContent->setDuration((int)$_POST['duration']);
+
+            if (!$videoContent->update()) {
+                throw new Exception("Échec de l'ajout du contenu vidéo.");
+            }
+        } elseif ($type === 'texte') {
+         //   var_dump($type);
+         //   die();
+            // Validation des champs spécifiques au type "Texte"
+            if (empty($_POST['content'])) {
+                throw new Exception("Le contenu texte est obligatoire.");
+            }
+
+            // Création du contenu texte
+            $textContent = new ContentText($dbManager);
+            $textContent->setContentId($newContent->id_content);
+            $textContent->setCourseId($id_course);
+            $textContent->setTitle($_POST['title']);
+            $textContent->setContent($_POST['content']);
+
+            if (!$textContent->update()) {
+                throw new Exception("Échec de l'ajout du contenu texte.");
+            }
         } else {
-            throw new Exception("Impossible de mettre à jour le cours.");
+            throw new Exception("Type de contenu invalide.");
         }
     } catch (Exception $e) {
         // Gérer les erreurs
-        echo "<script>sweetAlertError('Erreur : " . htmlspecialchars($e->getMessage()) . "');</script>";
+        setSweetAlertMessage('Erreur', htmlspecialchars($e->getMessage()), 'error', '');
     }
 }
 
@@ -137,17 +189,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_course'])) {
                         name="prix"
                         step="0.01"
                         min="0"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
 
                 <!-- Image de Couverture -->
                 <div>
                     <div class="flex justify-between">
-                    <label for="picture" class="block text-sm font-medium text-gray-700 mb-2">
-                        Image de Couverture
-                    </label>
-                 <img src="<?php echo '../'.$course->picture ?>" class="h-16 w-16"  >
+                        <label for="picture" class="block text-sm font-medium text-gray-700 mb-2">
+                            Image de Couverture
+                        </label>
+                        <img src="<?php echo '../' . $course->picture ?>" class="h-16 w-16">
                     </div>
                     <div class="flex items-center justify-center w-full">
                         <label class="flex flex-col border-4 border-dashed w-full h-32 hover:bg-gray-100 hover:border-blue-300 group">
@@ -182,27 +233,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_course'])) {
                         onchange="toggleContentFields()">
                         <option value="">Sélectionnez un type de contenu</option>
                         <option value="video" <?= isset($course->type) && $course->type === 'video' ? 'selected' : '' ?>>Vidéo</option>
-                        <option value="text" <?= isset($course->type) && $course->type === 'text' ? 'selected' : '' ?>>Texte</option>
+                        <option value="texte" <?= isset($course->type) && $course->type === 'texte' ? 'selected' : '' ?>>Texte</option>
                     </select>
 
                     <div id="typeError" class="text-red-500 text-sm hidden">Le type de contenu est obligatoire.</div>
                 </div>
+  
 
+                <!-- Champs text-->
+                <div id="textFields" class="hidden">
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
+                            Contenu Texte <span class="text-red-500">*</span>
+                        </label>
+                        <div id="quill-editor" class="w-full h-40 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                           Ajouter votre nouveau content 
+                        </div>
+                        <input type="hidden" name="content" id="content">
+                        <div id="contentError" class="text-red-500 text-sm hidden"></div>
+                    </div>
+                </div>
                 <!-- Champs Vidéo -->
                 <div id="videoFields" class="hidden">
-                    <div>
-                        <label for="url" class="block text-sm font-medium text-gray-700 mb-2">
-                            URL de la Vidéo <span class="text-red-500">*</span>
-                        </label>
-                        <input
-                            type="url"
-                            id="url"
-                            name="url"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Entrez l'URL de la vidéo">
-                        <div id="urlError" class="text-red-500 text-sm hidden">L'URL de la vidéo est obligatoire.</div>
+
+
+                    <h2 class="text-2xl font-bold mb-4">Téléchargez ou Intégrez une Vidéo</h2>
+
+                    <!-- Option 1 : Upload vidéo -->
+                    <div class="mb-4">
+                        <label for="videoUpload" class="block text-gray-700">Télécharger une vidéo</label>
+                        <input type="file" value="<?= $course->type === 'video' ? htmlspecialchars($newContent->url) : '' ?>" id="videoUpload" name="videoUpload" accept="video/*" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
                     </div>
 
+                    <!-- Option 2 : URL YouTube -->
+                    <div class="mb-4">
+                        <label for="videoURL" class="block text-gray-700">Ou, collez une URL YouTube</label>
+                        <input type="url" id="videoURL"   value="<?= $course->type === 'video' ? htmlspecialchars($newContent->url) : '' ?>" name="videoURL" placeholder="https://www.youtube.com/watch?v=exemple" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
+                    </div>
                     <div>
                         <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">
                             Durée de la Vidéo (en minutes) <span class="text-red-500">*</span>
@@ -216,26 +283,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_course'])) {
                         <div id="durationError" class="text-red-500 text-sm hidden">La durée de la vidéo est obligatoire.</div>
                     </div>
                 </div>
-
-                <!-- Champs Texte -->
-                <div id="textFields" class="hidden">
-                    <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 mb-2">
-                            Contenu Texte <span class="text-red-500">*</span>
-                        </label>
-                        <textarea
-                            id="content"
-                            name="content"
-                            rows="4"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Entrez le contenu texte"></textarea>
-                        <div id="contentError" class="text-red-500 text-sm hidden">Le contenu texte est obligatoire.</div>
-                    </div>
+                <div class="mb-4">
+                    <label for="tags" class="block text-sm font-medium text-gray-700">Tags</label>
+                    <input id="tags" name="tags" placeholder="Tapez pour ajouter des tags" class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
-
-
-
-
 
 
 
@@ -264,7 +315,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_course'])) {
     </div>
 </div>
 
-
 <script>
     function toggleContentFields() {
         const type = document.getElementById('type').value;
@@ -278,7 +328,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_course'])) {
         // Afficher les champs spécifiques en fonction du type sélectionné
         if (type === 'video') {
             videoFields.classList.remove('hidden');
-        } else if (type === 'text') {
+        } else if (type === 'texte') {
             textFields.classList.remove('hidden');
         }
     }
@@ -325,6 +375,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_course'])) {
         return isValid;
     }
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Initialiser Quill
+        const quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            placeholder: 'Entrez le contenu texte ici...',
+            modules: {
+                toolbar: [
+                    // Mise en forme de texte
+                    ['bold', 'italic', 'underline', 'strike'], // Gras, italique, souligné, barré
+                    [{
+                        'color': []
+                    }, {
+                        'background': []
+                    }], // Couleur du texte et arrière-plan
+                    [{
+                        'font': []
+                    }], // Choix de la police
+                    [{
+                        'size': ['small', 'normal', 'large', 'huge']
+                    }], // Taille de police
+
+                    // Alignement du texte
+                    [{
+                        'align': []
+                    }],
+
+                    // Options d'en-têtes
+                    [{
+                        'header': 1
+                    }, {
+                        'header': 2
+                    }, {
+                        'header': 3
+                    }],
+
+                    // Listes
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }],
+
+                    // Liens et images
+                    ['link', 'image', 'video'], // Liens, images et vidéos
+                    [{
+                        'indent': '-1'
+                    }, {
+                        'indent': '+1'
+                    }], // Augmenter ou diminuer le retrait
+
+                    // Citation et code
+                    ['blockquote', 'code-block'], // Citation et bloc de code
+
+                    // Outils supplémentaires
+                    ['clean'] // Supprimer la mise en forme
+                ]
+            }
+        });
+
+
+        // Synchroniser le contenu de Quill avec l'input caché
+        const contentInput = document.getElementById('content');
+        quill.on('text-change', () => {
+            contentInput.value = quill.root.innerHTML; // Récupère le HTML généré par Quill
+        });
+
+        // Vérification du formulaire
+        document.getElementById('courseForm').addEventListener('submit', (e) => {
+            if (document.getElementById('type').value === 'text' && contentInput.value.trim() === '') {
+                e.preventDefault();
+                document.getElementById('contentError').classList.remove('hidden');
+            }
+        });
+    });
+</script>
+
+
 
 
 

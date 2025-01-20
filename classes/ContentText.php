@@ -62,7 +62,7 @@ class ContentText extends AbstractContent
     {
         $data = [
             "title" => $this->title,
-            "content" => $this->content
+            "content_text" => $this->content
         ];
         return $this->db->update("content", $data, "id_content", $this->id_content);
     }

@@ -54,25 +54,7 @@ class student extends Member
     }
 
 
-    // Appeler la fonction d'ajout de cours depuis la classe Course
-   
-    public function getStatistics(): array
-    {
-        $totalCourses = $this->dbManager->selectBy('courses', ['id_student' => $this->id_user]);
-        $query = "SELECT COUNT(DISTINCT course_registrations.student_id) AS total_students 
-                  FROM course_registrations
-                  INNER JOIN courses ON course_registrations.course_id = courses.id_course
-                  WHERE courses.id_student = :studentId";
-        $stmt = $this->dbManager->getConnection()->prepare($query);
-        $stmt->bindValue(':studentId', $this->id_user, \PDO::PARAM_INT);  // Utilisation de id_user
-        $stmt->execute();
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        return [
-            'totalCourses' => count($totalCourses),
-            'totalStudents' => $result['total_students'] ?? 0,
-        ];
-    }
 
 
 }

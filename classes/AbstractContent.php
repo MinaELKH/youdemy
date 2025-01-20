@@ -66,6 +66,9 @@ abstract class AbstractContent {
         return $this;
     }
 
-
+    public function setContentId(?int $id_content): self {
+        $this->id_content = $id_content;
+        return $this;
+    }
     
 }
