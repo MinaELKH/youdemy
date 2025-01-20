@@ -13,7 +13,7 @@ $dbManager = new DatabaseManager();
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add"])) {
     try {
 
-        
+
         // Votre code à exécuter
         if (empty($_POST['name'])) {
             throw new Exception("Le champ 'titre de categorie' est obligatoire.");
@@ -36,14 +36,14 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add"])) {
 // Archive de catégorie
 if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
     try {
-            $newCategorie = new Categorie($dbManager, $_POST['id_categorie']);
-            $result = $newCategorie->archived();
-            if ($result) {
-                setSweetAlertMessage('Succès', 'Categorie archivée avec succès.', 'success', 'categorie.php');
-            } else {
-                setSweetAlertMessage('Erreur', 'Aucun archivage n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'categorie.php');
-            }
-        } catch (Exception $e) {
+        $newCategorie = new Categorie($dbManager, $_POST['id_categorie']);
+        $result = $newCategorie->archived();
+        if ($result) {
+            setSweetAlertMessage('Succès', 'Categorie archivée avec succès.', 'success', 'categorie.php');
+        } else {
+            setSweetAlertMessage('Erreur', 'Aucun archivage n\'a eu lieu. veuillez contacter le superAdmin', 'error', 'categorie.php');
+        }
+    } catch (Exception $e) {
         setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'categorie.php');
     }
 }
@@ -55,8 +55,8 @@ function afficher($dbManager)
         $categorie = new Categorie($dbManager);
         $categories = $categorie::getAll($dbManager);
 
-        echo "<div class='min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 p-8'>
-                <div class='container mx-auto'>
+        echo " <div class=' bg-gradient-to-br from-gray-50 to-blue-100 p-8'>
+    <div class='container mx-auto'>
                       <div class='flex justify-between items-center mb-4'>
             <h1 class='text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600'>
                 Categories
@@ -75,7 +75,7 @@ function afficher($dbManager)
                     <tbody>";
 
             foreach ($categories as $objet) {
-             
+
                 echo "<tr class='border-b border-gray-100 hover:bg-blue-50/50 transition duration-300'>
                         <td class='px-6 py-4 text-gray-800'>{$objet->id_categorie}</td>
                         <td class='px-6 py-4'>
@@ -119,7 +119,6 @@ function afficher($dbManager)
                 });
             });
         </script>";
-
     } catch (Exception $e) {
         echo "<div class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>
                 <strong class='font-bold'>Erreur : </strong>
@@ -132,53 +131,46 @@ function afficher($dbManager)
 
 
 
-<!-- <!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Catégories</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-  
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
-   
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
- 
-    <script src="//cdn.datatables.net/plug-ins/1.13.5/i18n/fr-FR.json"></script>
-</head>
-<body class="bg-gray-100"> -->
 
 <section class="mb-4">
-    <h3 class="text-xl font-semibold mb-2">Gestion des Catégories</h3>
-    <div class="bg-white p-4 rounded-lg shadow-lg">
-        <p class="text-gray-600">Ajouter une Catégorie</p>
-        <form method="POST" action="">
-            <div class="space-y-4">
-                <!-- Nom du Categorie -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom de la Catégorie</label>
-                    <input type="text" id="name" name="name" class="w-full p-3 border rounded-lg" placeholder="Entrez le nom">
-                </div>
-                <!-- Description -->
-                <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea id="description" name="description" class="w-full h-32 p-3 border rounded-lg resize-none" placeholder="Entrez la description"></textarea>
-                </div>
-                <!-- Bouton de soumission -->
-                <div>
-                    <button type="submit" name="add" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                        Ajouter
-                    </button>
+
+    <div class=" bg-gradient-to-br from-gray-50 to-blue-100 p-8">
+        <div class="container mx-auto">
+            <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-8">
+                <h2 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-6">
+                    Ajouter Categorie
+                </h2>
+                <div class="bg-white p-4 rounded-lg shadow-lg">
+                    <p class="text-gray-600">Ajouter une Catégorie</p>
+                    <form method="POST" action="">
+                        <div class="space-y-4">
+                            <!-- Nom du Categorie -->
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom de la Catégorie</label>
+                                <input type="text" id="name" name="name" class="w-full p-3 border rounded-lg" placeholder="Entrez le nom">
+                            </div>
+                            <!-- Description -->
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <textarea id="description" name="description" class="w-full h-32 p-3 border rounded-lg resize-none" placeholder="Entrez la description"></textarea>
+                            </div>
+                            <!-- Bouton de soumission -->
+                            <div>
+                                <button type="submit" name="add" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                    Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
+
 </section>
 
 <section class="mb-2">
-   
+
     <div class="bg-white p-4 rounded-lg shadow-lg">
         <?php afficher($dbManager); ?>
     </div>

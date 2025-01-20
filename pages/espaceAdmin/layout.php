@@ -68,7 +68,7 @@ if (Session::isLoggedIn() && session::hasRole('admin')) {
         <!-- Sidebar -->
 
 
-        <nav class="fixed top-0 left-0 h-screen w-16 bg-gradient-to-b from-blue-600 to-indigo-700 shadow-2xl rounded-2xl p-2 space-y-2 z-50"> <!-- Dashboard -->
+        <nav class="fixed  top-0 left-0 h-screen w-16 bg-gradient-to-b from-blue-600 to-indigo-700 shadow-2xl rounded-2xl p-2 space-y-2 z-50"> <!-- Dashboard -->
             <a href="dashboard.php" class="group relative flex items-center justify-center py-3 px-4 rounded-lg transition duration-300 hover:bg-white/20 hover:scale-105">
                 <div class="absolute inset-0 bg-white/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <i class="fas fa-tachometer-alt text-white text-xl relative z-10 transform group-hover:rotate-12"></i>
@@ -246,7 +246,7 @@ if (Session::isLoggedIn() && session::hasRole('admin')) {
                 </div>
             </nav>
             <!-- Main Section -->
-            <main class="flex-1 bg-gray-100 p-2">
+            <main class="flex-1 bg-gray-100 p-2 mt-24">
                 <?php
                 echo isset($content) ? $content : '<p>Bienvenue sur Votre Dashorad .</p>';
                 ?>

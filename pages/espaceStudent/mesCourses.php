@@ -70,7 +70,7 @@ $newStudent = new student ($dbManager , $s_userId) ;
                             <span class="text-[10px] text-gray-500">45%</span>
                         </div>
                         <div class="mt-2 flex justify-between items-center">
-                        <a href="detailCourStudent.php/?id_course=<?= htmlspecialchars($course->id_course); ?>" class="block">
+                        <a href="detailCourStudent.php?id_course=<?= htmlspecialchars($course->id_course); ?>" class="block">
                             <button class="bg-blue-50 text-blue-600 hover:bg-blue-100 px-2 py-1 rounded-lg text-[10px] transition-colors">
                                 Continuer
                             </button>

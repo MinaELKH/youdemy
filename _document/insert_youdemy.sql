@@ -346,137 +346,137 @@
 -- (33, 'I found the course content a bit too basic, but the structure was good.', NOW(), 0, 78);
 -- 
 
-
-UPDATE courses 
-SET DESCRIPTION =  '<div class="max-w-4xl mx-auto p-6">
-  <h1 class="text-3xl font-bold text-center mb-4">Introduction à la Programmation</h1>
-  <p class="text-lg text-gray-700 mb-6">
-    La programmation est un élément essentiel de la technologie moderne. Elle permet de créer des applications et des solutions informatiques pour résoudre divers problèmes. Voici quelques concepts de base :
-  </p>
-  <ul class="list-disc pl-6 text-gray-700">
-    <li>Les variables : pour stocker des données.</li>
-    <li>Les conditions : pour exécuter des actions basées sur des critères.</li>
-    <li>Les boucles : pour répéter des actions multiples fois.</li>
-    <li>Les fonctions : pour organiser et réutiliser le code.</li>
-    <li>Les erreurs : pour anticiper et gérer les problèmes dans le programme.</li>
-  </ul>
-</div>'
-WHERE id_course = 33
-
-
-
-
-
-INSERT INTO content (id_course, title, content_text)
-VALUES (33, "Introduction", "<div class='max-w-4xl mx-auto p-6'>
-  <h1 class='text-3xl font-bold text-center mb-4'>Introduction à la Programmation</h1>
-  <p class='text-lg text-gray-700 mb-6'>
-    La programmation est un élément essentiel de la technologie moderne. Elle permet de créer des applications et des solutions informatiques pour résoudre divers problèmes. En apprenant à programmer, vous serez en mesure de développer des logiciels, des sites web et des applications mobiles. Chaque programme informatique repose sur des principes de base que tous les développeurs doivent comprendre.
-  </p>
-  <ul class='list-disc pl-6 text-gray-700 mb-6'>
-    <li>
-      <strong>Les variables :</strong> Les variables sont utilisées pour stocker des valeurs dans un programme. Elles peuvent contenir différents types de données, tels que des nombres, des chaînes de caractères ou des objets. Par exemple, dans un programme, vous pouvez déclarer une variable `x` pour stocker un nombre, puis utiliser cette variable dans des calculs ou des conditions.
-      <br><br>
-      Les variables sont essentielles pour gérer l'état d'un programme. Chaque fois que vous modifiez la valeur d'une variable, vous modifiez l'état du programme, ce qui peut affecter son comportement. Il est crucial de bien nommer les variables pour qu'elles aient un sens et facilitent la compréhension du code.
-    </li>
-    <li>
-      <strong>Les conditions :</strong> Les structures conditionnelles permettent d'exécuter des instructions spécifiques en fonction de certaines conditions. Par exemple, un programme peut vérifier si une personne est adulte ou mineure et afficher un message en conséquence. Les conditions sont souvent utilisées avec des opérateurs de comparaison comme `==`, `!=`, `>`, `<`, et `>=`.
-      <br><br>
-      Elles permettent de rendre un programme plus interactif et réactif. Par exemple, dans un jeu vidéo, une condition peut vérifier si le joueur a gagné ou perdu. L'utilisation correcte des conditions est essentielle pour le bon fonctionnement des applications.
-    </li>
-    <li>
-      <strong>Les boucles :</strong> Les boucles sont utilisées pour exécuter un bloc de code plusieurs fois, souvent sous certaines conditions. Par exemple, vous pouvez utiliser une boucle pour parcourir une liste d'éléments et effectuer des actions sur chaque élément. Les boucles `for`, `while` et `do-while` sont les plus couramment utilisées.
-      <br><br>
-      Les boucles permettent d'automatiser des tâches répétitives, ce qui simplifie le code et le rend plus efficace. En travaillant avec des boucles, vous apprendrez à gérer la répétition dans vos programmes, ce qui est une compétence clé pour tout programmeur.
-    </li>
-    <li>
-      <strong>Les fonctions :</strong> Les fonctions sont des blocs de code réutilisables qui effectuent une tâche spécifique. Une fonction peut être appelée plusieurs fois dans un programme, ce qui permet de ne pas répéter le même code à plusieurs endroits. Les fonctions sont particulièrement utiles pour organiser le code et le rendre plus modulaire.
-      <br><br>
-      Les fonctions prennent souvent des arguments en entrée et retournent des valeurs en sortie. Cela permet de rendre les programmes plus flexibles et d'encapsuler la logique complexe dans des unités séparées. Par exemple, vous pouvez créer une fonction pour calculer la somme de deux nombres.
-    </li>
-    <li>
-      <strong>Les erreurs :</strong> La gestion des erreurs est cruciale pour garantir que vos programmes se comportent correctement même en cas de situations inattendues. Par exemple, si un utilisateur entre un texte au lieu d'un nombre dans un formulaire, le programme doit être capable de gérer cette erreur sans se planter.
-      <br><br>
-      La gestion des erreurs comprend l'utilisation de mécanismes tels que les blocs `try-catch` pour capturer les erreurs et y répondre de manière appropriée. Un bon programmeur doit toujours anticiper les erreurs possibles et prévoir des solutions pour éviter que le programme ne cesse de fonctionner de manière inattendue.
-    </li>
-  </ul>
-</div>");
-
-
-
-*
-
-
-INSERT INTO content (id_course, title, TYPE , content_text)
-VALUES 
+-- 
+-- UPDATE courses 
+-- SET DESCRIPTION =  '<div class="max-w-4xl mx-auto p-6">
+--   <h1 class="text-3xl font-bold text-center mb-4">Introduction à la Programmation</h1>
+--   <p class="text-lg text-gray-700 mb-6">
+--     La programmation est un élément essentiel de la technologie moderne. Elle permet de créer des applications et des solutions informatiques pour résoudre divers problèmes. Voici quelques concepts de base :
+--   </p>
+--   <ul class="list-disc pl-6 text-gray-700">
+--     <li>Les variables : pour stocker des données.</li>
+--     <li>Les conditions : pour exécuter des actions basées sur des critères.</li>
+--     <li>Les boucles : pour répéter des actions multiples fois.</li>
+--     <li>Les fonctions : pour organiser et réutiliser le code.</li>
+--     <li>Les erreurs : pour anticiper et gérer les problèmes dans le programme.</li>
+--   </ul>
+-- </div>'
+-- WHERE id_course = 33
+-- 
+-- 
+-- 
+-- 
+-- 
+-- INSERT INTO content (id_course, title, content_text)
+-- VALUES (33, "Introduction", "<div class='max-w-4xl mx-auto p-6'>
+--   <h1 class='text-3xl font-bold text-center mb-4'>Introduction à la Programmation</h1>
+--   <p class='text-lg text-gray-700 mb-6'>
+--     La programmation est un élément essentiel de la technologie moderne. Elle permet de créer des applications et des solutions informatiques pour résoudre divers problèmes. En apprenant à programmer, vous serez en mesure de développer des logiciels, des sites web et des applications mobiles. Chaque programme informatique repose sur des principes de base que tous les développeurs doivent comprendre.
+--   </p>
+--   <ul class='list-disc pl-6 text-gray-700 mb-6'>
+--     <li>
+--       <strong>Les variables :</strong> Les variables sont utilisées pour stocker des valeurs dans un programme. Elles peuvent contenir différents types de données, tels que des nombres, des chaînes de caractères ou des objets. Par exemple, dans un programme, vous pouvez déclarer une variable `x` pour stocker un nombre, puis utiliser cette variable dans des calculs ou des conditions.
+--       <br><br>
+--       Les variables sont essentielles pour gérer l'état d'un programme. Chaque fois que vous modifiez la valeur d'une variable, vous modifiez l'état du programme, ce qui peut affecter son comportement. Il est crucial de bien nommer les variables pour qu'elles aient un sens et facilitent la compréhension du code.
+--     </li>
+--     <li>
+--       <strong>Les conditions :</strong> Les structures conditionnelles permettent d'exécuter des instructions spécifiques en fonction de certaines conditions. Par exemple, un programme peut vérifier si une personne est adulte ou mineure et afficher un message en conséquence. Les conditions sont souvent utilisées avec des opérateurs de comparaison comme `==`, `!=`, `>`, `<`, et `>=`.
+--       <br><br>
+--       Elles permettent de rendre un programme plus interactif et réactif. Par exemple, dans un jeu vidéo, une condition peut vérifier si le joueur a gagné ou perdu. L'utilisation correcte des conditions est essentielle pour le bon fonctionnement des applications.
+--     </li>
+--     <li>
+--       <strong>Les boucles :</strong> Les boucles sont utilisées pour exécuter un bloc de code plusieurs fois, souvent sous certaines conditions. Par exemple, vous pouvez utiliser une boucle pour parcourir une liste d'éléments et effectuer des actions sur chaque élément. Les boucles `for`, `while` et `do-while` sont les plus couramment utilisées.
+--       <br><br>
+--       Les boucles permettent d'automatiser des tâches répétitives, ce qui simplifie le code et le rend plus efficace. En travaillant avec des boucles, vous apprendrez à gérer la répétition dans vos programmes, ce qui est une compétence clé pour tout programmeur.
+--     </li>
+--     <li>
+--       <strong>Les fonctions :</strong> Les fonctions sont des blocs de code réutilisables qui effectuent une tâche spécifique. Une fonction peut être appelée plusieurs fois dans un programme, ce qui permet de ne pas répéter le même code à plusieurs endroits. Les fonctions sont particulièrement utiles pour organiser le code et le rendre plus modulaire.
+--       <br><br>
+--       Les fonctions prennent souvent des arguments en entrée et retournent des valeurs en sortie. Cela permet de rendre les programmes plus flexibles et d'encapsuler la logique complexe dans des unités séparées. Par exemple, vous pouvez créer une fonction pour calculer la somme de deux nombres.
+--     </li>
+--     <li>
+--       <strong>Les erreurs :</strong> La gestion des erreurs est cruciale pour garantir que vos programmes se comportent correctement même en cas de situations inattendues. Par exemple, si un utilisateur entre un texte au lieu d'un nombre dans un formulaire, le programme doit être capable de gérer cette erreur sans se planter.
+--       <br><br>
+--       La gestion des erreurs comprend l'utilisation de mécanismes tels que les blocs `try-catch` pour capturer les erreurs et y répondre de manière appropriée. Un bon programmeur doit toujours anticiper les erreurs possibles et prévoir des solutions pour éviter que le programme ne cesse de fonctionner de manière inattendue.
+--     </li>
+--   </ul>
+-- </div>");
+-- 
+-- 
+-- 
+-- *
 
 
-(33, "Chapitre 2: Types de Données en Programmation","texte" ,  "<div class='max-w-4xl mx-auto p-6'>
-  <h1 class='text-3xl font-bold text-center mb-4'>Chapitre 2: Types de Données en Programmation</h1>
-  <p class='text-lg text-gray-700 mb-6'>
-    Les types de données sont utilisés pour définir la nature des informations manipulées dans un programme. Il existe différents types, tels que les entiers, les chaînes de caractères, les booléens, les listes, et les objets. Chaque type de donnée a des caractéristiques et des utilisations spécifiques.
-  </p>
-  <ul class='list-disc pl-6 text-gray-700 mb-6'>
-    <li><strong>Les nombres :</strong> Les nombres entiers (int) et flottants (float) sont utilisés pour effectuer des calculs dans un programme.</li>
-    <li><strong>Les chaînes de caractères :</strong> Les chaînes sont utilisées pour manipuler du texte, comme des mots, des phrases et des informations utilisateurs.</li>
-    <li><strong>Les booléens :</strong> Les valeurs booléennes, qui ne peuvent être que `true` ou `false`, sont principalement utilisées dans des conditions.</li>
-    <li><strong>Les tableaux :</strong> Un tableau est une collection de valeurs du même type, ce qui permet de regrouper des données de manière organisée.</li>
-    <li><strong>Les objets :</strong> Les objets regroupent plusieurs types de données sous un même nom, permettant de structurer des informations complexes.</li>
-  </ul>
-</div>"),
-
-(33, "Chapitre 3: Structures Conditionnelles et Boucles", "texte" , "<div class='max-w-4xl mx-auto p-6'>
-  <h1 class='text-3xl font-bold text-center mb-4'>Chapitre 3: Structures Conditionnelles et Boucles</h1>
-  <p class='text-lg text-gray-700 mb-6'>
-    Les structures conditionnelles et les boucles permettent de contrôler le flux d'exécution d'un programme. Les conditions permettent de vérifier des critères et d'exécuter des actions en fonction de la vérité de ces critères, tandis que les boucles permettent de répéter des actions plusieurs fois.
-  </p>
-  <ul class='list-disc pl-6 text-gray-700 mb-6'>
-    <li><strong>Les structures conditionnelles :</strong> Par exemple, un bloc `if` vérifie si une condition est vraie, et dans ce cas, il exécute un code spécifique. Sinon, le programme peut exécuter un autre code dans un bloc `else`.</li>
-    <li><strong>Les boucles :</strong> Une boucle `for` est utilisée lorsque vous savez à l'avance combien de fois vous voulez répéter un bloc de code. Une boucle `while` continue tant que la condition donnée est vraie.</li>
-    <li><strong>Les boucles imbriquées :</strong> Parfois, il peut être nécessaire d'utiliser des boucles à l'intérieur d'autres boucles pour traiter des données complexes ou des matrices.</li>
-    <li><strong>La gestion du flux avec `break` et `continue` :</strong> Ces instructions permettent de quitter une boucle prématurément (`break`) ou de passer à l'itération suivante (`continue`).</li>
-    <li><strong>Les opérateurs logiques :</strong> Les opérateurs comme `&&` (et) et `||` (ou) sont utilisés pour combiner plusieurs conditions dans une structure conditionnelle.</li>
-  </ul>
-</div>"),
-
-(33, "Chapitre 4: La Programmation Orientée Objet", "texte" ,  "<div class='max-w-4xl mx-auto p-6'>
-  <h1 class='text-3xl font-bold text-center mb-4'>Chapitre 4: La Programmation Orientée Objet</h1>
-  <p class='text-lg text-gray-700 mb-6'>
-    La programmation orientée objet (POO) est un paradigme de programmation qui permet de structurer le code sous forme d'objets. Chaque objet possède des propriétés (données) et des méthodes (comportements) qui lui sont associées. Ce chapitre explore les concepts fondamentaux de la POO.
-  </p>
-  <ul class='list-disc pl-6 text-gray-700 mb-6'>
-    <li><strong>Les classes :</strong> Une classe définit un modèle pour un objet. Elle contient des propriétés et des méthodes qui seront utilisées par les objets créés à partir de cette classe.</li>
-    <li><strong>Les objets :</strong> Un objet est une instance d'une classe. Par exemple, si vous avez une classe `Voiture`, un objet pourrait être une voiture spécifique avec des caractéristiques comme `marque` et `couleur`.</li>
-    <li><strong>L'héritage :</strong> L'héritage permet à une classe de hériter des propriétés et méthodes d'une autre classe. Cela permet de réutiliser le code et de simplifier la gestion de classes similaires.</li>
-    <li><strong>Le polymorphisme :</strong> Le polymorphisme permet à une méthode d'avoir différentes implémentations en fonction de l'objet qui l'appelle.</li>
-    <li><strong>Encapsulation :</strong> L'encapsulation consiste à protéger les données d'un objet en restreignant l'accès direct à certaines propriétés et en offrant des méthodes publiques pour les manipuler.</li>
-  </ul>
-</div>");
-
-
-
-
-
-
-
-INSERT INTO content (id_course, title,type ,  content_text)
-VALUES 
-(33, "Chapitre 1: L'Environnement de Travail en Programmation", "texte",  "<div class='max-w-4xl mx-auto p-6'>
-  <h1 class='text-3xl font-bold text-center mb-4'>Chapitre 5: L'Environnement de Travail en Programmation</h1>
-  <p class='text-lg text-gray-700 mb-6'>
-    Un environnement de travail bien configuré est essentiel pour tout développeur. Il comprend les outils et logiciels nécessaires pour écrire, tester, déboguer et déployer du code. Ce chapitre présente les composants clés de l'environnement de travail d'un programmeur et la manière de les configurer pour une productivité optimale.
-  </p>
-  <ul class='list-disc pl-6 text-gray-700 mb-6'>
-    <li><strong>Les éditeurs de code :</strong> Un éditeur de code est un logiciel où vous écrivez votre code. Les éditeurs populaires incluent Visual Studio Code, Sublime Text et Atom. Ces outils offrent des fonctionnalités comme la coloration syntaxique, l'auto-complétion et la gestion de projets pour faciliter l'écriture de code.</li>
-    <li><strong>Les IDE (Environnements de Développement Intégrés) :</strong> Un IDE est un outil plus complet qui combine un éditeur de code avec d'autres outils comme un débogueur, un gestionnaire de version et des outils de compilation. Des exemples d'IDE populaires sont IntelliJ IDEA, Eclipse et PyCharm.</li>
-    <li><strong>Les systèmes de contrôle de version :</strong> Un système de contrôle de version, comme Git, permet de suivre les modifications apportées au code au fil du temps. Git permet de travailler en collaboration, de revenir à une version précédente du code et de gérer plusieurs versions simultanément avec des branches.</li>
-    <li><strong>Les gestionnaires de paquets :</strong> Un gestionnaire de paquets permet d'installer, de mettre à jour et de gérer des bibliothèques ou des frameworks nécessaires au développement. Par exemple, NPM (Node Package Manager) pour JavaScript, Composer pour PHP, et PIP pour Python.</li>
-    <li><strong>Les environnements de développement local :</strong> Il est essentiel de configurer un environnement local sur votre machine pour tester votre code avant de le déployer en production. Vous pouvez utiliser des outils comme Docker ou des machines virtuelles pour créer des environnements isolés et reproductibles.</li>
-  </ul>
-  <p class='text-lg text-gray-700'>
-    En plus de ces outils, il est important d'adopter des pratiques de travail efficaces, comme l'utilisation de la ligne de commande, la configuration de raccourcis clavier pour les tâches répétitives, et la gestion des tâches avec des outils comme Trello ou Jira. Ces pratiques vous aideront à améliorer votre productivité et à mieux organiser votre travail.
-  </p>
-</div>");
+-- INSERT INTO content (id_course, title, TYPE , content_text)
+-- VALUES 
+-- 
+-- 
+-- (33, "Chapitre 2: Types de Données en Programmation","texte" ,  "<div class='max-w-4xl mx-auto p-6'>
+--   <h1 class='text-3xl font-bold text-center mb-4'>Chapitre 2: Types de Données en Programmation</h1>
+--   <p class='text-lg text-gray-700 mb-6'>
+--     Les types de données sont utilisés pour définir la nature des informations manipulées dans un programme. Il existe différents types, tels que les entiers, les chaînes de caractères, les booléens, les listes, et les objets. Chaque type de donnée a des caractéristiques et des utilisations spécifiques.
+--   </p>
+--   <ul class='list-disc pl-6 text-gray-700 mb-6'>
+--     <li><strong>Les nombres :</strong> Les nombres entiers (int) et flottants (float) sont utilisés pour effectuer des calculs dans un programme.</li>
+--     <li><strong>Les chaînes de caractères :</strong> Les chaînes sont utilisées pour manipuler du texte, comme des mots, des phrases et des informations utilisateurs.</li>
+--     <li><strong>Les booléens :</strong> Les valeurs booléennes, qui ne peuvent être que `true` ou `false`, sont principalement utilisées dans des conditions.</li>
+--     <li><strong>Les tableaux :</strong> Un tableau est une collection de valeurs du même type, ce qui permet de regrouper des données de manière organisée.</li>
+--     <li><strong>Les objets :</strong> Les objets regroupent plusieurs types de données sous un même nom, permettant de structurer des informations complexes.</li>
+--   </ul>
+-- </div>"),
+-- 
+-- (33, "Chapitre 3: Structures Conditionnelles et Boucles", "texte" , "<div class='max-w-4xl mx-auto p-6'>
+--   <h1 class='text-3xl font-bold text-center mb-4'>Chapitre 3: Structures Conditionnelles et Boucles</h1>
+--   <p class='text-lg text-gray-700 mb-6'>
+--     Les structures conditionnelles et les boucles permettent de contrôler le flux d'exécution d'un programme. Les conditions permettent de vérifier des critères et d'exécuter des actions en fonction de la vérité de ces critères, tandis que les boucles permettent de répéter des actions plusieurs fois.
+--   </p>
+--   <ul class='list-disc pl-6 text-gray-700 mb-6'>
+--     <li><strong>Les structures conditionnelles :</strong> Par exemple, un bloc `if` vérifie si une condition est vraie, et dans ce cas, il exécute un code spécifique. Sinon, le programme peut exécuter un autre code dans un bloc `else`.</li>
+--     <li><strong>Les boucles :</strong> Une boucle `for` est utilisée lorsque vous savez à l'avance combien de fois vous voulez répéter un bloc de code. Une boucle `while` continue tant que la condition donnée est vraie.</li>
+--     <li><strong>Les boucles imbriquées :</strong> Parfois, il peut être nécessaire d'utiliser des boucles à l'intérieur d'autres boucles pour traiter des données complexes ou des matrices.</li>
+--     <li><strong>La gestion du flux avec `break` et `continue` :</strong> Ces instructions permettent de quitter une boucle prématurément (`break`) ou de passer à l'itération suivante (`continue`).</li>
+--     <li><strong>Les opérateurs logiques :</strong> Les opérateurs comme `&&` (et) et `||` (ou) sont utilisés pour combiner plusieurs conditions dans une structure conditionnelle.</li>
+--   </ul>
+-- </div>"),
+-- 
+-- (33, "Chapitre 4: La Programmation Orientée Objet", "texte" ,  "<div class='max-w-4xl mx-auto p-6'>
+--   <h1 class='text-3xl font-bold text-center mb-4'>Chapitre 4: La Programmation Orientée Objet</h1>
+--   <p class='text-lg text-gray-700 mb-6'>
+--     La programmation orientée objet (POO) est un paradigme de programmation qui permet de structurer le code sous forme d'objets. Chaque objet possède des propriétés (données) et des méthodes (comportements) qui lui sont associées. Ce chapitre explore les concepts fondamentaux de la POO.
+--   </p>
+--   <ul class='list-disc pl-6 text-gray-700 mb-6'>
+--     <li><strong>Les classes :</strong> Une classe définit un modèle pour un objet. Elle contient des propriétés et des méthodes qui seront utilisées par les objets créés à partir de cette classe.</li>
+--     <li><strong>Les objets :</strong> Un objet est une instance d'une classe. Par exemple, si vous avez une classe `Voiture`, un objet pourrait être une voiture spécifique avec des caractéristiques comme `marque` et `couleur`.</li>
+--     <li><strong>L'héritage :</strong> L'héritage permet à une classe de hériter des propriétés et méthodes d'une autre classe. Cela permet de réutiliser le code et de simplifier la gestion de classes similaires.</li>
+--     <li><strong>Le polymorphisme :</strong> Le polymorphisme permet à une méthode d'avoir différentes implémentations en fonction de l'objet qui l'appelle.</li>
+--     <li><strong>Encapsulation :</strong> L'encapsulation consiste à protéger les données d'un objet en restreignant l'accès direct à certaines propriétés et en offrant des méthodes publiques pour les manipuler.</li>
+--   </ul>
+-- </div>");
+-- 
+-- 
+-- 
+-- 
+-- 
+-- 
+-- 
+-- INSERT INTO content (id_course, title,type ,  content_text)
+-- VALUES 
+-- (33, "Chapitre 1: L'Environnement de Travail en Programmation", "texte",  "<div class='max-w-4xl mx-auto p-6'>
+--   <h1 class='text-3xl font-bold text-center mb-4'>Chapitre 5: L'Environnement de Travail en Programmation</h1>
+--   <p class='text-lg text-gray-700 mb-6'>
+--     Un environnement de travail bien configuré est essentiel pour tout développeur. Il comprend les outils et logiciels nécessaires pour écrire, tester, déboguer et déployer du code. Ce chapitre présente les composants clés de l'environnement de travail d'un programmeur et la manière de les configurer pour une productivité optimale.
+--   </p>
+--   <ul class='list-disc pl-6 text-gray-700 mb-6'>
+--     <li><strong>Les éditeurs de code :</strong> Un éditeur de code est un logiciel où vous écrivez votre code. Les éditeurs populaires incluent Visual Studio Code, Sublime Text et Atom. Ces outils offrent des fonctionnalités comme la coloration syntaxique, l'auto-complétion et la gestion de projets pour faciliter l'écriture de code.</li>
+--     <li><strong>Les IDE (Environnements de Développement Intégrés) :</strong> Un IDE est un outil plus complet qui combine un éditeur de code avec d'autres outils comme un débogueur, un gestionnaire de version et des outils de compilation. Des exemples d'IDE populaires sont IntelliJ IDEA, Eclipse et PyCharm.</li>
+--     <li><strong>Les systèmes de contrôle de version :</strong> Un système de contrôle de version, comme Git, permet de suivre les modifications apportées au code au fil du temps. Git permet de travailler en collaboration, de revenir à une version précédente du code et de gérer plusieurs versions simultanément avec des branches.</li>
+--     <li><strong>Les gestionnaires de paquets :</strong> Un gestionnaire de paquets permet d'installer, de mettre à jour et de gérer des bibliothèques ou des frameworks nécessaires au développement. Par exemple, NPM (Node Package Manager) pour JavaScript, Composer pour PHP, et PIP pour Python.</li>
+--     <li><strong>Les environnements de développement local :</strong> Il est essentiel de configurer un environnement local sur votre machine pour tester votre code avant de le déployer en production. Vous pouvez utiliser des outils comme Docker ou des machines virtuelles pour créer des environnements isolés et reproductibles.</li>
+--   </ul>
+--   <p class='text-lg text-gray-700'>
+--     En plus de ces outils, il est important d'adopter des pratiques de travail efficaces, comme l'utilisation de la ligne de commande, la configuration de raccourcis clavier pour les tâches répétitives, et la gestion des tâches avec des outils comme Trello ou Jira. Ces pratiques vous aideront à améliorer votre productivité et à mieux organiser votre travail.
+--   </p>
+-- </div>");
 
 -- 
 -- INSERT INTO `coursetags` (`id_course`, `id_tag`) 
@@ -486,4 +486,29 @@ VALUES
 --  (60 , 30) ,
 --   (60 , 31) ;
 
-youdemy_croiseusers
+
+
+-- INSERT INTO `content` (`id_course`, `title`, `type`, `content_text`, `url_file`) VALUES
+-- (34, 'Introduction to Programming', 'texte', '<h1>Introduction</h1><p>Bienvenue dans ce cours. Vous apprendrez les bases de la programmation, y compris les concepts fondamentaux comme les variables, les boucles et les fonctions.</p><ul><li>Qu\'est-ce que la programmation ?</li><li>Les langages les plus populaires</li><li>Pourquoi apprendre la programmation ?</li></ul><p>Préparez-vous à plonger dans un monde passionnant !</p>', NULL),
+-- (35, 'Variables and Data Types', 'texte', '<h2>Variables et Types de Données</h2><p>Les variables sont essentielles en programmation. Voici ce que vous devez savoir :</p><ol><li><b>Déclaration</b> : Déclarez vos variables avant de les utiliser.</li><li><b>Types de Données</b> : Entiers, chaînes, booléens, etc.</li></ol><p>Un exemple : <code>$name = "Alice";</code></p>', NULL),
+-- (36, 'Control Structures', 'texte', '<h2>Structures de Contrôle</h2><p>Les structures de contrôle comme les boucles et les instructions conditionnelles permettent de contrôler le flux de votre programme. Voici quelques exemples :</p><pre><code>if ($x > 0) { echo "Positif"; } else { echo "Négatif"; }</code></pre>', NULL),
+-- (38, 'Functions in Programming', 'texte', '<h3>Fonctions</h3><p>Les fonctions vous permettent de réutiliser du code. Exemple :</p><pre><code>function greet($name) { echo "Bonjour, " . $name; }</code></pre><p>Les fonctions peuvent être :</p><ul><li>Avec paramètres</li><li>Avec ou sans valeur de retour</li></ul>', NULL),
+-- (39, 'Arrays and Collections', 'texte', '<h4>Tableaux et Collections</h4><p>Les tableaux sont des structures de données puissantes :</p><ul><li>Tableaux indexés : <code>$arr = [1, 2, 3];</code></li><li>Tableaux associatifs : <code>$arr = ["name" => "Alice", "age" => 25];</code></li></ul>', NULL),
+-- (40, 'Introduction to OOP', 'texte', '<h1>Programmation Orientée Objet</h1><p>OOP repose sur quatre piliers :</p><ol><li>Encapsulation</li><li>Héritage</li><li>Polymorphisme</li><li>Abstraction</li></ol>', NULL),
+-- (41, 'Classes and Objects', 'texte', '<h2>Classes et Objets</h2><p>Une classe est un modèle. Un objet est une instance. Exemple :</p><pre><code>class Animal { public $name; } $dog = new Animal();</code></pre>', NULL),
+-- (42, 'Exception Handling', 'texte', '<h2>Gestion des Exceptions</h2><p>Les exceptions sont utilisées pour gérer les erreurs. Exemple :</p><pre><code>try { echo 10 / 0; } catch (Exception $e) { echo "Erreur : " . $e->getMessage(); }</code></pre>', NULL),
+-- (43, 'File Handling', 'texte', '<h2>Manipulation de Fichiers</h2><p>Lire et écrire des fichiers en PHP est simple :</p><pre><code>$file = fopen("file.txt", "r");</code></pre>', NULL),
+-- (44, 'Database Connections', 'texte', '<h2>Connexions à la Base de Données</h2><p>PHP offre de nombreuses façons de se connecter à une base de données. Exemple avec PDO :</p><pre><code>$pdo = new PDO("mysql:host=localhost;dbname=test", "user", "password");</code></pre>', NULL),
+-- (45, 'APIs and Web Services', 'texte', '<h2>APIs et Services Web</h2><p>Les APIs permettent aux applications de communiquer. Exemple :</p><pre><code>$response = file_get_contents("https://api.example.com/data");</code></pre>', NULL),
+-- (46, 'Debugging and Testing', 'texte', '<h2>Débogage et Tests</h2><p>Déboguez efficacement en utilisant :</p><ul><li>Les journaux d\'erreurs</li><li>Les outils comme Xdebug</li></ul>', NULL),
+-- (47, 'Best Practices in PHP', 'texte', '<h2>Meilleures Pratiques</h2><p>Adoptez des pratiques comme :</p><ul><li>Code lisible</li><li>Utilisation de namespaces</li><li>Gestion des erreurs</li></ul>', NULL),
+-- (53, 'Advanced OOP Concepts', 'texte', '<h2>Concepts Avancés en OOP</h2><p>Explorez les traits, interfaces et autres concepts avancés pour structurer votre code.</p>', NULL),
+-- (48, 'Security in PHP', 'texte', '<h2>Sécurité en PHP</h2><p>Protégez vos applications en :</p><ul><li>Validant les entrées utilisateur</li><li>Utilisant des mots de passe hachés</li></ul>', NULL),
+-- (49, 'Working with Sessions', 'texte', '<h2>Sessions en PHP</h2><p>Les sessions permettent de stocker des données pour chaque utilisateur. Exemple :</p><pre><code>session_start(); $_SESSION["user"] = "Alice";</code></pre>', NULL),
+-- (50, 'Localization', 'texte', '<h2>Localisation</h2><p>PHP facilite la gestion des langues. Utilisez gettext pour localiser votre application.</p>', NULL),
+-- (51, 'PHP Frameworks', 'texte', '<h2>Frameworks PHP</h2><p>Découvrez Laravel, Symfony et d\'autres frameworks pour accélérer le développement.</p>', NULL),
+-- (52, 'Working with APIs', 'texte', '<h2>Travailler avec des APIs</h2><p>Les APIs facilitent l\'intégration des services externes dans vos applications PHP.</p>', NULL),
+-- (54, 'Version Control with Git', 'texte', '<h2>Contrôle de Version avec Git</h2><p>Apprenez à gérer le code source efficacement avec Git et GitHub.</p>', NULL),
+-- (55, 'Deployment', 'texte', '<h2>Déploiement</h2><p>Déployez vos applications en production en utilisant des outils comme Docker.</p>', NULL),
+-- (65, 'Conclusion and Next Steps', 'texte', '<h2>Conclusion</h2><p>Félicitations pour avoir terminé ce cours ! Voici quelques étapes à suivre pour continuer votre apprentissage.</p>', NULL);
+-- 

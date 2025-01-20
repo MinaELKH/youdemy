@@ -126,17 +126,6 @@ if (isset($_POST["deletereview"])) {
             <!-- Course Meta -->
             <div class="flex items-center gap-2 mb-6">
                 <span class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm"><?= $course->category_name ?></span>
-                <div class="flex items-center gap-1">
-                    <span class="font-bold">5.0</span>
-                    <div class="flex text-yellow-400">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                </div>
-
             </div>
 
 
@@ -144,7 +133,7 @@ if (isset($_POST["deletereview"])) {
 
             <!-- Course Video -->
             <div class="bg-gray-200 aspect-video rounded-lg mb-2">
-                <img src="<?= '../../' . $course->picture ?>" alt="Course preview" class="w-full h-full object-cover rounded-lg">
+                <img src="<?= '../' . $course->picture ?>" alt="Course preview" class="w-full h-full object-cover rounded-lg">
             </div>
             <!-- Course Details -->
             <div class="grid grid-cols-2  lg:grid-cols-4 items-center gap-2 mb-2 text-xs text-gray-600">
@@ -278,7 +267,7 @@ if (isset($_POST["deletereview"])) {
                                 <div class="flex items-center mb-2">
 
                                     <img
-                                        img src="<?= !empty($objet_Cmt->avatar) ? '../../' . $objet_Cmt->avatar : '../../avatar_1.jpg' ?>"
+                                        img src="<?= !empty($objet_Cmt->avatar) ? '../' . $objet_Cmt->avatar : '../avatar_1.jpg' ?>"
                                         alt="Profil"
                                         class="w-10 h-10 rounded-full mr-3"
                                         height="40"
@@ -337,17 +326,19 @@ if (isset($_POST["deletereview"])) {
                     À propos de l'Instructeur
                 </h2>
                 <div class="flex items-center mb-2">
-                    <img src="<?= !empty($course->teacher_avatar) ? '../../' . $course->teacher_avatar : '../../avatar_1.jpg' ?>"
+                    <img src="<?= !empty($course->teacher_avatar) ? '../' . $course->teacher_avatar : '../avatar_1.jpg' ?>"
                         alt="Profil"
                         class="w-10 h-10 rounded-full mr-3"
                         height="40"
                         width="40" />
+                        <div>
                     <h3 class="text-gray-800 font-semibold">
                         Dr. <?= $course->teacher_name ?>
                     </h3>
                     <p class="text-gray-600 text-sm">
-                        Fondateur Naruto Edu
+                        Enseignant 
                     </p>
+                        </div>
                 </div>
             </div>
 
@@ -388,7 +379,7 @@ if (isset($_POST["deletereview"])) {
 
             <!-- Course Overview -->
             
-            <h4 class="underline text-lg font-bold text-gray-800">Ce que vous apprendrez</h4>
+            <h4 class="underline text-lg font-bold text-gray-800 m-4">Ce que vous apprendrez</h4>
             <div class="bg-white rounded-lg shadow-md border border-gray-100 p-6 mt-4">
 
                 <div class="leading-relaxed  whitespace-normal break-words"> <?= $course->description ?></div>

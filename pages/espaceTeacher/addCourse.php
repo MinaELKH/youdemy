@@ -56,6 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
         if (empty($_POST['id_categorie'])) {
             throw new Exception("La catégorie est obligatoire.");
         }
+
+
         $uploadResult = uploadImage($_FILES['picture']);
         $picture = $uploadResult['filePath'];
         // Création du cours
@@ -68,12 +70,14 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
             $s_userId, // Supposant que l'ID du professeur est dans la session
             $_POST['id_categorie'],
             Course::STATUS_PENDING,
-            0,
-            $_POST['prix']
+            0, //archive
+            $_POST['prix'],
+            $_POST['type']
         );
 
         $result = $newCourse->add();
         $id_course = $dbManager->getLastInsertId();
+
         // echo("id_course") ; 
         // var_dump($id_course);
         if ($result) {
@@ -84,8 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
             $tags = array_unique(array_filter(array_map('trim', explode(',', $tags_input))));
     
             foreach ($tags as $tag_name) {
-                var_dump($tag_name) ;
-                die();
+               
               $tag = new Tag($dbManager, 0, $tag_name);
               // Vérifier si le tag existe
               $objetTag = $tag->getTagByName();
@@ -97,32 +100,33 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
               $tag_course = new courseTags($dbManager, $id_course, $tag_id);
               $tag_course->linkTagTocourse();
             }
-          } else {
-            echo " l article n est pas ajouté";
-          }
+          } 
         }
 
         
         if ($result) {
-            $courseId = $dbManager->getLastInsertId();
-
+            
             // Gestion du contenu en fonction du type
             $type = $_POST['type'];
 
             if ($type === 'video') {
                 // Validation des champs spécifiques au type "Vidéo"
-                if (empty($_POST['url'])) {
-                    throw new Exception("L'URL de la vidéo est obligatoire.");
-                }
-                if (empty($_POST['duration']) || !is_numeric($_POST['duration'])) {
-                    throw new Exception("La durée de la vidéo est obligatoire et doit être un nombre.");
-                }
-
+                
+             
+                    if (!empty($_POST['videoURL'])) {
+                        $url= $_POST['videoURL'];
+                    } elseif (isset($_FILES['videoUpload'])) {
+                        $url = uploadVideo($_FILES['videoUpload']);
+                        var_dump($url['filePath']) ;
+                        die() ;
+                    }
+             
+              
                 // Création du contenu vidéo
                 $videoContent = new ContentVideo($dbManager);
-                $videoContent->setCourseId($courseId);
+                $videoContent->setCourseId($id_course);
                 $videoContent->setTitle($_POST['title']);
-                $videoContent->setUrl($_POST['url']);
+                $videoContent->setUrl($url['filePath']);
                 $videoContent->setDuration((int)$_POST['duration']);
 
                 if (!$videoContent->add()) {
@@ -136,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
 
                 // Création du contenu texte
                 $textContent = new ContentText($dbManager);
-                $textContent->setCourseId($courseId);
+                $textContent->setCourseId($id_course);
                 $textContent->setTitle($_POST['title']);
                 $textContent->setContent($_POST['content']);
 
@@ -150,7 +154,8 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
             // Succès
             setSweetAlertMessage('Succès', 'Le cours et son contenu ont été ajoutés avec succès', 'success', 'addCourse.php');
         } else {
-            throw new Exception("Échec de l'ajout du cours.");
+            throw new Exception("Échec de l'ajout du contenue.");
+           
         }
     } catch (Exception $e) {
         setSweetAlertMessage('Erreur', $e->getMessage(), 'error', 'addCourse.php');
@@ -237,7 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                     <div class="mb-4">
                         <label for="videoUpload" class="block text-gray-700">Télécharger une vidéo</label>
                         <input type="file" id="videoUpload" name="videoUpload" accept="video/*" class="mt-2 p-2 border border-gray-300 rounded-lg w-full">
-                    </div>
+                    </div> 
 
                     <!-- Option 2 : URL YouTube -->
                     <div class="mb-4">
@@ -260,7 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["add_course"])) {
                             class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Entrez l'URL de la vidéo">
                         <div id="urlError" class="text-red-500 text-sm hidden">L'URL de la vidéo est obligatoire.</div>
-                    </div> -->
+                    </div>  -->
 
                     <div>
                         <label for="duration" class="block text-sm font-medium text-gray-700 mb-2">

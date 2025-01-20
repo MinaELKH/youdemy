@@ -84,14 +84,10 @@ class ContentVideo extends AbstractContent {
     return '<div class=" course-video w-full ">
                 <h2 class="text-2xl font-bold mb-4">' . ($this->title) . '</h2>
                 <div class="video-container mb-4">
-                    <video 
-                        class="w-full rounded-lg" 
-                        controls
-                        poster=""
-                    >
-                        <source src="' . htmlspecialchars($this->url) . '" type="video/mp4">
-                        Votre navigateur ne supporte pas la lecture de vidéos.
-                    </video>
+                    <div class="container flex justify-center">
+                        <iframe height="400" width="560" src='. $this->url .'></iframe>
+                    </div>
+
                 </div>
                 <div class="video-info mb-4">
                     <span class="text-sm text-gray-600">Durée: ' . htmlspecialchars($this->duration) . '</span>

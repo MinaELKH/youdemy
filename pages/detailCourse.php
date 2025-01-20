@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
                 'Inscription réussie 🎉',
                 'Félicitations ! Vous êtes maintenant inscrit au cours . Préparez-vous à apprendre et à explorer de nouvelles compétences passionnantes ! 🚀',
                 'success',
-                'espaceStudent/detailCourStudent.php/?id_course='.$id_course
+                'espaceStudent/detailCourStudent.php?id_course='.$id_course
             );
         } else {
             setSweetAlertMessage('Erreur', 'Aucun inscription n\'a eu lieu. Veuillez contacter l\'administrateur.', 'error', '');

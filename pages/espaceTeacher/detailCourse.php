@@ -94,115 +94,103 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
 
 <body class="bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-md fixed w-full z-10 top-0">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <img alt="EduMall Logo" class="h-10" src="https://placehold.co/40x40" />
-                <span class="text-xl font-bold">
-                    YOUDEMY
-                </span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a class="text-gray-700" href="#">
-                    Categorie
-                </a>
-                <div class="relative">
-                    <input class="border rounded-full py-2 px-4 pl-10" placeholder="Search..." type="text" />
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                    </i>
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h2 class="text-2xl text-indigo-500 font-bold ">
+                            You<span class="text-yellow-500">Demy</span>
+                        </h2>
+                    </div>
+
+                    <!-- Menu Principal -->
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Accueil
+                        </a>
+                        <a href="#" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Tableau de bord
+                        </a>
+                        <a href="mesCourses.php" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Mes Cours
+                        </a>
+                        <a href="addCourse.php" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
+                            Ajouter un nouveau cour </a>
+                    </div>
                 </div>
-                <a class="text-gray-700" href="#">
-                    Demo
-                </a>
 
-                <!-- la partie qui se change selon user  -->
-
-                <div class="flex items-center space-x-4 relative">
-                    <?php if (!Session::isLoggedIn()) : ?>
-                        <nav class="flex items-center space-x-4">
-                            <a class="text-gray-700 hover:text-gray-900" href="#">
-                                Enseigner in Youdemy
-                            </a>
-                            <a class="text-gray-700 hover:text-gray-900" href="#">
-                                <i class="fas fa-shopping-cart"></i>
-                            </a>
-                            <a class="text-gray-700 hover:text-gray-900" href="auth/login.php">
-                                Log In
-                            </a>
-                            <a class="bg-blue-500 text-white py-2 px-4 rounded-full hover:bg-blue-600 transition" href="auth/register.php">
-                                Sign Up
-                            </a>
-                        </nav>
-                    <?php endif; ?>
-
-                    <?php if (Session::isLoggedIn()) : ?>
-                        <div class="flex items-center space-x-4">
-                            <!-- Notifications -->
-                            <div class="relative">
-                                <button class="text-gray-700 hover:text-gray-900">
-                                    <i class="fas fa-bell text-lg"></i>
-                                    <span class="bg-red-500 text-white rounded-full px-2 py-1 text-xs absolute -top-2 -right-2">3</span>
-                                </button>
-                            </div>
-
-                            <!-- Profile Dropdown -->
-                            <div x-data="{ open: false }" class="relative">
-                                <button
-                                    @click="open = !open"
-                                    class="flex items-center focus:outline-none">
-                                    <img
-                                        src="<?= isset($s_userAvatar) ?'../'.$s_userAvatar : '../uploads/avatar_1.jpg' ?>"
-                                        alt="Profil"
-                                        class="w-10 h-10 rounded-full mr-3">
-                                    <div class="flex flex-col">
-                                        <span class="text-sm font-medium text-gray-700"><?= $s_userName ?></span>
-                                        <span class="text-xs text-gray-500">
-                                            <?= Session::hasRole('student') ? 'Apprenant' : 'Enseignant' ?>
-                                        </span>
-                                    </div>
-                                </button>
-
-                                <!-- Dropdown Menu -->
-                                <div
-                                    x-show="open"
-                                    @click.away="open = false"
-                                    x-transition:enter="transition ease-out duration-300"
-                                    x-transition:enter-start="opacity-0 scale-90"
-                                    x-transition:enter-end="opacity-100 scale-100"
-                                    x-transition:leave="transition ease-in duration-300"
-                                    x-transition:leave-start="opacity-100 scale-100"
-                                    x-transition:leave-end="opacity-0 scale-90"
-                                    class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-20 border">
-                                    <a href="<?= Session::hasRole('student') ? '../espaceStudent/mesCourses.php' : '../espaceTeacher/dashboard.php' ?>"
-                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                                        <i class="fas fa-chart-line mr-2"></i> Tableau de Bord
-                                    </a>
-                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                                        <i class="fas fa-user mr-2"></i> Profil
-                                    </a>
-                                    <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                                        <i class="fas fa-cog mr-2"></i> Paramètres
-                                    </a>
-                                    <div class="border-t my-1"></div>
-                                    <a href="auth/logout.php" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
-                                        <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
-                                    </a>
-                                </div>
-                            </div>
+                <!-- Éléments de Droite -->
+                <div class="flex items-center">
+                    <!-- Recherche -->
+                    <div class="mr-4">
+                        <div class="relative">
+                            <input
+                                type="text"
+                                placeholder="Rechercher..."
+                                class="bg-gray-100 text-gray-700 border-none rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                            <span class="absolute right-3 top-3 text-gray-500">
+                                <i class="fas fa-search"></i>
+                            </span>
                         </div>
-                    <?php endif; ?>
+                    </div>
+
+                    <!-- Notifications -->
+                    <div class="mr-4">
+                        <button class="text-gray-700 hover:text-gray-900 relative">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="bg-red-500 text-white rounded-full px-2 py-1 text-xs absolute -top-2 -right-2">3</span>
+                        </button>
+                    </div>
+
+                    <!-- Profil -->
+
+                    <!-- Profile Dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button
+                            @click="open = !open"
+                            class="flex items-center focus:outline-none">
+                            <img
+                                src="<?= isset($s_userAvatar) ? '../' . $s_userAvatar : '../../uploads/avatar_1.jpg' ?>"
+                                alt="Profil"
+                                class="w-10 h-10 rounded-full mr-3">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-medium text-gray-700"><?= $s_userName ?></span>
+                                <span class="text-xs text-yellow-500">
+                                    enseignant
+                                </span>
+                            </div>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div
+                            x-show="open"
+                            @click.away="open = false"
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 scale-90"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-300"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-90"
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-20 border">
+
+                            <a href="../auth/logout.php" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
+                                <i class="fas fa-sign-out-alt mr-2"></i> Déconnexion
+                            </a>
+                            <!-- Include Alpine.js for interactivity -->
+                            <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+
+                        </div>
+                    </div>
+
                 </div>
-
-                <!-- Include Alpine.js for interactivity -->
-                <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-
-
-
-                <!-- fin de la partie qui se change selon user  -->
             </div>
         </div>
     </nav>
+
+
 
     <!-- Breadcrumb -->
     <div class="container mx-auto px-4 py-4">

@@ -58,7 +58,7 @@ if (Session::isLoggedIn() && session::hasRole('student')) {
                         <div class="flex items-baseline space-x-4">
                         <a href="../home.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Acceuil</a>
                             <a href="mesCourses.php" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Mes Cours</a>
-                            <a href="detailCourStudent.php/?id_course=33" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">en Cours</a>
+                            <a href="detailCourStudent.php?id_course=33" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">en Cours</a>
                             <a href="#" class="text-gray-600 hover:bg-gray-100 px-3 py-2 rounded-md">Favoris</a>
                            
                        
@@ -114,14 +114,14 @@ if (Session::isLoggedIn() && session::hasRole('student')) {
                             x-transition:leave-start="opacity-100 scale-100"
                             x-transition:leave-end="opacity-0 scale-90"
                             class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-20 border">
-                            <a href="<?= Session::hasRole('student') ? '/student/dashboard' : '/teacher/dashboard' ?>"
+                            <a href="<?= Session::hasRole('student') ? '../mesCourses.php' : '../dashboard.php' ?>"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
                                 <i class="fas fa-chart-line mr-2"></i> Tableau de Bord
                             </a>
-                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
                                 <i class="fas fa-user mr-2"></i> Profil
                             </a>
-                            <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
                                 <i class="fas fa-cog mr-2"></i> Paramètres
                             </a>
                             <div class="border-t my-1"></div>
@@ -164,7 +164,7 @@ if (Session::isLoggedIn() && session::hasRole('student')) {
             <div class="px-2 pt-2 pb-3 space-y-1">
                 <a href="mesCourses.php" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Mes Cours</a>
 
-                <a href="detailCourStudent.php/?id_course=33" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Recommandés</a>
+                <a href="detailCourStudent.php?id_course=33" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Recommandés</a>
                 <a href="#" class="text-gray-600 hover:bg-gray-100 block px-3 py-2 rounded-md">Favoris</a>
             </div>
         </div>

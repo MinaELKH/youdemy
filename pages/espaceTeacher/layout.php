@@ -58,10 +58,16 @@ $message = '';
     <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 
     <!-- Tagify CSS -->
-<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
 
-<!-- Tagify JS -->
-<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js"></script>
+    <!-- Tagify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.min.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <!-- Include Alpine.js for interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
 
 </head>
@@ -132,7 +138,7 @@ $message = '';
                             <div class="flex flex-col">
                                 <span class="text-sm font-medium text-gray-700"><?= $s_userName ?></span>
                                 <span class="text-xs text-yellow-500">
-                                 enseignant
+                                    enseignant
                                 </span>
                             </div>
                         </button>

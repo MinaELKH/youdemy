@@ -44,36 +44,29 @@ if (isset($_GET['id_categorie'])) {
 <section>
 
     <div class="container mx-auto mt-24">
-    <?php
-if (isset($id_categorie) && $id_categorie) {
-    $selectedCategory = Categorie::getById($dbManager, $id_categorie);
-    echo "
-    <div class='
-        bg-indigo-50 
-        rounded-md 
-        px-3 
-        py-2 
-        mb-4 
-        border-l-3 
-        border-indigo-400 
-        text-indigo-700'>
-        Catégorie : " . htmlspecialchars($selectedCategory->name) . "
-    </div>";
-}
-?>
-
-
         <a class="text-blue-600 text-sm" href="#">
             Quel sera votre prochain sujet d'apprentissage ?
         </a>
-        <h1 class="text-xl text-gray-600 font-bold mt-2">
+        <h1 class="text-l text-gray-600 font-bold mt-2">
             Découvrez les cours dispensés par des experts confirmés.
         </h1>
+        <!-- si la recherche est fait pas categorie on mention la categorie c est optionnel -->
+        <?php
+        if (isset($id_categorie) && $id_categorie) {
+            $selectedCategory = Categorie::getById($dbManager, $id_categorie);
+            echo "
+                <div class=' bg-indigo-50  rounded-md   px-3   py-2   mb-4   border-l-3  border-indigo-400  text-indigo-700'>
+                    Catégorie : " . htmlspecialchars($selectedCategory->name) . "
+                </div>";
+        }
+        ?>
+
+
         <p lass="text-xs text-gray-400">
             Explorez des cours conçus et enseignés par des experts de renom.
         </p>
 
-      
+
 
         <?php require('include/cards.php') ?>
 

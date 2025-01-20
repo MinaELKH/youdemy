@@ -1,51 +1,118 @@
-<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
-  <!-- Gradient pour l'arrière-plan -->
-  <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#4ECDC4;stop-opacity:1" />
-    </linearGradient>
-    
-    <!-- Gradient pour le cerveau -->
-    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
-      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.6" />
-    </linearGradient>
-  </defs>
+<?php
+// Fonction pour uploader une vidéo
+function uploadVideo($file, $uploadsDir = 'uploads/', $maxSize = 50 * 1024 * 1024, $allowedTypes = ['video/mp4', 'video/quicktime', 'video/x-msvideo', 'video/x-ms-wmv'])
+{
+    if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
+        $videoTmpName = $file['tmp_name'];
+        $videoName = basename($file['name']);
+        $videoSize = $file['size'];
+        $videoType = mime_content_type($videoTmpName);
 
-  <!-- Forme abstraite représentant un cerveau/nuage -->
-  <path d="M50 100 C30 70 20 50 40 30 C60 10 90 20 100 40 C120 20 150 20 170 40 C190 20 220 20 240 40 C260 20 290 30 310 50 C330 70 320 90 300 100" 
-        fill="url(#grad1)" 
-        stroke="white" 
-        stroke-width="2"/>
+        // Vérification du type
+        if (!in_array($videoType, $allowedTypes)) {
+            return ['success' => false, 'message' => "Type de fichier non supporté. Veuillez utiliser MP4, AVI, MOV ou WMV."];
+        }
 
-  <!-- Lignes connectées symbolisant l'apprentissage -->
-  <path d="M70 80 L120 60 L170 90 L220 50 L270 85" 
-        fill="none" 
-        stroke="white" 
-        stroke-width="3"
-        stroke-linecap="round"/>
+        // Vérification de la taille
+        if ($videoSize > $maxSize) {
+            return ['success' => false, 'message' => "Le fichier est trop volumineux. Limite de " . ($maxSize / (1024 * 1024)) . " Mo."];
+        }
 
-  <!-- Points de connexion -->
-  <circle cx="70" cy="80" r="4" fill="white"/>
-  <circle cx="120" cy="60" r="4" fill="white"/>
-  <circle cx="170" cy="90" r="4" fill="white"/>
-  <circle cx="220" cy="50" r="4" fill="white"/>
-  <circle cx="270" cy="85" r="4" fill="white"/>
+        // Création du chemin d'enregistrement avec un nom unique
+        $videoPath = $uploadsDir . uniqid() . '-' . $videoName;
+        // Déplacement du fichier
+        if (move_uploaded_file($videoTmpName, 'pages/'.$videoPath)) {
+            return ['success' => true, 'filePath' => $videoPath];
+        } else {
+            return ['success' => false, 'message' => "Erreur lors de l'upload de la vidéo."];
+        }
+    } else {
+        return ['success' => false, 'message' => "Aucun fichier sélectionné ou erreur lors de l'upload."];
+    }
+}
 
-  <!-- Texte Youdemy avec effet moderne -->
-  <text x="50" y="150" 
-        font-family="Arial" 
-        font-size="48" 
-        font-weight="bold" 
-        fill="#2C3E50"
-        letter-spacing="2">
-    YOUDEMY
-  </text>
+// Fonction pour valider une URL YouTube
+function isValidYouTubeURL($url)
+{
+    return preg_match('/(youtube.com\/watch\?v=|youtu.be\/)([a-zA-Z0-9_-]+)/', $url);
+}
 
-  <!-- Petits cercles décoratifs -->
-  <circle cx="40" cy="160" r="3" fill="#FF6B6B"/>
-  <circle cx="360" cy="160" r="3" fill="#4ECDC4"/>
-  <circle cx="50" cy="170" r="2" fill="#FF6B6B"/>
-  <circle cx="350" cy="170" r="2" fill="#4ECDC4"/>
-</svg>
+// Traitement du formulaire
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST['videoURL'])) {
+        $youtubeURL = $_POST['videoURL'];
+    } elseif (isset($_FILES['videoUpload'])) {
+        $result = uploadVideo($_FILES['videoUpload']);
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de vidéo ou URL YouTube</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload de vidéo ou URL YouTube</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            <!-- Option 1 : Upload de vidéo -->
+            <div class="form-group">
+                <label for="videoUpload">Télécharger une vidéo</label>
+                <input type="file" id="videoUpload" name="videoUpload" accept="video/*">
+            </div>
+
+            <!-- Option 2 : URL YouTube -->
+            <div class="form-group">
+                <label for="videoURL">Ou, collez une URL YouTube</label>
+                <input type="url" id="videoURL" name="videoURL" placeholder="https://www.youtube.com/watch?v=exemple">
+            </div>
+
+            <!-- Bouton de soumission -->
+            <button type="submit" class="btn">Envoyer</button>
+        </form>
+
+        <!-- Affichage des messages -->
+        <?php if (!empty($message)) : ?>
+            <div class="message <?php echo (strpos($message, 'Erreur') === false) ? 'success' : 'error'; ?>">
+                <?php echo $message; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</body>
+</html>

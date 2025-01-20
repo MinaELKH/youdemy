@@ -26,11 +26,14 @@ abstract class AbstractContent {
 
     // Méthodes abstraites 
     abstract public function add(): bool;
+    abstract public function display(): string ;
     abstract public function update(): bool;
     abstract public function delete(): bool;
     abstract public function getById(): ?object;
-   // abstract public function getByIdCourse(): ?object;
     abstract static public function getAllByIdCourse($db ,$id_course ): ?array;
+    
+    
+    
     // Getters génériques
 
     public function __get($att) {
@@ -64,15 +67,5 @@ abstract class AbstractContent {
     }
 
 
-    // public  static function getAllByCourse($db): array {
-    //     try {
-    //         $query = "SELECT * FROM content WHERE id_course = ?";
-    //         $stmt = $this->db->getConnection()->prepare($query);
-    //         $stmt->execute([$this->id_course]);
-    //         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    //     } catch (\PDOException $e) {
-            
-    //         return [];
-    //     }
-    // }
+    
 }

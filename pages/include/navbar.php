@@ -41,8 +41,8 @@ if (Session::isLoggedIn()) {
 
 <body class="font-sans antialiased">
     <nav class="w-full bg-white shadow-md fixed w-full z-10 top-0">
-        <div class="container  px-4  flex justify-between items-center">
-            <div class="flex items-center space-x-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
                 <img alt="youdemy" class="h-12" src="../src/images/logo.png" />
 
                 <div class="flex items-center">
@@ -53,10 +53,12 @@ if (Session::isLoggedIn()) {
                 <a class="text-gray-700" href="home.php">
                     Accueil
                 </a>
-                <a class="text-gray-700" href="#">
+              
+                <form action="http://localhost/youdemy/pages/searchResult.php"  method="GET">
                 <select
                         id="id_categorie"
                         name="id_categorie"
+                        onchange="this.form.submit()"
                         class="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <option value="">catégorie</option>
                         <?php 
@@ -67,9 +69,11 @@ if (Session::isLoggedIn()) {
                             </option>
                         <?php endforeach; ?>
                     </select>
-                </a>
+                </form>
+               
+                       
 
-            </div>
+          
             <div class="flex items-center  text-center justify-between space-x-8">
 
                 <div class="mt-2">

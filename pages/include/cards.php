@@ -7,7 +7,7 @@ use config\Session;
 session::start();
 
 if (empty($courses)): ?>
-    <div class="bg-white border border-blue-100 rounded-lg shadow-md mt-4 p-4 text-center space-y-5 max-w-md mx-auto">
+    <div class="m-4 bg-white border border-blue-100 rounded-lg shadow-md mt-4 p-4 text-center space-y-5 max-w-md mx-auto">
         <div class="bg-blue-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
             <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -58,8 +58,8 @@ if (empty($courses)): ?>
                     <span class="p-1 my-4 text-xs bg-gray-200 rounded-full ">
                         <?= htmlspecialchars($course->category_name); ?>
                     </span>
-                    <div class="flex items-center mb-2">
-
+                    <div class="flex justify-between items-center mb-2">
+                       <div class="flex items-center ">
                         <!-- Avatar de l'auteur -->
                         <img src="<?= !empty($course->teacher_avatar) ? 'http://localhost/youdemy/pages/' . $course->teacher_avatar : 'http://localhost/youdemy/pages/uploads/avatar_1.jpg' ?>"
                             alt="Profil"
@@ -70,22 +70,21 @@ if (empty($courses)): ?>
                         <span class="text-xs font-semibold">
                             <?= htmlspecialchars($course->teacher_name); ?>
                         </span>
+
+        </div>
                         <!-- Informations supplémentaires -->
-                        <div class="flex  gap-2 items-center text-xs text-gray-600 mt-2">
+                        
 
                             <span class="mr-2 flex items-center">
-                                <i class="fas fa-user mr-1"></i>
+                                <i class="fas fa-user mr-1 text-green-300"></i>
                                 <?= htmlspecialchars($course->student_count); ?>
                             </span>
                             <span class="mr-2 flex items-center">
-                                <i class="fas fa-comment mr-1"></i>
+                                <i class="fas fa-comment mr-1 text-blue-300"></i>
                                 <?= htmlspecialchars($course->review_count); ?>
                             </span>
-                            <i class="fas fa-star text-yellow-500 mr-2"></i>
-                            <span> 5
-                                <!-- <?= htmlspecialchars($course->rating); ?> -->
-                            </span>
-                        </div>
+                        
+                            
                     </div>
 
 
