@@ -182,8 +182,6 @@ if (isset($_POST["deletereview"])) {
             <section class="bg-white rounded-lg p-2 mb-2">
                 <div class="flex space-x-2 mb-2  ">
                     <?php
-                    //    var_dump($ObjetContent);
-                    //    die();
                     echo ($ObjetContent->display());
                  
                     ?>

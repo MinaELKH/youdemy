@@ -104,10 +104,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                         class="pl-10 pr-4 py-3 w-72 bg-white/80 backdrop-blur-sm rounded-full border-2 border-blue-100 focus:border-blue-300 transition duration-300 ease-in-out shadow-lg">
                     <i class="fas fa-search absolute left-4 top-4 text-blue-400"></i>
                 </div>
-                     <form method="get" action="">
-                    <button value="1" name="pending" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full hover:scale-105 transform transition flex items-center shadow-xl hover:shadow-2xl">
+                    <a href="approvedTeacher.php">
+                    <button  class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full hover:scale-105 transform transition flex items-center shadow-xl hover:shadow-2xl">
                         <i class="fas fa-plus mr-2"></i> Demandes en attente
                     </button>
+                    </a>
             </div>
             </form>
         </div>
@@ -140,18 +141,19 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["status"])) {
                         $teacherss = $newTeacher->getAll_Pending();
                     } else {
                         $newTeacher = new teacher($dbManager);
-                        $teacherss = $newTeacher->getAll();
+                        $teachers = $newTeacher->getAll();
                     }
-                    //  echo"<pre>" ;
-                    //  var_dump($teacherss);
-                    //  echo"<pre>" ;
-                    foreach ($teacherss as $teacher): ?>
+                  
+                    foreach ($teachers as $teacher): 
+                    
+                    ?>
+                    
                         <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition duration-300">
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-4">
                                     <div class="relative">
-                                        <img
-                                            src="<?= htmlspecialchars($teacher->getAvatar() ?? 'default-avatar.png') ?>"
+                                        <img       src="<?= isset($teacher->avatar) ? '../'.$teacher->avatar : '../uploads/avatar_1.jpg' ?>"
+                                          
                                             alt="Profile"
                                             class="w-16 h-16 rounded-full object-cover border-4 bg-green-500 border-opacity-30 transform hover:scale-110 transition" />
                                         <span class="absolute bottom-0 right-0 block h-4 w-4 rounded-full bg-green-500 ring-2 ring-white"></span>

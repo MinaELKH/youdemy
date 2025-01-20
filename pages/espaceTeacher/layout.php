@@ -87,12 +87,6 @@ $message = '';
 
                     <!-- Menu Principal -->
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                            Accueil
-                        </a>
-                        <a href="#" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
-                            Tableau de bord
-                        </a>
                         <a href="mesCourses.php" class="text-gray-700 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">
                             Mes Cours
                         </a>
@@ -191,7 +185,7 @@ $message = '';
                     </div>
                     <div class="space-y-4">
                         <p class="text-gray-700 leading-relaxed">
-                            Cher(e) <span class="font-bold text-gray-900">[Nom du professeur]</span>,
+                            Cher(e) <span class="font-bold text-gray-900"><?=$s_userName?></span>,
                         </p>
                         <p class="text-gray-600 leading-relaxed">
                             Nous regrettons de vous informer que votre demande d'adhésion en tant qu'enseignant(e) sur notre plateforme a été rejetée après un examen approfondi.
@@ -230,7 +224,7 @@ $message = '';
                     </div>
                     <div class="space-y-4">
                         <p class="text-gray-600 leading-relaxed">
-                            Cher(e) <span class="font-bold text-gray-900">[Nom du professeur]</span>,
+                            Cher(e) <span class="font-bold text-gray-900"><?=$s_userName?></span>,
                         </p>
                         <p class="text-gray-600 leading-relaxed">
                             Nous vous informons que votre demande d'adhésion en tant qu'enseignant(e) est actuellement en cours d'examen. Nous vous tiendrons informé(e) dès qu'une décision sera prise.

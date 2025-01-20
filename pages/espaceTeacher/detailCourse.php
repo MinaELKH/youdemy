@@ -33,11 +33,46 @@ if (!$id_course || !is_numeric($id_course)) {
 try {
     $newCourse = new Course($dbManager, $id_course);
     $course = $newCourse->getDetailCourse(); // je selection d apres viewcourse 
-    // echo"<pre>" ;
-    // var_dump($course);
-    // echo"<pre>" ;
+
+ 
     if (!$course) {
         throw new Exception("Le cours avec l'ID $id_course n'existe pas.");
+    }
+    // Recuperer le contenu du cours en fonction de son type
+    $newContent = null;
+
+    if ($course->type == 'texte') {
+        $newContent = new ContentText($dbManager);
+        $result = ContentText::getAllByIdCourse($dbManager, $id_course);
+    } else if ($course->type == 'video') {
+        $newContent = new ContentVideo($dbManager);
+        $result = ContentVideo::getAllByIdCourse($dbManager, $id_course);
+        // var_dump($newContent) ;
+        // die() ;
+    }
+
+
+    /// on verifie si le id_content dans l url , ou on va recupere le premier chapitre par defaut 
+    if (isset($_GET['id_content'])) {
+        // verif si le contenu est trouve on le recupere via l id_course
+        if (is_numeric($_GET['id_content'])) {
+            $newContent->id_content = intval($_GET['id_content']);
+            $ObjetContent = $newContent->getById();
+        } else {
+
+            throw new Exception("ID content invalide ");
+        }
+    } elseif ($newContent) {
+        // echo "hello" ;
+        // var_dump($newContent) ;
+        // die() ; 
+        $newContent->id_course = $id_course;
+        $ObjetContent = $newContent->getByIdCourse();
+        // echo "hello" ;
+        // var_dump($ObjetContent) ;
+        // die() ; 
+    } else {
+        throw new Exception("Le contenu associe au cours n'a pas ete trouve.");
     }
 } catch (Exception $e) {
     // Gerer les erreurs
@@ -280,6 +315,17 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
                     <h4 class="underline text-lg font-bold text-gray-800">Ce que vous apprendrez</h4>
                     <div class="leading-relaxed  whitespace-normal break-words"> <?= $course->description ?></div>
                 </section>
+
+                   <!-- content  -->
+            <section class="bg-white rounded-lg p-2 mb-2">
+                <div class="flex space-x-2 mb-2  ">
+                    <?php
+                    echo ($ObjetContent->display());
+                 
+                    ?>
+                </div>
+            </section>
+            
                 <!-- Reviews Section -->
                 <section class="bg-white rounded-lg p-2 mb-2">
 

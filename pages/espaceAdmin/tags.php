@@ -59,7 +59,7 @@ if (isset($_POST['addTags'])) {
                     </div>
 
                     <!-- Liste des Tags -->
-                    <input type="text" name="tags" id="tags">
+                    <input type="hidden" name="tags" id="tags">
                     <div 
                         id="tagList" 
                         class="flex flex-wrap gap-2 min-h-[100px] border border-dashed border-blue-300 p-2 rounded-lg"

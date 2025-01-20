@@ -46,7 +46,7 @@ class Session {
          
             exit(); 
         } elseif ($role == "teacher") {
-            header('Location: ../espaceTeacher/dashboard.php');
+            header('Location: ../espaceTeacher/mesCourses.php');
             exit();
         }  elseif ($role == "admin") {
            
