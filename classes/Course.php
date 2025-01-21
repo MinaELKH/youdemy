@@ -3,7 +3,7 @@
 namespace classes;
 
 use config\DataBaseManager;
-use stdClass, PDO, Exception;
+use stdClass, PDO , PDOException ;
 
 class Course
 {
@@ -173,7 +173,11 @@ class Course
 
     public static function getAll(DataBaseManager $db): array
     {
-        return $db->selectAll("viewcourses");
+        $params = [
+            "status" => self::STATUS_APPROVED,
+            "archived" => 0
+        ];
+        return $db->selectBy("viewcourses", $params);
     }
 
     public static function getSearch($db , $MotSearch): ?array
@@ -214,6 +218,56 @@ class Course
             return $stmt->fetchALL(PDO::FETCH_OBJ);
         } else {
             return false;
+        }
+ 
+    }
+
+
+
+    //pagination *
+
+
+
+public static function showInCatalogue(DataBaseManager $db, int $page = 1, int $perPage = 10): array
+{
+    try {
+        // Calculate the offset
+        $offset = ($page - 1) * $perPage;
+
+        // Prepare the SQL query with LIMIT and OFFSET
+        $db= $db->getConnection(); 
+        $stmt = $db->prepare("
+            select * from viewcourses
+            LIMIT :limit OFFSET :offset
+        ");
+
+        // Bind the pagination parameters
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Return the fetched data
+    } catch (PDOException $e) {
+        error_log("Database error in showInCatalogue: " . $e->getMessage());
+        return []; // Return an empty array if there's an error
+    }
+}
+
+    public static function countCourses(DataBaseManager $db): int
+    {
+        try {
+            $db= $db->getConnection();
+            $stmt = $db->prepare("
+                SELECT COUNT(*) AS total
+                FROM courses
+                WHERE status = 'approved' AND archived = '0'
+            ");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int) $result['total']; // Return the total number of courses
+        } catch (PDOException $e) {
+            error_log("Database error in countCourses: " . $e->getMessage());
+            return 0; // Return 0 if there's an error
         }
     }
 }

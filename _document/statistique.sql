@@ -1,4 +1,6 @@
 
+
+-- -------------------------------------------------  Admin Statistique 
 -- les 3  prof le plus actifs
 SELECT name_full , COUNT(id_course) as nbCourse FROM users u
 INNER JOIN  courses c  ON  u.id_user = c.id_teacher 
@@ -11,8 +13,8 @@ LIMIT 3
 
 SELECT NAME , COUNT(id_course) as nbCourse FROM categories  cat
 INNER JOIN  courses c  ON  c.id_categorie = cat.id_categorie 
-GROUP BY NAME , id_course 
-ORDER BY nbCourse  , id_course desc
+GROUP BY NAME 
+ORDER BY nbCourse desc
 LIMIT 3
 
 -- les cours on plus de 5 inscrits
@@ -45,7 +47,24 @@ SELECT COUNT(*) FROM courses WHERE status = 'pending'
 
 SELECT COUNT(*) FROM teachers WHERE approved = 'pending'
 
---
+-- -------------------------------------------------  Enseigant  Statistique 
+
+SELECT COUNT(*) FROM courses WHERE id_teacher = :id_user
+SELECT COUNT(*) FROM enrollments e INNER JOIN courses c  ON   e.id_course = c.id_course 
+WHERE id_teacher = 88
+
+SELECT   sum(prix) as CA FROM courses c INNER JOIN enrollments e ON e.id_course = c.id_course WHERE id_teacher = 88
+
+
+SELECT name_full , COUNT(e.id_student) AS inscrits FROM courses c
+                            INNER JOIN enrollments e ON e.id_course = c.id_course
+                            INNER JOIN users u on u.id_user = e.id_student
+                            WHERE id_teacher =88
+                            GROUP BY name_full
+                            LIMIT 1 
+
+
+
 
 
 

@@ -29,7 +29,9 @@ if (Session::isLoggedIn()) {
 
 try {
     $dbManager = new DataBaseManager();
-    $courses = Course::getall($dbManager);
+  $courses = Course::getall($dbManager);
+ 
+  // $courses = Course::showInCatalogue( $dbManager ) ; 
 } catch (Exception $e) {
     // Log error and redirect or show error message
     error_log($e->getMessage());
@@ -188,6 +190,54 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["archive"])) {
 
 
         <?php require('include/cards.php') ?>
+   
+
+
+
+
+
+
+         <!-- Pagination -->
+
+
+         <?php
+$totalPages = Course::countCourses($dbManager); // Nombre de pages total
+$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+if ($totalPages > 1): ?>
+    <div class="mt-6 flex justify-center">
+        <nav class="inline-flex rounded-lg shadow-sm" aria-label="Pagination">
+            <!-- Bouton Précédent -->
+            <?php if ($currentPage > 1): ?>
+                <a href="?page=<?= $currentPage - 1 ?>" 
+                   class="px-3 py-2 bg-white text-gray-700 hover:bg-blue-50 rounded-l-lg border text-sm">
+                    Précédent
+                </a>
+            <?php endif; ?>
+
+            <!-- Pages -->
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <?php if (abs($i - $currentPage) <= 2 || $i === 1 || $i === $totalPages): ?>
+                    <a href="?page=<?= $i ?>" 
+                       class="px-3 py-2 bg-white border text-sm <?= $i === $currentPage ? 'bg-blue-50 text-blue-600 font-bold' : 'text-gray-700 hover:bg-blue-50' ?>" 
+                       aria-current="<?= $i === $currentPage ? 'page' : 'false' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php elseif ($i === 2 || $i === $totalPages - 1): ?>
+                    <span class="px-3 py-2 bg-white border text-gray-400">...</span>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <!-- Bouton Suivant -->
+            <?php if ($currentPage < $totalPages): ?>
+                <a href="?page=<?= $currentPage + 1 ?>" 
+                   class="px-3 py-2 bg-white text-gray-700 hover:bg-blue-50 rounded-r-lg border text-sm">
+                    Suivant
+                </a>
+            <?php endif; ?>
+        </nav>
+    </div>
+<?php endif; ?>
 
 
 

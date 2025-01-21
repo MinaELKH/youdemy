@@ -25,13 +25,8 @@ if (Session::isLoggedIn()) {
   //  var_dump($userAvatar); 
 } 
 
+$dbManager = new DataBaseManager();
 $id_course = $_GET['id_course'] ?? null;
-
-$id_content = $_GET['id_content'] ?? null;
-
-
-
-// charger les donnees du cours
 if (!$id_course || !is_numeric($id_course)) {
     die("ID de cours invalide ou manquant.");
 }
@@ -39,46 +34,11 @@ if (!$id_course || !is_numeric($id_course)) {
 try {
     $newCourse = new Course($dbManager, $id_course);
     $course = $newCourse->getDetailCourse(); // je selection d apres viewcourse 
-
- 
+    // echo"<pre>" ;
+    // var_dump($course);
+    // echo"<pre>" ;
     if (!$course) {
         throw new Exception("Le cours avec l'ID $id_course n'existe pas.");
-    }
-    // Recuperer le contenu du cours en fonction de son type
-    $newContent = null;
-
-    if ($course->type == 'texte') {
-        $newContent = new ContentText($dbManager);
-        $result = ContentText::getAllByIdCourse($dbManager, $id_course);
-    } else if ($course->type == 'video') {
-        $newContent = new ContentVideo($dbManager);
-        $result = ContentVideo::getAllByIdCourse($dbManager, $id_course);
-        // var_dump($newContent) ;
-        // die() ;
-    }
-
-
-    /// on verifie si le id_content dans l url , ou on va recupere le premier chapitre par defaut 
-    if (isset($_GET['id_content'])) {
-        // verif si le contenu est trouve on le recupere via l id_course
-        if (is_numeric($_GET['id_content'])) {
-            $newContent->id_content = intval($_GET['id_content']);
-            $ObjetContent = $newContent->getById();
-        } else {
-
-            throw new Exception("ID content invalide ");
-        }
-    } elseif ($newContent) {
-        // echo "hello" ;
-        // var_dump($newContent) ;
-        // die() ; 
-        $newContent->id_course = $id_course;
-        $ObjetContent = $newContent->getByIdCourse();
-        // echo "hello" ;
-        // var_dump($ObjetContent) ;
-        // die() ; 
-    } else {
-        throw new Exception("Le contenu associe au cours n'a pas ete trouve.");
     }
 } catch (Exception $e) {
     // Gerer les erreurs
@@ -87,7 +47,38 @@ try {
 }
 
 
-?>
+//acheter 
+
+if ($_SERVER["REQUEST_METHOD"] == 'POST' && isset($_POST["acheter"])) {
+    try {
+        if (Session::isLoggedIn() && Session ::hasRole('student')){
+        $enroll = new enrollment($dbManager, $course->id_course , $s_userId  );
+        $result = $enroll->add();
+
+        if ($result) {
+            setSweetAlertMessage(
+                'Inscription réussie 🎉',
+                'Félicitations ! Vous êtes maintenant inscrit au cours . Préparez-vous à apprendre et à explorer de nouvelles compétences passionnantes ! 🚀',
+                'success',
+                'espaceStudent/detailCourStudent.php?id_course='.$id_course
+            );
+        } else {
+            setSweetAlertMessage('Erreur', 'Aucun inscription n\'a eu lieu. Veuillez contacter l\'administrateur.', 'error', '');
+        }
+    }
+    else{
+        setSweetAlertMessage(
+            'Authentification requise ⚠️',
+            'Veuillez vous authentifier pour accéder aux cours.',
+            'warning',
+            'auth/login.php'
+        );
+    }
+    } catch (Exception $e) {
+        setSweetAlertMessage('Erreur', $e->getMessage(), 'error', '');
+    }
+}
+
 
 ?>
 <?php require('include/navbar.php') ?>

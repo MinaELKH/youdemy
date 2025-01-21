@@ -1,118 +1,65 @@
-<?php
-// Fonction pour uploader une vidéo
-function uploadVideo($file, $uploadsDir = 'uploads/', $maxSize = 50 * 1024 * 1024, $allowedTypes = ['video/mp4', 'video/quicktime', 'video/x-msvideo', 'video/x-ms-wmv'])
+<?php 
+
+public static function showInCatalogue(PDO $db, int $page = 1, int $perPage = 10): array
 {
-    if (isset($file) && $file['error'] === UPLOAD_ERR_OK) {
-        $videoTmpName = $file['tmp_name'];
-        $videoName = basename($file['name']);
-        $videoSize = $file['size'];
-        $videoType = mime_content_type($videoTmpName);
+    try {
+        // Calculate the offset
+        $offset = ($page - 1) * $perPage;
 
-        // Vérification du type
-        if (!in_array($videoType, $allowedTypes)) {
-            return ['success' => false, 'message' => "Type de fichier non supporté. Veuillez utiliser MP4, AVI, MOV ou WMV."];
-        }
+        // Prepare the SQL query with LIMIT and OFFSET
+        $stmt = $db->prepare("
+            SELECT 
+                c.id_course, 
+                c.title, 
+                c.price, 
+                c.created_at, 
+                c.status, 
+                c.archive, 
+                c.picture, 
+                cat.name AS category, 
+                u.first_name, 
+                u.last_name, 
+                COUNT(e.id_user) AS enrollment_count
+            FROM 
+                course AS c
+            INNER JOIN 
+                user AS u ON c.id_user = u.id_user
+            LEFT JOIN 
+                category AS cat ON c.id_category = cat.id_category
+            LEFT JOIN 
+                enrollement AS e ON c.id_course = e.id_course
+            WHERE 
+                c.status = 'activated' AND c.archive = '0'
+            GROUP BY 
+                c.id_course
+            LIMIT :limit OFFSET :offset
+        ");
 
-        // Vérification de la taille
-        if ($videoSize > $maxSize) {
-            return ['success' => false, 'message' => "Le fichier est trop volumineux. Limite de " . ($maxSize / (1024 * 1024)) . " Mo."];
-        }
+        // Bind the pagination parameters
+        $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 
-        // Création du chemin d'enregistrement avec un nom unique
-        $videoPath = $uploadsDir . uniqid() . '-' . $videoName;
-        // Déplacement du fichier
-        if (move_uploaded_file($videoTmpName, 'pages/'.$videoPath)) {
-            return ['success' => true, 'filePath' => $videoPath];
-        } else {
-            return ['success' => false, 'message' => "Erreur lors de l'upload de la vidéo."];
-        }
-    } else {
-        return ['success' => false, 'message' => "Aucun fichier sélectionné ou erreur lors de l'upload."];
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Return the fetched data
+    } catch (PDOException $e) {
+        error_log("Database error in showInCatalogue: " . $e->getMessage());
+        return []; // Return an empty array if there's an error
     }
 }
 
-// Fonction pour valider une URL YouTube
-function isValidYouTubeURL($url)
-{
-    return preg_match('/(youtube.com\/watch\?v=|youtu.be\/)([a-zA-Z0-9_-]+)/', $url);
-}
-
-// Traitement du formulaire
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['videoURL'])) {
-        $youtubeURL = $_POST['videoURL'];
-    } elseif (isset($_FILES['videoUpload'])) {
-        $result = uploadVideo($_FILES['videoUpload']);
+    public static function countCourses(PDO $db): int
+    {
+        try {
+            $stmt = $db->prepare("
+                SELECT COUNT(*) AS total
+                FROM course
+                WHERE status = 'activated' AND archive = '0'
+            ");
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int) $result['total']; // Return the total number of courses
+        } catch (PDOException $e) {
+            error_log("Database error in countCourses: " . $e->getMessage());
+            return 0; // Return 0 if there's an error
+        }
     }
-}
-?>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload de vidéo ou URL YouTube</title>
-    <style>
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .message {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        .message.success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Upload de vidéo ou URL YouTube</h1>
-        <form action="" method="post" enctype="multipart/form-data">
-            <!-- Option 1 : Upload de vidéo -->
-            <div class="form-group">
-                <label for="videoUpload">Télécharger une vidéo</label>
-                <input type="file" id="videoUpload" name="videoUpload" accept="video/*">
-            </div>
-
-            <!-- Option 2 : URL YouTube -->
-            <div class="form-group">
-                <label for="videoURL">Ou, collez une URL YouTube</label>
-                <input type="url" id="videoURL" name="videoURL" placeholder="https://www.youtube.com/watch?v=exemple">
-            </div>
-
-            <!-- Bouton de soumission -->
-            <button type="submit" class="btn">Envoyer</button>
-        </form>
-
-        <!-- Affichage des messages -->
-        <?php if (!empty($message)) : ?>
-            <div class="message <?php echo (strpos($message, 'Erreur') === false) ? 'success' : 'error'; ?>">
-                <?php echo $message; ?>
-            </div>
-        <?php endif; ?>
-    </div>
-</body>
-</html>
